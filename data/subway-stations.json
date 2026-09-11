@@ -1,0 +1,162 @@
+[
+  {
+    "stationId": 1,
+    "stationName": "평동",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 2,
+    "stationName": "도산",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 3,
+    "stationName": "광주송정역",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 4,
+    "stationName": "송정공원",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 5,
+    "stationName": "공항",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 6,
+    "stationName": "김대중컨벤션센터",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 7,
+    "stationName": "상무",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 8,
+    "stationName": "운천",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 9,
+    "stationName": "쌍촌",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 10,
+    "stationName": "화정",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 11,
+    "stationName": "농성",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 12,
+    "stationName": "돌고개",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 13,
+    "stationName": "양동시장",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 14,
+    "stationName": "금남로5가",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 15,
+    "stationName": "금남로4가",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 16,
+    "stationName": "문화전당",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 17,
+    "stationName": "남광주",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 18,
+    "stationName": "학동·증심사입구",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 19,
+    "stationName": "소태",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  },
+  {
+    "stationId": 20,
+    "stationName": "녹동",
+    "lineNumber": 1,
+    "lat": 35.1595,
+    "lng": 126.8526,
+    "address": ""
+  }
+]

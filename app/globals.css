@@ -1,26 +1,117 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap");
 @import "tailwindcss";
 
+/* ─── 오메나 공식 브랜드 컬러 시스템 ─────────────────────── */
+/* 출처: 광주광역시 오매광주 오메나 Manual Guidebook © 2020 */
+@theme {
+  /* Primary — 네이비 블루 오메나 (R30 G68 B138) */
+  --color-brand-navy: #1E448A;
+  --color-brand-navy-light: #2D56AA;
+  --color-brand-navy-pale: #DBEAFE;
+
+  /* Secondary — 에코 그린 오메나 (R49 G132 B64) */
+  --color-brand-green: #318440;
+  --color-brand-green-light: #3DA050;
+  --color-brand-green-pale: #D1FAE5;
+
+  /* Accent — 앰버 골드 오메나 (R252 G179 B43) */
+  --color-brand-amber: #FCB32B;
+  --color-brand-amber-light: #FCD34D;
+  --color-brand-amber-pale: #FEF3C7;
+
+  /* Point — 빨강 오메나 (R224 G30 B44) */
+  --color-brand-red: #E01E2C;
+  --color-brand-red-pale: #FEE2E2;
+
+  /* 관광지 카테고리 컬러 */
+  --color-cat-tour: #1E3A8A;      /* 관광지 */
+  --color-cat-culture: #7C3AED;   /* 문화시설 */
+  --color-cat-food: #EA580C;      /* 음식점 */
+  --color-cat-stay: #2D7A3A;      /* 숙박 */
+
+  /* 폰트 */
+  --font-sans: "Noto Sans KR", sans-serif;
+
+  /* 전역 배경/텍스트 */
+  --color-background: #F8FAFF;
+  --color-foreground: #1a1a2e;
+}
+
+/* ─── 기본 설정 ──────────────────────────────────────────── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F8FAFF;
+  --foreground: #1a1a2e;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html, body {
+  height: 100%;
+  overflow: hidden;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
+}
+
+/* ─── 카카오 지도 커스텀 오버레이 ────────────────────────── */
+.custom-marker-label {
+  background: white;
+  border-radius: 8px;
+  padding: 4px 8px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1E3A8A;
+  border: 1.5px solid #1E3A8A;
+  white-space: nowrap;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.bus-stop-marker {
+  background: #1E3A8A;
+  border-radius: 50%;
+  width: 12px;
+  height: 12px;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+.subway-station-marker {
+  background: #7C3AED;
+  border-radius: 50%;
+  width: 14px;
+  height: 14px;
+  border: 2px solid white;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+}
+
+/* ─── 스크롤바 커스텀 ────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #DBEAFE;
+  border-radius: 4px;
+}
+
+/* ─── 애니메이션 ─────────────────────────────────────────── */
+@keyframes omona-walk {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.omona-bounce {
+  animation: omona-walk 0.8s ease-in-out infinite;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.3s ease-out;
 }

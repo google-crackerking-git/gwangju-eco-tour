@@ -1,0 +1,45 @@
+// NextAuth.js 설정 — 카카오 로그인 전용
+// 서버사이드 전용 모듈
+
+import NextAuth from 'next-auth';
+import type { NextAuthConfig } from 'next-auth';
+import Kakao from 'next-auth/providers/kakao';
+
+declare module 'next-auth' {
+  interface Session {
+    user: {
+      id: string;
+      name?: string | null;
+      email?: string | null;
+      image?: string | null;
+    };
+  }
+}
+
+export const authConfig: NextAuthConfig = {
+  providers: [
+    Kakao({
+      clientId: process.env.KAKAO_CLIENT_ID!,
+      ...(process.env.KAKAO_CLIENT_SECRET ? { clientSecret: process.env.KAKAO_CLIENT_SECRET } : {}),
+      client: {
+        token_endpoint_auth_method: process.env.KAKAO_CLIENT_SECRET ? 'client_secret_post' : 'none'
+      }
+    })
+  ],
+  callbacks: {
+    jwt({ token, user }) {
+      if (user?.id) token.sub = user.id;
+      return token;
+    },
+    session({ session, token }) {
+      if (token.sub) session.user.id = token.sub;
+      return session;
+    },
+  },
+  pages: {
+    signIn: '/',   // 로그인 페이지를 메인으로 설정
+  },
+  session: { strategy: 'jwt' },
+};
+
+export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);

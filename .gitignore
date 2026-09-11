@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Auxly - AI Task Management (internal data)
+.auxly/
+
+.vercel
+.env*
+
+# Local Netlify folder
+.netlify
