@@ -20,7 +20,7 @@ export default function FavoriteButton({ placeId, placeData }: FavoriteButtonPro
     // 즐겨찾기 상태 확인
     const checkFavorite = async () => {
       try {
-        const res = await fetch('/api/user/favorites');
+        const res = await fetch('/api/user/favorites?t=' + Date.now(), { cache: 'no-store' });
         const data = await res.json();
         if (data.success) {
           const found = data.data.some((f: FavoritePlace) => f.placeId === placeId);

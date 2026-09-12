@@ -34,8 +34,8 @@ export default function MyPage() {
       setIsLoading(true);
       try {
         const [favRes, visitRes] = await Promise.all([
-          fetch('/api/user/favorites'),
-          fetch('/api/user/visits'),
+          fetch('/api/user/favorites?t=' + Date.now(), { cache: 'no-store' }),
+          fetch('/api/user/visits?t=' + Date.now(), { cache: 'no-store' }),
         ]);
         const [favData, visitData] = await Promise.all([favRes.json(), visitRes.json()]);
         if (favData.success) setFavorites(favData.data);

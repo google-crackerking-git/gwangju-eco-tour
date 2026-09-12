@@ -6,6 +6,8 @@ import { auth } from '@/lib/auth';
 import { getFirebaseAdmin } from '@/lib/firebase-admin';
 import type { VisitRecord } from '@/types';
 
+export const dynamic = 'force-dynamic';
+
 // GET — 방문기록 목록 조회
 export async function GET() {
   const session = await auth();
