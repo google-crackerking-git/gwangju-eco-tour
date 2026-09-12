@@ -56,10 +56,14 @@ export default function FavoriteButton({ placeId, placeData }: FavoriteButtonPro
           body: JSON.stringify(placeData),
         });
         const data = await res.json();
-        if (data.success) setIsFavorite(true);
+        if (data.success) {
+          setIsFavorite(true);
+        } else {
+          alert('저장 실패: ' + (data.error || '알 수 없는 오류'));
+        }
       }
-    } catch {
-      alert('처리 중 오류가 발생했어요.');
+    } catch (e: any) {
+      alert('처리 중 오류가 발생했어요: ' + e.message);
     } finally {
       setIsLoading(false);
     }

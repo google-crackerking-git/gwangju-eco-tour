@@ -66,9 +66,9 @@ export async function POST(request: NextRequest) {
       .set(placeData);
 
     return NextResponse.json({ success: true });
-  } catch (error) {
+  } catch (error: any) {
     console.error('[Favorites POST Error]', error);
-    return NextResponse.json({ success: false, error: '즐겨찾기 추가 실패' }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message || '즐겨찾기 추가 실패' }, { status: 500 });
   }
 }
 

@@ -37,9 +37,11 @@ export default function VisitButton({ placeData }: VisitButtonProps) {
         setIsRecorded(true);
         setShowMemoInput(false);
         setMemo('');
+      } else {
+        alert('기록 실패: ' + (data.error || '알 수 없는 오류'));
       }
-    } catch {
-      alert('기록 중 오류가 발생했어요.');
+    } catch (e: any) {
+      alert('기록 중 오류가 발생했어요: ' + e.message);
     } finally {
       setIsLoading(false);
     }
