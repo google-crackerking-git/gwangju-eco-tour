@@ -27,8 +27,13 @@ export const authConfig: NextAuthConfig = {
     })
   ],
   callbacks: {
-    jwt({ token, user }) {
-      if (user?.id) token.sub = user.id;
+    jwt({ token, user, account }) {
+      // 카카오 고유 ID를 명시적으로 세션(토큰)에 고정
+      if (account?.providerAccountId) {
+        token.sub = account.providerAccountId;
+      } else if (user?.id) {
+        token.sub = user.id;
+      }
       return token;
     },
     session({ session, token }) {
