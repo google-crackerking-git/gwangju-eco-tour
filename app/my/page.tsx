@@ -122,13 +122,16 @@ export default function MyPage() {
       {/* 오메나 배너 */}
       <div className="flex items-center justify-center gap-4 py-4 px-4"
         style={{ background: 'linear-gradient(135deg, #DBEAFE, #D1FAE5)' }}>
-        <Image src="/characters/1.기본형(정면).png" alt="오메나" width={60} height={60} />
+        <Image src="/characters/1.기본(정면).png" alt="오메나" width={60} height={60} />
         <div>
           <p className="font-bold text-sm" style={{ color: '#1E3A8A' }}>
-            오메나와 함께한 광주 탐험 🗺️
+            오메나와 함께하는 광주 탐험 중!
           </p>
           <p className="text-xs text-gray-500">
-            즐겨찾기 {favorites.length}곳 · 방문기록 {visits.length}곳
+            즐겨찾기 {favorites.length}개 · 방문기록 {visits.length}개
+          </p>
+          <p className="text-[10px] text-gray-400 mt-1">
+            디버그 ID: {session.user?.id}
           </p>
         </div>
       </div>
