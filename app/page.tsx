@@ -223,10 +223,15 @@ export default function HomePage() {
         {/* 모바일 하단 교통 탭 */}
         {!selectedStop && (
           <div
-            className="fixed inset-x-0 bottom-0 bg-white border-t border-gray-200 z-40"
-            style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
+            className="fixed inset-x-0 bottom-0 bg-white border-t border-gray-200 z-40 flex flex-col"
+            style={{ 
+              height: '45vh', 
+              paddingBottom: 'env(safe-area-inset-bottom)' 
+            }}
           >
-            <TransportPanel onStopSelect={handleStopSelect} mobileCompact />
+            <div className="flex-1 overflow-hidden">
+              <TransportPanel onStopSelect={handleStopSelect} mobileCompact />
+            </div>
           </div>
         )}
       </div>
