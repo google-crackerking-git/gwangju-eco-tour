@@ -150,7 +150,7 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
               {/* 추가 상세 정보 (overview) */}
               <div className="mt-3 pt-3 border-t border-gray-100">
                 <p className="text-xs text-gray-600 leading-relaxed whitespace-pre-wrap">
-                  {detailInfo ? detailInfo.overview : '상세 정보를 불러오는 중입니다...'}
+                  {place.overview || detailInfo?.overview || '상세 정보를 불러오는 중입니다...'}
                 </p>
               </div>
 
