@@ -11,6 +11,7 @@ import TourismInfoCard from '@/components/sidebar/TourismInfoCard';
 import LoginButton from '@/components/auth/LoginButton';
 import CharacterLoader from '@/components/character/CharacterLoader';
 import CharacterEmptyState from '@/components/character/CharacterEmptyState';
+import OnboardingModal from '@/components/guide/OnboardingModal';
 import type { SelectedStop } from '@/types';
 
 // 카카오 지도는 SSR 불가 → 클라이언트에서만 로드
@@ -78,6 +79,7 @@ export default function HomePage() {
 
   return (
     <div className="flex flex-col h-screen overflow-hidden">
+      <OnboardingModal />
       {/* ─── 헤더 ──────────────────────────────────────────────── */}
       <header
         className="flex items-center justify-between px-4 py-2 shadow-md z-50 shrink-0"
@@ -86,17 +88,31 @@ export default function HomePage() {
         <div className="flex items-center gap-2">
           <Image
             src="/characters/1.기본형(정면).png"
-            alt="오메나"
+            alt="오매나"
             width={36}
             height={36}
             className="rounded-full bg-white/20"
           />
           <div>
             <h1 className="text-white font-black text-base leading-tight">광주에코투어</h1>
-            <p className="text-blue-200 text-xs">🌿 친환경 광주 관광</p>
+            <p className="text-blue-200 text-xs">친환경 광주 관광</p>
           </div>
         </div>
-        <LoginButton />
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => window.location.reload()}
+            className="text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
+          >
+            <span>🏠</span> 홈
+          </button>
+          <button 
+            onClick={() => window.dispatchEvent(new Event('openTutorial'))}
+            className="text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
+          >
+            <span>💡</span> 사용법
+          </button>
+          <LoginButton />
+        </div>
       </header>
 
       {/* ─── 메인 컨텐츠 ────────────────────────────────────────── */}
