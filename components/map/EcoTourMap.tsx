@@ -161,8 +161,11 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
         />
       ))}
 
-      {/* 관광지 마커 */}
-      {filteredTourism.map((place) => (
+      {/* 관광지 마커 (필터된 관광지 + 선택된 연관 관광지) */}
+      {[
+        ...filteredTourism,
+        ...(selectedTourism && !filteredTourism.find(p => p.contentId === selectedTourism.contentId) ? [selectedTourism] : [])
+      ].map((place) => (
         <TourismMarker
           key={place.contentId}
           place={place}
