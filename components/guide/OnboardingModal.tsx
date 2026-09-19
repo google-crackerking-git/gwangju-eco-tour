@@ -26,8 +26,14 @@ export default function OnboardingModal() {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-opacity">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-300">
+    <div 
+      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm transition-opacity"
+      onClick={handleClose}
+    >
+      <div 
+        className="bg-white rounded-3xl shadow-2xl w-full max-w-md overflow-hidden flex flex-col max-h-[85vh] animate-in fade-in zoom-in duration-300"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="bg-gradient-to-r from-blue-900 to-indigo-800 text-white p-5 flex justify-between items-center shrink-0">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🌱</span>

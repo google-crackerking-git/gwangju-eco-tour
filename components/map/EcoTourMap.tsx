@@ -111,9 +111,14 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
       level={7}
       onCreate={setMap}
       onClick={() => {
-        setSelectedTourism(null);
-        setSelectedStop(null);
-        setNearbyTourism([]);
+        if (selectedTourism) {
+          // 관광지가 선택되어 있다면 관광지 선택만 해제 (이전 단계)
+          setSelectedTourism(null);
+        } else {
+          // 관광지 선택이 없는 상태라면 정류장 선택 해제 (완전 초기화)
+          setSelectedStop(null);
+          setNearbyTourism([]);
+        }
       }}
     >
       {/* 버스 정류장 마커 */}
