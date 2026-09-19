@@ -643,7 +643,6 @@
                 document.getElementById('hud-bus-type').className = `${activeRoute.typeBg} px-2.5 py-1 rounded-full text-xs font-black text-white shadow-md`;
                 document.getElementById('hud-route-name').innerText = activeRoute.num;
                 document.getElementById('start-screen').classList.add('hidden');
-                document.getElementById('back-btn').style.display = 'block';
                 resetGame();
                 gameState = 'PLAYING';
                 playSound('collect');
@@ -652,7 +651,6 @@
             document.getElementById('restart-btn').onclick = () => {
                 document.getElementById('end-screen').classList.add('hidden');
                 document.getElementById('start-screen').classList.remove('hidden');
-                document.getElementById('back-btn').style.display = 'none';
                 gameState = 'START';
             };
         }
@@ -876,7 +874,6 @@
                 }
 
                 document.getElementById('end-screen').classList.remove('hidden');
-                document.getElementById('back-btn').style.display = 'none';
             }
         }
 
