@@ -10,7 +10,7 @@ import { CONTENT_TYPE_ICONS, CONTENT_TYPE_LABELS } from '@/types';
 type TabType = 'bus' | 'subway';
 
 // Category filter config — order mirrors the store DEFAULT_CATEGORIES
-const CATEGORY_IDS: TourismContentType[] = [12, 14, 39, 32];
+const CATEGORY_IDS: TourismContentType[] = [12, 14, 39, 32, 38];
 
 interface TransportPanelProps {
   onStopSelect: (stop: SelectedStop) => void;
@@ -84,7 +84,9 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
                           ? '#EDE9FE'
                           : id === 39
                           ? '#FFEDD5'
-                          : '#D1FAE5',
+                          : id === 32
+                          ? '#D1FAE5'
+                          : '#FCE7F3',
                       color:
                         id === 12
                           ? '#1E3A8A'
@@ -92,7 +94,9 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
                           ? '#7C3AED'
                           : id === 39
                           ? '#EA580C'
-                          : '#2D7A3A',
+                          : id === 32
+                          ? '#2D7A3A'
+                          : '#BE185D',
                     }
                   : {
                       backgroundColor: '#F3F4F6',

@@ -1,0 +1,60 @@
+const fs = require('fs');
+
+const envStr = fs.readFileSync('.env.local', 'utf8');
+const match = envStr.match(/KAKAO_CLIENT_ID=(.*)/);
+const kakaoKey = match[1].trim().replace(/\"/g, '');
+
+const markets = JSON.parse(fs.readFileSync('data/markets_raw.json', 'utf8'));
+
+async function run() {
+  for (let m of markets) {
+    let q = m['주소'] || m['시장명'];
+    if (!q) continue;
+    try {
+      let geoRes = await fetch('https://dapi.kakao.com/v2/local/search/address.json?query=' + encodeURIComponent(q), {
+        headers: { Authorization: 'KakaoAK ' + kakaoKey }
+      });
+      let geoJson = await geoRes.json();
+      if (geoJson.documents && geoJson.documents.length > 0) {
+        m.lat = parseFloat(geoJson.documents[0].y);
+        m.lng = parseFloat(geoJson.documents[0].x);
+      } else {
+        // try keyword search
+        geoRes = await fetch('https://dapi.kakao.com/v2/local/search/keyword.json?query=' + encodeURIComponent('광주 ' + m['시장명']), {
+          headers: { Authorization: 'KakaoAK ' + kakaoKey }
+        });
+        geoJson = await geoRes.json();
+        if (geoJson.documents && geoJson.documents.length > 0) {
+          m.lat = parseFloat(geoJson.documents[0].y);
+          m.lng = parseFloat(geoJson.documents[0].x);
+        } else {
+          m.lat = 0; m.lng = 0;
+        }
+      }
+    } catch(e) { console.error(e); m.lat = 0; m.lng = 0; }
+  }
+  
+  const tsContent = 'import { TourismPlace } from "@/types";\n\n' +
+    'export const LOCAL_MARKETS: TourismPlace[] = ' + JSON.stringify(markets.map((m, i) => {
+      let contentId = 'market_' + i;
+      let contentTypeId = 38; 
+      let title = '[전통시장] ' + m['시장명'];
+      let overview = m['팝업창 기본설명'] + '\n\n' + '이용시간: ' + m['이용시간'] + '\n' + '취급품목: ' + m['취급품목'];
+      return {
+        contentId,
+        contentTypeId,
+        title,
+        addr1: m['주소'],
+        mapx: m.lng,
+        mapy: m.lat,
+        dist: 0,
+        firstimage: '',
+        tel: m['전화'],
+        overview,
+        isShopping: true
+      };
+    }), null, 2) + ';\n';
+    
+  fs.writeFileSync('data/markets.ts', tsContent);
+}
+run();

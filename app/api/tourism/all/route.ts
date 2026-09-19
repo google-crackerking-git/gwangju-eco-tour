@@ -4,9 +4,10 @@ import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 import { fetchHistorical518, mergeHistorical518 } from '@/lib/historical518';
 import { fetchPathPlaces, mergePathData } from '@/lib/path';
+import { fetchMarkets, mergeMarkets } from '@/lib/market';
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/areaBasedList2';
-const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
+const CONTENT_TYPES = [12, 14, 39, 32, 38]; // 관광지, 문화시설, 음식점, 숙박, 쇼핑
 const AREA_CODE = 5; // 광주광역시
 
 export async function GET(request: NextRequest) {
@@ -18,12 +19,13 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const [odcloudItems, jnTourItems, heritageItems, historical518Items, pathItems, ...results] = await Promise.all([
+    const [odcloudItems, jnTourItems, heritageItems, historical518Items, pathItems, marketItems, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
       fetchHeritagePlaces(),
       fetchHistorical518(),
       fetchPathPlaces(),
+      fetchMarkets(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -66,6 +68,7 @@ export async function GET(request: NextRequest) {
     allPlaces = mergeHeritageData(allPlaces, heritageItems);
     allPlaces = mergeHistorical518(allPlaces, historical518Items);
     allPlaces = mergePathData(allPlaces, pathItems);
+    allPlaces = mergeMarkets(allPlaces, marketItems);
 
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {

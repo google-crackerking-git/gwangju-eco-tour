@@ -8,6 +8,7 @@ import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 import { fetchHistorical518, mergeHistorical518 } from '@/lib/historical518';
 import { fetchPathPlaces, mergePathData } from '@/lib/path';
+import { fetchMarkets, mergeMarkets } from '@/lib/market';
 
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371e3; // metres
@@ -25,7 +26,7 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 }
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/locationBasedList1';
-const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
+const CONTENT_TYPES = [12, 14, 39, 32, 38]; // 관광지, 문화시설, 음식점, 숙박, 쇼핑
 
 export async function GET(request: NextRequest) {
   const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
@@ -53,13 +54,14 @@ export async function GET(request: NextRequest) {
   const maxRadius = radiusParam ? parseInt(radiusParam, 10) : 500; // default 500m
 
   try {
-    // 4개 카테고리 동시 조회 + ODCloud, JnTour, Heritage, 518, Path
-    const [odcloudItems, jnTourItems, heritageItems, historical518Items, pathItems, ...results] = await Promise.all([
+    // 4개 카테고리 동시 조회 + ODCloud, JnTour, Heritage, 518, Path, Markets
+    const [odcloudItems, jnTourItems, heritageItems, historical518Items, pathItems, marketItems, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
       fetchHeritagePlaces(),
       fetchHistorical518(),
       fetchPathPlaces(),
+      fetchMarkets(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -105,6 +107,7 @@ export async function GET(request: NextRequest) {
     allPlaces = mergeHeritageData(allPlaces, heritageItems);
     allPlaces = mergeHistorical518(allPlaces, historical518Items);
     allPlaces = mergePathData(allPlaces, pathItems);
+    allPlaces = mergeMarkets(allPlaces, marketItems);
 
     const centerLat = parseFloat(lat);
     const centerLng = parseFloat(lng);
