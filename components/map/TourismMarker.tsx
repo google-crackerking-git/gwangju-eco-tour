@@ -58,6 +58,19 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
     getDistance(place.mapy, place.mapx, p.mapy, p.mapx) <= 500
   ).slice(0, 3); // 최대 3개
 
+  const markerSvg = encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+      <circle cx="14" cy="14" r="14" fill="${color}" stroke="white" stroke-width="2" opacity="0.95"/>
+      <text x="14" y="18.5" fill="white" font-size="12" text-anchor="middle">${icon}</text>
+    </svg>
+  `);
+  const selectedMarkerSvg = encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="16" fill="${color}" stroke="#FBBF24" stroke-width="4"/>
+      <text x="18" y="23.5" fill="white" font-size="16" text-anchor="middle">${icon}</text>
+    </svg>
+  `);
+
   return (
     <>
       <MapMarker
@@ -67,12 +80,8 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
         onMouseOver={() => setHovered(true)}
         onMouseOut={() => setHovered(false)}
         image={{
-          src: `data:image/svg+xml;utf8,${encodeURIComponent(
-            `<svg xmlns="http://www.w3.org/2000/svg" width="${isSelected ? 28 : 22}" height="${isSelected ? 28 : 22}">
-              <circle cx="${isSelected ? 14 : 11}" cy="${isSelected ? 14 : 11}" r="${isSelected ? 13 : 10}" fill="${color}" stroke="white" stroke-width="2" opacity="0.9"/>
-            </svg>`
-          )}`,
-          size: isSelected ? { width: 28, height: 28 } : { width: 22, height: 22 },
+          src: `data:image/svg+xml;utf8,${isSelected ? selectedMarkerSvg : markerSvg}`,
+          size: isSelected ? { width: 36, height: 36 } : { width: 28, height: 28 },
         }}
       />
       {hovered && !isSelected && (
@@ -115,11 +124,21 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
             <div className="p-4 overflow-y-auto">
               <div className="flex justify-between items-start mb-1">
                 <h3 className="font-bold text-base text-gray-900 leading-tight">{place.title}</h3>
-                {detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능') && (
-                  <span className="shrink-0 bg-green-100 text-green-700 text-[10px] px-1.5 py-0.5 rounded font-bold border border-green-200">
-                    🐾 반려동물
-                  </span>
-                )}
+                <div className="flex flex-col items-end gap-1">
+                  {detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능') && (
+                    <span className="shrink-0 bg-green-100 text-green-700 text-[10px] px-1.5 py-0.5 rounded font-bold border border-green-200">
+                      🐕 반려동물
+                    </span>
+                  )}
+                  <a 
+                    href={`https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="shrink-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold hover:bg-blue-700 transition-colors"
+                  >
+                    🚶 길찾기
+                  </a>
+                </div>
               </div>
               <p className="text-xs text-gray-500 mb-2 leading-snug">{place.addr1}</p>
               {place.tel && <p className="text-sm text-blue-600 mb-3">📞 {place.tel}</p>}

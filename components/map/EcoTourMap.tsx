@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useEffect, useState } from 'react';
 import { useKakaoLoader, Map, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import { useEcoTourStore } from '@/store/ecoTourStore';
 import { GWANGJU_CENTER } from '@/data/subway-stations';
@@ -46,6 +46,26 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
     allTourism,
   } = useEcoTourStore();
 
+  const [map, setMap] = useState<kakao.maps.Map | null>(null);
+
+  // 선택된 정류장이나 관광지가 변경될 때 중심 이동
+  useEffect(() => {
+    if (!map) return;
+    if (selectedTourism) {
+      map.panTo(new kakao.maps.LatLng(selectedTourism.mapy, selectedTourism.mapx));
+    } else if (selectedStop) {
+      map.panTo(new kakao.maps.LatLng(selectedStop.lat, selectedStop.lng));
+    }
+  }, [map, selectedStop, selectedTourism]);
+
+  // 버스 노선 선택 시 전체 정류장이 보이도록 bounds 설정
+  useEffect(() => {
+    if (!map || transportMode !== 'bus' || busStops.length === 0) return;
+    const bounds = new kakao.maps.LatLngBounds();
+    busStops.forEach(stop => bounds.extend(new kakao.maps.LatLng(stop.lat, stop.lng)));
+    map.setBounds(bounds);
+  }, [map, transportMode, busStops]);
+
   const filteredTourism = nearbyTourism.filter((p) =>
     activeCategories.includes(p.contentTypeId)
   );
@@ -89,6 +109,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
       center={{ lat: GWANGJU_CENTER.lat, lng: GWANGJU_CENTER.lng }}
       style={{ width: '100%', height: '100%' }}
       level={7}
+      onCreate={setMap}
       onClick={() => {
         setSelectedTourism(null);
         setSelectedStop(null);

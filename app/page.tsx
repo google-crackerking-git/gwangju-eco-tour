@@ -57,8 +57,9 @@ export default function HomePage() {
     setMobileSheetOpen(true);
 
     try {
+      const radius = stop.type === 'subway' ? '500' : '300';
       const res = await fetch(
-        `/api/tourism/nearby?lat=${stop.lat}&lng=${stop.lng}`
+        `/api/tourism/nearby?lat=${stop.lat}&lng=${stop.lng}&radius=${radius}`
       );
       const data = await res.json();
       if (data.success) {

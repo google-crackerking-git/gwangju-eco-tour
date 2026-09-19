@@ -11,6 +11,20 @@ interface BusStopMarkerProps {
 }
 
 export default function BusStopMarker({ stop, isSelected, hasTourism, onSelect }: BusStopMarkerProps) {
+  const busSvg = encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+      <circle cx="14" cy="14" r="14" fill="#1E3A8A" stroke="white" stroke-width="2"/>
+      <text x="14" y="19" fill="white" font-size="14" text-anchor="middle">🚌</text>
+    </svg>
+  `);
+  
+  const selectedBusSvg = encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+      <circle cx="18" cy="18" r="16" fill="#1E3A8A" stroke="#FBBF24" stroke-width="4"/>
+      <text x="18" y="24" fill="white" font-size="18" text-anchor="middle">🚌</text>
+    </svg>
+  `);
+
   return (
     <>
       <MapMarker
@@ -18,23 +32,18 @@ export default function BusStopMarker({ stop, isSelected, hasTourism, onSelect }
         title={stop.nodeName}
         onClick={onSelect}
         image={{
-          src: isSelected
-            ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
-            : `data:image/svg+xml;utf8,${encodeURIComponent(
-                `<svg xmlns="http://www.w3.org/2000/svg" width="${hasTourism ? 16 : 12}" height="${hasTourism ? 16 : 12}">
-                  <circle cx="${hasTourism ? 8 : 6}" cy="${hasTourism ? 8 : 6}" r="${hasTourism ? 7 : 5}" fill="${hasTourism ? '#318440' : '#1E448A'}" stroke="white" stroke-width="2"/>
-                </svg>`
-              )}`,
-          size: isSelected ? { width: 24, height: 35 } : (hasTourism ? { width: 16, height: 16 } : { width: 12, height: 12 }),
+          src: \`data:image/svg+xml;utf8,\${isSelected ? selectedBusSvg : busSvg}\`,
+          size: isSelected ? { width: 36, height: 36 } : { width: 28, height: 28 },
         }}
       />
       {isSelected && (
         <CustomOverlayMap
           position={{ lat: stop.lat, lng: stop.lng }}
-          yAnchor={2.5}
+          yAnchor={1.8}
         >
-          <div className="custom-marker-label bg-white border border-blue-800 text-blue-800 px-2 py-1 rounded-lg text-xs font-bold shadow-md whitespace-nowrap">
-            🚏 {stop.nodeName}
+          <div className="custom-marker-label bg-white border-2 border-blue-800 text-blue-900 px-3 py-1.5 rounded-lg text-sm font-bold shadow-lg whitespace-nowrap flex flex-col items-center">
+            <span>{stop.nodeName}</span>
+            {stop.arsId && <span className="text-[10px] text-gray-500 font-medium">{stop.arsId}</span>}
           </div>
         </CustomOverlayMap>
       )}

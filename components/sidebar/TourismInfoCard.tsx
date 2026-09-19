@@ -45,10 +45,10 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
   const categoryIcon = CONTENT_TYPE_ICONS[place.contentTypeId];
   const categoryLabel = CONTENT_TYPE_LABELS[place.contentTypeId];
 
-  // 주변 관광지 (300m 이내)
+  // 주변 관광지 (500m 이내)
   const relatedPlaces = allTourism.filter(p => 
     p.contentId !== place.contentId && 
-    getDistance(place.mapy, place.mapx, p.mapy, p.mapx) <= 300
+    getDistance(place.mapy, place.mapx, p.mapy, p.mapx) <= 500
   ).slice(0, 3);
 
   const favoriteData: Omit<FavoritePlace, 'savedAt'> = {
@@ -177,6 +177,14 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
 
         {/* 액션 버튼들 */}
         <div className="flex gap-2 pt-4 mt-4 border-t border-gray-100">
+          <a
+            href={`https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`}
+            target="_blank"
+            rel="noreferrer"
+            className="flex-1 text-center py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1"
+          >
+            <span>🚶</span> 길찾기
+          </a>
           <FavoriteButton placeId={place.contentId} placeData={favoriteData} />
           <VisitButton placeData={visitData} />
         </div>

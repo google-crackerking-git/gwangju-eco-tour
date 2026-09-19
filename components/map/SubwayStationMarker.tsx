@@ -27,6 +27,20 @@ export default function SubwayStationMarker({ station, isSelected, hasTourism, o
     }
   }, [isSelected, info, station.stationId]);
 
+  const subwaySvg = encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
+      <rect x="2" y="2" width="24" height="24" rx="6" fill="#7C3AED" stroke="white" stroke-width="2"/>
+      <text x="14" y="19" fill="white" font-size="14" text-anchor="middle">🚇</text>
+    </svg>
+  `);
+  
+  const selectedSubwaySvg = encodeURIComponent(`
+    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
+      <rect x="2" y="2" width="32" height="32" rx="8" fill="#7C3AED" stroke="#FBBF24" stroke-width="4"/>
+      <text x="18" y="24" fill="white" font-size="18" text-anchor="middle">🚇</text>
+    </svg>
+  `);
+
   return (
     <>
       <MapMarker
@@ -34,14 +48,8 @@ export default function SubwayStationMarker({ station, isSelected, hasTourism, o
         title={station.stationName}
         onClick={onSelect}
         image={{
-          src: isSelected
-            ? 'https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png'
-            : `data:image/svg+xml;utf8,${encodeURIComponent(
-                `<svg xmlns="http://www.w3.org/2000/svg" width="${hasTourism ? 18 : 14}" height="${hasTourism ? 18 : 14}">
-                  <rect x="1" y="1" width="${hasTourism ? 16 : 12}" height="${hasTourism ? 16 : 12}" rx="3" fill="${hasTourism ? '#318440' : '#7C3AED'}" stroke="white" stroke-width="2"/>
-                </svg>`
-              )}`,
-          size: isSelected ? { width: 24, height: 35 } : (hasTourism ? { width: 18, height: 18 } : { width: 14, height: 14 }),
+          src: \`data:image/svg+xml;utf8,\${isSelected ? selectedSubwaySvg : subwaySvg}\`,
+          size: isSelected ? { width: 36, height: 36 } : { width: 28, height: 28 },
         }}
       />
       {isSelected && info && (

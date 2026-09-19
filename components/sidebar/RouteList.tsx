@@ -111,7 +111,7 @@ export default function RouteList({ onStopSelect }: RouteListProps) {
             const isLoadingThis = isSelected && isLoadingStops;
 
             return (
-              <li key={route.routeId}>
+              <li key={route.routeId} className="flex flex-col">
                 <button
                   type="button"
                   onClick={() => handleRouteClick(route)}
@@ -140,7 +140,7 @@ export default function RouteList({ onStopSelect }: RouteListProps) {
                   {/* Start → End */}
                   <span className="min-w-0 flex-1 truncate text-sm">
                     {route.startNodeName}
-                    <span className="mx-1 opacity-60">→</span>
+                    <span className="mx-1 opacity-60">↔</span>
                     {route.endNodeName}
                   </span>
 
@@ -149,10 +149,35 @@ export default function RouteList({ onStopSelect }: RouteListProps) {
                     <span
                       className="h-4 w-4 shrink-0 animate-spin rounded-full border-2 border-t-transparent border-white"
                       role="status"
-                      aria-label="정류장 로딩 중"
                     />
                   )}
                 </button>
+
+                {isSelected && !isLoadingStops && busStops && busStops.length > 0 && (
+                  <div className="bg-gray-50 px-2 py-2 max-h-64 overflow-y-auto">
+                    <ul className="space-y-1">
+                      {busStops.map((stop) => (
+                        <li key={stop.nodeId}>
+                          <button
+                            type="button"
+                            onClick={() => onStopSelect({ type: 'bus', id: stop.nodeId, name: stop.nodeName, lat: stop.lat, lng: stop.lng })}
+                            className="w-full flex items-center justify-between text-left text-xs p-2 rounded hover:bg-white hover:shadow-sm transition-all"
+                          >
+                            <div className="flex flex-col">
+                              <span className="font-medium text-gray-800">{stop.nodeName}</span>
+                              {stop.arsId && <span className="text-[10px] text-gray-500">정류소번호: {stop.arsId}</span>}
+                            </div>
+                            {stop.dir && (
+                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${stop.dir === 'up' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}>
+                                {stop.dir === 'up' ? '기점행' : '종점행'}
+                              </span>
+                            )}
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
               </li>
             );
           })}

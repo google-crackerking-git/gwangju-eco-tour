@@ -24,6 +24,7 @@ export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const lat = searchParams.get('lat');
   const lng = searchParams.get('lng');
+  const radiusParam = searchParams.get('radius') || '300'; // 기본 300, 지하철은 500
 
   if (!lat || !lng) {
     return NextResponse.json(
@@ -41,14 +42,14 @@ export async function GET(request: NextRequest) {
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
-        url.searchParams.set('numOfRows', '10');
+        url.searchParams.set('numOfRows', '20'); // 더 넓은 반경을 위해 20개로 증가
         url.searchParams.set('pageNo', '1');
         url.searchParams.set('MobileOS', 'ETC');
         url.searchParams.set('MobileApp', 'GwangjuEcoTour');
         url.searchParams.set('_type', 'json');
         url.searchParams.set('mapX', lng);
         url.searchParams.set('mapY', lat);
-        url.searchParams.set('radius', String(RADIUS));
+        url.searchParams.set('radius', radiusParam);
         url.searchParams.set('contentTypeId', String(contentTypeId));
 
         const response = await fetch(url.toString(), {

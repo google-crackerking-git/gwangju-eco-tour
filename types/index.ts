@@ -12,9 +12,11 @@ export interface BusRoute {
 export interface BusStop {
   nodeId: string;
   nodeName: string;
+  arsId?: string;
   lat: number;
   lng: number;
   nodeOrder: number;    // 노선 내 정류장 순서
+  dir?: 'up' | 'down';  // 상하행 구분
 }
 
 // ─── 지하철 관련 타입 ─────────────────────────────────────────

@@ -45,14 +45,21 @@ export async function GET(request: NextRequest) {
       items = items ? [items] : [];
     }
 
-    const stopList = items.map((item: any) => ({
-      nodeId: String(item.BUSSTOP_ID ?? ''),
-      nodeName: item.BUSSTOP_NAME ?? '',
-      arsId: String(item.ARS_ID ?? ''),
-      lat: parseFloat(item.LATITUDE ?? '0'),
-      lng: parseFloat(item.LONGITUDE ?? '0'),
-      nodeOrder: parseInt(item.SEQ ?? '0', 10),
-    }));
+    let foundTurnaround = false;
+    const stopList = items.map((item: any) => {
+      if (item.RETURN_FLAG === 3 || item.RETURN_FLAG === '3') {
+        foundTurnaround = true;
+      }
+      return {
+        nodeId: String(item.BUSSTOP_ID ?? ''),
+        nodeName: item.BUSSTOP_NAME ?? '',
+        arsId: String(item.ARS_ID ?? ''),
+        lat: parseFloat(item.LATITUDE ?? '0'),
+        lng: parseFloat(item.LONGITUDE ?? '0'),
+        nodeOrder: parseInt(item.SEQ ?? '0', 10),
+        dir: foundTurnaround ? 'down' : 'up',
+      };
+    });
 
     // 순서대로 정렬
     stopList.sort((a: { nodeOrder: number }, b: { nodeOrder: number }) => a.nodeOrder - b.nodeOrder);
