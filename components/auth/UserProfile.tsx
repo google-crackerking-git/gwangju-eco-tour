@@ -29,6 +29,20 @@ export default function UserProfile({ session }: UserProfileProps) {
   const avatarSrc = user?.image ?? null;
   const nickname = user?.name ?? '사용자';
 
+  const [ecoPoints, setEcoPoints] = useState(0);
+
+  // Load eco points from localStorage
+  useEffect(() => {
+    const loadPoints = () => {
+      const pts = parseInt(localStorage.getItem('eco_points') || '0', 10);
+      setEcoPoints(pts);
+    };
+    loadPoints();
+    // Also listen for changes (in case they play the game in another tab/iframe, but for our setup this is fine)
+    window.addEventListener('storage', loadPoints);
+    return () => window.removeEventListener('storage', loadPoints);
+  }, []);
+
   return (
     <div ref={dropdownRef} className="relative">
       {/* Trigger */}
@@ -39,6 +53,9 @@ export default function UserProfile({ session }: UserProfileProps) {
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
+        <div className="hidden sm:flex items-center gap-1 bg-emerald-500/80 text-white px-2 py-0.5 rounded-full text-[10px] font-bold border border-emerald-400 mr-1 shadow-inner">
+          🌱 {ecoPoints} PT
+        </div>
         {avatarSrc ? (
           <Image
             src={avatarSrc}
@@ -68,13 +85,18 @@ export default function UserProfile({ session }: UserProfileProps) {
         </svg>
       </button>
 
-      {/* Dropdown */}
+      {/* Dropdown Menu */}
       {isOpen && (
-        <div className="animate-fade-in-up absolute right-0 top-full z-50 mt-2 w-40 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
+        <div className="absolute right-0 top-full mt-2 w-48 rounded-xl bg-white p-2 shadow-lg ring-1 ring-black/5 z-50">
+          <div className="px-3 py-2 border-b border-gray-100 mb-1">
+            <p className="text-sm font-bold text-gray-900 truncate">{nickname}</p>
+            <p className="text-xs text-emerald-600 font-bold mt-1">🌱 {ecoPoints} 에코포인트</p>
+          </div>
+          
           <Link
             href="/my"
             onClick={() => setIsOpen(false)}
-            className="flex items-center gap-2 px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+            className="flex items-center gap-2 w-full rounded-lg px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition-colors"
           >
             <span>👤</span>
             마이페이지

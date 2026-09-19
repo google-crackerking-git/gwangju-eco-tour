@@ -737,81 +737,28 @@
             });
         }
 
+        // Preload Omena Images
+        const imgOmenaRun = new Image(); imgOmenaRun.src = '/characters/5. 응용형(자전거).png';
+        const imgOmenaJump = new Image(); imgOmenaJump.src = '/characters/15. 응용형(최고).png';
+        const imgOmenaIdle = new Image(); imgOmenaIdle.src = '/characters/31. 응용형(길찾기).png';
+
         function drawOmena(x, y, facingLeft, squash) {
             ctx.save();
             ctx.translate(x + player.width / 2, y + player.height / 2);
             if (facingLeft) ctx.scale(-1, 1);
             ctx.scale(1 / squash, squash);
 
-            ctx.fillStyle = '#facc15';
-            ctx.beginPath();
-            ctx.arc(0, 4, 18, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.strokeStyle = '#ca8a04';
-            ctx.lineWidth = 2;
-            ctx.stroke();
+            let currentImg = imgOmenaIdle;
+            if (!player.grounded) {
+                currentImg = imgOmenaJump;
+            } else if (Math.abs(player.vx) > 0.5) {
+                currentImg = imgOmenaRun;
+            }
 
-            ctx.strokeStyle = '#334155';
-            ctx.lineWidth = 2;
-
-            ctx.beginPath();
-            ctx.moveTo(-6, -11);
-            ctx.lineTo(-12, -22);
-            ctx.stroke();
-            ctx.fillStyle = '#ef4444';
-            ctx.beginPath();
-            ctx.arc(-12, -22, 4.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.moveTo(0, -13);
-            ctx.lineTo(0, -26);
-            ctx.stroke();
-            ctx.fillStyle = '#22c55e';
-            ctx.beginPath();
-            ctx.arc(0, -26, 4.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.beginPath();
-            ctx.moveTo(6, -11);
-            ctx.lineTo(12, -22);
-            ctx.stroke();
-            ctx.fillStyle = '#3b82f6';
-            ctx.beginPath();
-            ctx.arc(12, -22, 4.5, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#0f172a';
-            ctx.beginPath();
-            ctx.arc(-5.5, -1, 3, 0, Math.PI * 2);
-            ctx.arc(5.5, -1, 3, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = '#ffffff';
-            ctx.beginPath();
-            ctx.arc(-6.5, -2, 1.2, 0, Math.PI * 2);
-            ctx.arc(4.5, -2, 1.2, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.fillStyle = 'rgba(244, 63, 94, 0.65)';
-            ctx.beginPath();
-            ctx.arc(-9.5, 4, 3.8, 0, Math.PI * 2);
-            ctx.arc(9.5, 4, 3.8, 0, Math.PI * 2);
-            ctx.fill();
-
-            ctx.strokeStyle = '#0f172a';
-            ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.arc(0, 3, 5, 0.1 * Math.PI, 0.9 * Math.PI);
-            ctx.stroke();
-
-            ctx.fillStyle = '#ea580c';
-            const legOffset = (Math.abs(player.vx) > 0.1) ? Math.sin(Date.now() * 0.018) * 6 : 0;
-            ctx.beginPath();
-            ctx.arc(-6 + legOffset, 20, 5, 0, Math.PI * 2);
-            ctx.arc(6 - legOffset, 20, 5, 0, Math.PI * 2);
-            ctx.fill();
-
+            if (currentImg.complete) {
+                // Adjust drawing offset and size (player rect is 38x48)
+                ctx.drawImage(currentImg, -28, -32, 56, 56);
+            }
             ctx.restore();
         }
 
@@ -891,11 +838,16 @@
                 playSound('clear');
                 createBurstParticles(goal.x + 35, goal.y + 30, '#38bdf8');
 
+                // Data Integration: Save points to localStorage for main app
+                const currentPoints = parseInt(localStorage.getItem('eco_points') || '0', 10);
+                localStorage.setItem('eco_points', (currentPoints + score).toString());
+
                 document.getElementById('end-title').innerText = `🏆 ${activeRoute.num} 완주 성공!`;
                 document.getElementById('end-desc').innerHTML = `
                     오매나와 함께 <b>[${activeRoute.num} - ${activeRoute.theme}]</b> 노선을 타고,<br>
                     공공데이터 연계 주요 유명 관광지를 성공적으로 수집했습니다!<br><br>
-                    🌱 <b>획득 에코포인트:</b> <span class="text-amber-300 font-extrabold text-lg">${score} PT</span>
+                    🌱 <b>획득 에코포인트:</b> <span class="text-amber-300 font-extrabold text-lg">+${score} PT</span><br>
+                    <span class="text-emerald-300 text-xs mt-1 block">(총 누적: ${currentPoints + score} PT)</span>
                 `;
 
                 const spotContainer = document.getElementById('collected-spots-list');
