@@ -218,15 +218,15 @@
         <canvas id="gameCanvas"></canvas>
 
         <!-- Discovery Toast Popup -->
-        <div id="spot-toast" class="absolute top-1/4 left-1/2 glass-panel rounded-3xl p-5 flex flex-col items-center gap-3 z-30 hidden pointer-events-none toast-pop border-2 border-amber-400/60 min-w-[320px] shadow-2xl">
-            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-3xl shadow-lg shrink-0 mb-1">
-                🏛️
+        <div id="spot-toast" class="absolute top-16 left-1/2 glass-panel rounded-full p-2.5 px-5 flex items-center gap-3 z-30 hidden pointer-events-none toast-pop border border-amber-400/50 shadow-lg">
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xl shadow-inner shrink-0">
+                📍
             </div>
-            <div class="flex flex-col items-center text-center">
-                <span id="toast-badge" class="bg-blue-600/90 text-white text-[11px] px-3 py-1 rounded-full mb-2 font-bold tracking-wide shadow-sm">버스 300m</span>
-                <span id="toast-title" class="font-black text-amber-300 text-xl mb-1 drop-shadow-md">국립아시아문화전당</span>
-                <p id="toast-desc" class="text-sm text-slate-200 mt-1">아시아 최대 규모의 복합 문화 예술 기관</p>
+            <div class="flex flex-col">
+                <span id="toast-title" class="font-bold text-amber-300 text-sm drop-shadow-sm">국립아시아문화전당</span>
+                <span id="toast-desc" class="text-[10px] text-slate-200 line-clamp-1 mt-0.5">아시아 최대 규모의 복합 문화 예술 기관</span>
             </div>
+            <span id="toast-badge" class="hidden"></span>
         </div>
 
         <!-- Start Screen / Route Selection Modal -->
@@ -368,105 +368,99 @@
 
         const busRoutesData = [
             {
-                id: "route_09",
-                num: "🚌 첨단09",
-                type: "급행",
-                typeBg: "bg-red-500",
-                category: "CULTURE",
-                theme: "문화예술 & 무등산",
-                bgColor: "gradient-sky",
+                id: "route_09", num: "🚌 첨단09", type: "급행", typeBg: "bg-red-500", category: "CULTURE",
+                theme: "문화예술 & 무등산", bgColor: "gradient-sky",
                 touristSpots: [
-                    { name: "국립아시아문화전당(ACC)", x: 320, y: 280, desc: "아시아 최대 규모 복합 문화 예술 기관", distance: "300m" },
+                    { name: "국립아시아문화전당", x: 320, y: 280, desc: "아시아 최대 규모 복합 문화 예술 기관", distance: "300m" },
                     { name: "동명동 카페거리", x: 650, y: 210, desc: "트렌디한 감성의 핫플레이스 카페 골목", distance: "300m" },
-                    { name: "광주 예술의 거리", x: 980, y: 270, desc: "전통 서화 및 갤러리가 늘어선 문화거리", distance: "500m" },
-                    { name: "조선대학교 장미원", x: 1350, y: 190, desc: "화려한 수만 송이 장미와 수변 산책로", distance: "300m" },
+                    { name: "광주 예술의거리", x: 980, y: 270, desc: "전통 문화 및 갤러리가 모인 문화거리", distance: "500m" },
+                    { name: "조선대학교 장미원", x: 1350, y: 190, desc: "수만 송이 장미가 피는 산책로", distance: "300m" },
                     { name: "지산유원지 모노레일", x: 1720, y: 270, desc: "무등산 능선을 조망하는 감성 리프트", distance: "500m" },
-                    { name: "무등산 국립공원", x: 2050, y: 210, desc: "세계지질공원 서석대 & 입석대 주상절리", distance: "300m" }
+                    { name: "무등산국립공원", x: 2050, y: 210, desc: "세계지질공원 입석대 & 서석대 절경", distance: "300m" }
                 ]
             },
             {
-                id: "route_117",
-                num: "🚌 양림117",
-                type: "간선",
-                typeBg: "bg-amber-500",
-                category: "HISTORY",
-                theme: "근대역사 & 정크아트",
-                bgColor: "gradient-retro",
+                id: "route_01", num: "🚌 순환01", type: "순환", typeBg: "bg-blue-600", category: "NATURE",
+                theme: "도심 속 자연 코스", bgColor: "gradient-nature",
                 touristSpots: [
-                    { name: "양림동 펭귄마을", x: 330, y: 270, desc: "정겨운 버려진 예술 골목 정크아트 비엔날레", distance: "300m" },
-                    { name: "우일선 선교사 사택", x: 670, y: 200, desc: "광주에서 가장 오래된 고풍스러운 서양식 근대건축", distance: "500m" },
-                    { name: "사직공원 전망타워", x: 1000, y: 260, desc: "광주 도심 전체와 무등산 파노라마 전망", distance: "300m" },
-                    { name: "이이남 스튜디오", x: 1380, y: 200, desc: "세계적 미디어아트 작품을 감상하는 카페 공간", distance: "300m" },
-                    { name: "양림 미술관", x: 1740, y: 270, desc: "지역 예술가들의 다양한 기획 전시관", distance: "500m" },
-                    { name: "오원각 역사사택", x: 2060, y: 220, desc: "울창한 숲속 고즈넉한 힐링 역사 문화재", distance: "300m" }
+                    { name: "상무시민공원", x: 330, y: 270, desc: "도심 속 거대한 호수와 산책로", distance: "200m" },
+                    { name: "5·18자유공원", x: 670, y: 200, desc: "민주화 운동의 역사적 상징", distance: "400m" },
+                    { name: "김대중컨벤션센터", x: 1000, y: 260, desc: "국제 규모의 대형 전시관", distance: "100m" },
+                    { name: "광주월드컵경기장", x: 1380, y: 200, desc: "2002년 4강 신화의 성지", distance: "300m" },
+                    { name: "풍암호수공원", x: 1740, y: 270, desc: "수변 데크길이 아름다운 공원", distance: "200m" },
+                    { name: "광주학생독립운동기념탑", x: 2060, y: 220, desc: "학생들의 항일 운동을 기리는 탑", distance: "300m" }
                 ]
             },
             {
-                id: "route_151",
-                num: "🚌 지원151",
-                type: "지선",
-                typeBg: "bg-emerald-500",
-                category: "HISTORY",
-                theme: "민주·평화 유적 코스",
-                bgColor: "gradient-green",
+                id: "route_117", num: "🚌 양림117", type: "간선", typeBg: "bg-amber-500", category: "HISTORY",
+                theme: "근대역사 & 스트리트", bgColor: "gradient-retro",
                 touristSpots: [
-                    { name: "5·18 민주광장", x: 310, y: 280, desc: "민주화 운동의 상징적 역사 장소", distance: "300m" },
-                    { name: "국립5·18민주묘지", x: 660, y: 210, desc: "숭고한 5·18 정신을 기리는 민주 성지", distance: "500m" },
-                    { name: "광주학생독립운동기념관", x: 990, y: 270, desc: "1929년 학생 항일 운동을 기억하는 기념관", distance: "300m" },
-                    { name: "전남대학교 민주길", x: 1360, y: 190, desc: "역사와 자연 숲길이 어우러진 둘레길", distance: "500m" },
-                    { name: "5·18 민주화운동기념관", x: 1710, y: 260, desc: "유네스코 세계기록유산 보유 기록관", distance: "300m" },
-                    { name: "민주종각 평화광장", x: 2040, y: 210, desc: "평화와 화합을 기원하는 종각 명소", distance: "300m" }
+                    { name: "양림펭귄마을", x: 330, y: 270, desc: "버려진 정크아트로 꾸며진 예술 골목", distance: "300m" },
+                    { name: "우일선 선교사 사택", x: 670, y: 200, desc: "가장 오래된 서양식 근대건축물", distance: "500m" },
+                    { name: "사직공원 전망타워", x: 1000, y: 260, desc: "무등산과 도심 파노라마 조망", distance: "300m" },
+                    { name: "이이남 스튜디오", x: 1380, y: 200, desc: "세계적 미디어아트 작품이 있는 카페", distance: "300m" },
+                    { name: "양림 미술관", x: 1740, y: 270, desc: "지역 예술가들의 다양한 기획 전시", distance: "500m" },
+                    { name: "최승효 가옥", x: 2060, y: 220, desc: "도심 속 고즈넉한 힐링 한옥", distance: "300m" }
                 ]
             },
             {
-                id: "route_12",
-                num: "🚌 수완12",
-                type: "간선",
-                typeBg: "bg-amber-500",
-                category: "FOOD",
-                theme: "1913 시장 & 비엔날레",
-                bgColor: "gradient-purple",
+                id: "route_151", num: "🚌 지원151", type: "지선", typeBg: "bg-emerald-500", category: "HISTORY",
+                theme: "민주·평화 유적 코스", bgColor: "gradient-green",
                 touristSpots: [
-                    { name: "1913 송정역 시장", x: 320, y: 270, desc: "100년 전통 레트로 청년 야시장 명소", distance: "300m" },
-                    { name: "광주비엔날레 전시관", x: 650, y: 200, desc: "아시아 대표 국제 현대미술 축제장", distance: "500m" },
-                    { name: "송정 떡갈비 거리", x: 980, y: 260, desc: "광주 5미(味) 명물 요리 거리", distance: "300m" },
-                    { name: "중외공원 명품숲", x: 1350, y: 190, desc: "시립미술관과 박물관이 모인 공원", distance: "500m" },
-                    { name: "국립광주박물관", x: 1700, y: 270, desc: "남도 문화유산을 보존한 종합박물관", distance: "300m" },
-                    { name: "광주 시립미술관", x: 2030, y: 220, desc: "현대 미술품과 드넓은 조각공원", distance: "300m" }
+                    { name: "5·18 민주광장", x: 310, y: 280, desc: "민주화 운동의 상징적인 중심 장소", distance: "300m" },
+                    { name: "국립5·18민주묘지", x: 660, y: 210, desc: "5·18 영령을 기리는 민주 성지", distance: "500m" },
+                    { name: "광주학생독립운동기념관", x: 990, y: 270, desc: "1929년 학생 항일 운동 기억 공간", distance: "300m" },
+                    { name: "전남대학교 민주길", x: 1360, y: 190, desc: "자연 경관이 어우러진 둘레길", distance: "500m" },
+                    { name: "5·18 민주화운동기록관", x: 1710, y: 260, desc: "유네스코 세계기록유산 보유 전시관", distance: "300m" },
+                    { name: "민주종각 평화광장", x: 2040, y: 210, desc: "평화와 화합을 기원하는 종각", distance: "300m" }
                 ]
             },
             {
-                id: "route_35",
-                num: "🚌 운림35",
-                type: "지선",
-                typeBg: "bg-emerald-500",
-                category: "NATURE",
-                theme: "무등산 생태 & 한옥",
-                bgColor: "gradient-nature",
+                id: "route_29", num: "🚌 송정29", type: "간선", typeBg: "bg-amber-500", category: "FOOD",
+                theme: "교통 & 전통 시장", bgColor: "gradient-purple",
+                touristSpots: [
+                    { name: "광주송정역", x: 310, y: 280, desc: "호남선의 관문이자 KTX 거점역", distance: "100m" },
+                    { name: "1913송정역시장", x: 660, y: 210, desc: "100년 전통 레트로 야시장 명소", distance: "200m" },
+                    { name: "송정공원", x: 990, y: 270, desc: "벚꽃이 만개하는 도심 속 휴식처", distance: "400m" },
+                    { name: "송정 떡갈비거리", x: 1360, y: 190, desc: "육즙 가득한 떡갈비 특화 거리", distance: "200m" },
+                    { name: "영산강 자전거길", x: 1710, y: 260, desc: "시원한 강바람을 맞는 에코 코스", distance: "300m" },
+                    { name: "극락강역", x: 2040, y: 210, desc: "가장 작은 꼬마역의 아날로그 감성", distance: "300m" }
+                ]
+            },
+            {
+                id: "route_12", num: "🚌 수완12", type: "간선", typeBg: "bg-amber-500", category: "FOOD",
+                theme: "중외공원 & 비엔날레", bgColor: "gradient-sky",
+                touristSpots: [
+                    { name: "광주비엔날레 전시관", x: 320, y: 270, desc: "세계적인 현대 미술 축제의 장", distance: "500m" },
+                    { name: "중외공원 명품길", x: 650, y: 200, desc: "시립미술관과 박물관이 모인 공원", distance: "500m" },
+                    { name: "국립광주박물관", x: 980, y: 260, desc: "남도 문화유산을 보존하는 박물관", distance: "300m" },
+                    { name: "광주 시립미술관", x: 1350, y: 190, desc: "현대 미술품과 넓은 조각공원", distance: "300m" },
+                    { name: "광주역사민속박물관", x: 1700, y: 270, desc: "전통 민속 농경 문화를 체험하는 곳", distance: "400m" },
+                    { name: "어린이대공원", x: 2030, y: 220, desc: "가족 나들이하기 좋은 놀이공원", distance: "200m" }
+                ]
+            },
+            {
+                id: "route_35", num: "🚌 운림35", type: "지선", typeBg: "bg-emerald-500", category: "NATURE",
+                theme: "무등산 생태 & 한옥", bgColor: "gradient-nature",
                 touristSpots: [
                     { name: "증심사 사찰", x: 330, y: 280, desc: "무등산 자락의 천년 고찰", distance: "300m" },
-                    { name: "의재미술관", x: 660, y: 210, desc: "허백련 화백의 남종화 미술관", distance: "500m" },
-                    { name: "광주 전통문화관", x: 990, y: 270, desc: "한옥 체험과 전통 국악 공연 중심지", distance: "300m" },
-                    { name: "무등산 춘설차밭", x: 1360, y: 190, desc: "은은한 차향이 가득한 녹차 밭 산책로", distance: "500m" },
-                    { name: "무등산 계곡 에코길", x: 1710, y: 260, desc: "맑은 청정 계곡을 따라 걷는 에코 코스", distance: "300m" },
-                    { name: "무등산 주상절리대", x: 2050, y: 210, desc: "천연기념물 병풍 모양 주상절리", distance: "300m" }
+                    { name: "의재미술관", x: 660, y: 210, desc: "허백련 화백의 한국화 미술관", distance: "500m" },
+                    { name: "광주 전통문화관", x: 990, y: 270, desc: "한옥 체험 및 전통 국악 공연 중심지", distance: "300m" },
+                    { name: "포충사", x: 1370, y: 200, desc: "임진왜란 의병장을 모신 사당", distance: "500m" },
+                    { name: "충장사", x: 1730, y: 280, desc: "김덕령 장군의 얼이 깃든 곳", distance: "300m" },
+                    { name: "원효사 계곡", x: 2050, y: 210, desc: "무등산의 시원하고 맑은 자연 계곡", distance: "300m" }
                 ]
             },
             {
-                id: "route_02",
-                num: "🚌 좌석02",
-                type: "좌석",
-                typeBg: "bg-blue-600",
-                category: "FOOD",
-                theme: "도심 랜드마크 스팟",
-                bgColor: "gradient-city",
+                id: "route_06", num: "🚌 풍암06", type: "지선", typeBg: "bg-emerald-500", category: "NATURE",
+                theme: "호수 & 향교 탐방", bgColor: "gradient-green",
                 touristSpots: [
-                    { name: "김대중컨벤션센터", x: 310, y: 270, desc: "각종 전시 및 국제 행사의 도심 거점", distance: "300m" },
-                    { name: "5·18 기념공원", x: 640, y: 200, desc: "도심 속 쾌적한 녹지공원과 기념관", distance: "500m" },
-                    { name: "상무시민공원 생태호수", x: 980, y: 260, desc: "조각공원과 수변 산책로가 우수한 명소", distance: "300m" },
-                    { name: "광주광역시청 시민광장", x: 1350, y: 190, desc: "시민 휴식공간과 야외 문화 광장", distance: "500m" },
-                    { name: "상무지구 명물 먹자거리", x: 1700, y: 270, desc: "광주의 맛있는 육전과 맛집 골목", distance: "300m" },
-                    { name: "광주역 문화광장", x: 2020, y: 220, desc: "철도 교통과 도심 문화 전시 공간", distance: "300m" }
+                    { name: "광주향교", x: 310, y: 280, desc: "조선시대 유학 교육의 산실", distance: "200m" },
+                    { name: "사직공원", x: 660, y: 210, desc: "가을 단풍이 아름다운 시민의 숲", distance: "300m" },
+                    { name: "광주공원 포장마차", x: 990, y: 270, desc: "야간 불빛 아래 열리는 낭만 포차거리", distance: "400m" },
+                    { name: "남광주시장", x: 1360, y: 190, desc: "활기찬 수산물 및 먹거리 새벽시장", distance: "200m" },
+                    { name: "풍암호수 장미원", x: 1710, y: 260, desc: "수만 송이 장미가 만개하는 테마파크", distance: "300m" },
+                    { name: "월드컵경기장 마실길", x: 2040, y: 210, desc: "여유로운 저녁 산책을 위한 공원길", distance: "300m" }
                 ]
             }
         ];
@@ -502,7 +496,8 @@
             gravity: 0.68,
             grounded: false,
             facingLeft: false,
-            squash: 1.0
+            squash: 1.0,
+            doubleJumped: false
         };
 
         const keys = { left: false, right: false, jump: false };
@@ -512,16 +507,16 @@
             { x: 650, y: 470, w: 680, h: 90, type: 'ground' },
             { x: 1380, y: 470, w: 920, h: 90, type: 'ground' },
 
-            { x: 250, y: 360, w: 140, h: 22, type: 'bus', label: '🚌 정류장 300m' },
-            { x: 460, y: 270, w: 140, h: 22, type: 'subway', label: '🚇 지하철 500m' },
+            { x: 250, y: 360, w: 140, h: 22, type: 'bus', label: '🌱 친환경 정류장' },
+            { x: 460, y: 270, w: 140, h: 22, type: 'subway', label: '♻️ 탄소 제로 코스' },
             
-            { x: 770, y: 350, w: 130, h: 22, type: 'bus', label: '🚌 스마트 길찾기' },
-            { x: 970, y: 260, w: 150, h: 22, type: 'subway', label: '🚇 에코 스팟' },
-            { x: 1180, y: 330, w: 130, h: 22, type: 'cloud', label: '💖 찜하기 코스' },
+            { x: 770, y: 350, w: 130, h: 22, type: 'bus', label: '👟 도보 300m 투어' },
+            { x: 970, y: 260, w: 150, h: 22, type: 'subway', label: '🚲 자전거 환승' },
+            { x: 1180, y: 330, w: 130, h: 22, type: 'cloud', label: '🌳 무등산 둘레길' },
 
-            { x: 1520, y: 350, w: 140, h: 22, type: 'bus', label: '🚌 친환경 노선' },
-            { x: 1720, y: 270, w: 140, h: 22, type: 'subway', label: '🚇 공공데이터 API' },
-            { x: 1920, y: 360, w: 130, h: 22, type: 'cloud', label: '🏁 도착 종점' }
+            { x: 1520, y: 350, w: 140, h: 22, type: 'bus', label: '🚌 에코 환승센터' },
+            { x: 1720, y: 270, w: 140, h: 22, type: 'subway', label: '🏛️ 광주 공공데이터' },
+            { x: 1920, y: 360, w: 130, h: 22, type: 'cloud', label: '🏁 에코투어 완주' }
         ];
 
         let activeItems = [];
@@ -591,18 +586,32 @@
             document.getElementById('sound-toggle-btn').innerText = soundMuted ? '🔇' : '🔊';
         };
 
+        function handleJump() {
+            if (gameState !== 'PLAYING') return;
+            if (player.grounded) {
+                player.vy = player.jumpStrength;
+                player.grounded = false;
+                player.doubleJumped = false;
+                player.squash = 1.3;
+                createDustParticles(player.x + player.width / 2, player.y + player.height);
+                playSound('jump');
+            } else if (!player.doubleJumped) {
+                player.vy = player.jumpStrength * 0.85;
+                player.doubleJumped = true;
+                player.squash = 1.3;
+                createBurstParticles(player.x + 18, player.y + 40, '#ffffff');
+                playSound('jump');
+            }
+        }
+
         function initControls() {
             renderRouteCards('ALL');
 
             window.addEventListener('keydown', (e) => {
                 if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
                 if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
-                if ((e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW') && player.grounded && gameState === 'PLAYING') {
-                    player.vy = player.jumpStrength;
-                    player.grounded = false;
-                    player.squash = 1.3;
-                    createDustParticles(player.x + player.width / 2, player.y + player.height);
-                    playSound('jump');
+                if ((e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW')) {
+                    handleJump();
                 }
             });
 
@@ -616,13 +625,7 @@
                 el.addEventListener('touchstart', (e) => {
                     e.preventDefault();
                     if (keyName === 'jump') {
-                        if (player.grounded && gameState === 'PLAYING') {
-                            player.vy = player.jumpStrength;
-                            player.grounded = false;
-                            player.squash = 1.3;
-                            createDustParticles(player.x + player.width / 2, player.y + player.height);
-                            playSound('jump');
-                        }
+                        handleJump();
                     } else {
                         keys[keyName] = true;
                     }
