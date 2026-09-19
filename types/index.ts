@@ -30,20 +30,22 @@ export interface SubwayStation {
 }
 
 // ─── 관광지 관련 타입 ─────────────────────────────────────────
-export type TourismContentType = 12 | 14 | 39 | 32;
+export type TourismContentType = 12 | 14 | 39 | 32 | 38;
 
 export const CONTENT_TYPE_LABELS: Record<TourismContentType, string> = {
   12: '관광지',
   14: '문화시설',
   39: '음식점',
   32: '숙박',
+  38: '쇼핑',
 };
 
 export const CONTENT_TYPE_COLORS: Record<TourismContentType, string> = {
-  12: '#1E3A8A', // 네이비 블루 - 관광지
+  12: '#1E3A8A', // 네이비블루 - 관광지
   14: '#7C3AED', // 보라 - 문화시설
   39: '#EA580C', // 주황 - 음식점
   32: '#2D7A3A', // 에코그린 - 숙박
+  38: '#EAB308', // 옐로우 - 쇼핑
 };
 
 export const CONTENT_TYPE_ICONS: Record<TourismContentType, string> = {
@@ -51,6 +53,7 @@ export const CONTENT_TYPE_ICONS: Record<TourismContentType, string> = {
   14: '🎭',
   39: '🍽️',
   32: '🏨',
+  38: '🛍️',
 };
 
 export interface TourismPlace {
