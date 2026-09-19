@@ -1,28 +1,27 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
 import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 import { fetchHistorical518, mergeHistorical518 } from '@/lib/historical518';
-import { fetchMarketShops, mergeMarketData } from '@/lib/market';
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/areaBasedList2';
 const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
 const AREA_CODE = 5; // 광주광역시
-export async function GET() {
+
+export async function GET(request: NextRequest) {
   const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
   const serviceKey = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
 
   if (!serviceKey) {
-    return NextResponse.json({ success: false, error: 'TOUR_API_SERVICE_KEY 환경변수가 설정되지 않았습니다.' }, { status: 500 });
+    return NextResponse.json({ success: false, error: 'API KEY missing' }, { status: 500 });
   }
 
   try {
-    const [odcloudItems, jnTourItems, heritageItems, historical518Items, marketItems, ...results] = await Promise.all([
+    const [odcloudItems, jnTourItems, heritageItems, historical518Items, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
       fetchHeritagePlaces(),
       fetchHistorical518(),
-      fetchMarketShops(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -64,7 +63,6 @@ export async function GET() {
     allPlaces = mergeJnTourData(allPlaces, jnTourItems);
     allPlaces = mergeHeritageData(allPlaces, heritageItems);
     allPlaces = mergeHistorical518(allPlaces, historical518Items);
-    allPlaces = mergeMarketData(allPlaces, marketItems);
 
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {

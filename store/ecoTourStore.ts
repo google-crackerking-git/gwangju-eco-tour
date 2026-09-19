@@ -51,7 +51,7 @@ interface EcoTourState {
   reset: () => void;
 }
 
-const DEFAULT_CATEGORIES = [12, 14, 39, 32, 38];
+const DEFAULT_CATEGORIES = [12, 14, 39, 32];
 
 export const useEcoTourStore = create<EcoTourState>((set) => ({
   // 교통 모드
