@@ -94,12 +94,17 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'contentId and title required' }, { status: 400 });
   }
 
-  const [common, pet, gallery, related] = await Promise.all([
-    fetchCommon(contentId),
-    fetchPetInfo(contentId),
-    fetchGalleryAndImages(contentId, title, addr1),
-    fetchRelated('5', '1') // default to gwangju dong-gu for the API call
-  ]);
+  // 커스텀 contentId (예: 518_..., heritage_...)인 경우 TourAPI 호출 생략
+  const isCustomId = !/^\d+$/.test(contentId);
+
+  const [common, pet, gallery, related] = isCustomId 
+    ? [null, null, [], []]
+    : await Promise.all([
+        fetchCommon(contentId),
+        fetchPetInfo(contentId),
+        fetchGalleryAndImages(contentId, title, addr1),
+        fetchRelated('5', '1') // default to gwangju dong-gu for the API call
+      ]);
 
   return NextResponse.json({
     success: true,

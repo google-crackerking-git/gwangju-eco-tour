@@ -152,7 +152,7 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
         <div className="mt-4 pt-4 border-t border-gray-100">
           <h4 className="font-bold text-sm text-gray-800 mb-2">상세 정보</h4>
           <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-wrap">
-            {detailInfo?.overview || place.overview || '상세 정보를 불러오는 중입니다...'}
+            {place.overview || detailInfo?.overview || '상세 정보를 불러오는 중입니다...'}
           </p>
         </div>
 
