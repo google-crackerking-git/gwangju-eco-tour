@@ -89,13 +89,13 @@
         }
 
         /* Toast Animation */
-        @keyframes slideUpFade {
-            0% { transform: translateY(100%) scale(0.9); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes slideDownCenter {
+            0% { transform: translate(-50%, -30px) scale(0.85); opacity: 0; }
+            100% { transform: translate(-50%, 0) scale(1); opacity: 1; }
         }
 
         .toast-pop {
-            animation: slideUpFade 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+            animation: slideDownCenter 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         /* Pulse glow animation */
@@ -218,16 +218,14 @@
         <canvas id="gameCanvas"></canvas>
 
         <!-- Discovery Toast Popup -->
-        <div id="spot-toast" class="absolute bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 glass-panel rounded-2xl p-3.5 px-5 flex items-center gap-3.5 z-30 hidden pointer-events-none toast-pop border-amber-400/40 min-w-[280px]">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xl shadow-lg shrink-0">
+        <div id="spot-toast" class="absolute top-1/4 left-1/2 glass-panel rounded-3xl p-5 flex flex-col items-center gap-3 z-30 hidden pointer-events-none toast-pop border-2 border-amber-400/60 min-w-[320px] shadow-2xl">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-3xl shadow-lg shrink-0 mb-1">
                 🏛️
             </div>
-            <div>
-                <div class="flex items-center gap-2">
-                    <span id="toast-title" class="font-bold text-amber-300 text-sm">국립아시아문화전당</span>
-                    <span id="toast-badge" class="bg-blue-600/80 text-white text-[10px] px-2 py-0.5 rounded-full">버스 300m</span>
-                </div>
-                <p id="toast-desc" class="text-xs text-slate-200 mt-0.5 line-clamp-1">아시아 최대 규모의 복합 문화 예술 기관</p>
+            <div class="flex flex-col items-center text-center">
+                <span id="toast-badge" class="bg-blue-600/90 text-white text-[11px] px-3 py-1 rounded-full mb-2 font-bold tracking-wide shadow-sm">버스 300m</span>
+                <span id="toast-title" class="font-black text-amber-300 text-xl mb-1 drop-shadow-md">국립아시아문화전당</span>
+                <p id="toast-desc" class="text-sm text-slate-200 mt-1">아시아 최대 규모의 복합 문화 예술 기관</p>
             </div>
         </div>
 
