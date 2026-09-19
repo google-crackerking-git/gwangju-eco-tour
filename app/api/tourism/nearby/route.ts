@@ -7,6 +7,7 @@ import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
 import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 import { fetchHistorical518, mergeHistorical518 } from '@/lib/historical518';
+import { fetchPathPlaces, mergePathData } from '@/lib/path';
 
 function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
   const R = 6371e3; // metres
@@ -52,12 +53,13 @@ export async function GET(request: NextRequest) {
   const maxRadius = radiusParam ? parseInt(radiusParam, 10) : 500; // default 500m
 
   try {
-    // 4개 카테고리 동시 조회 + ODCloud, JnTour, Heritage, 518
-    const [odcloudItems, jnTourItems, heritageItems, historical518Items, ...results] = await Promise.all([
+    // 4개 카테고리 동시 조회 + ODCloud, JnTour, Heritage, 518, Path
+    const [odcloudItems, jnTourItems, heritageItems, historical518Items, pathItems, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
       fetchHeritagePlaces(),
       fetchHistorical518(),
+      fetchPathPlaces(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -102,6 +104,7 @@ export async function GET(request: NextRequest) {
     allPlaces = mergeJnTourData(allPlaces, jnTourItems);
     allPlaces = mergeHeritageData(allPlaces, heritageItems);
     allPlaces = mergeHistorical518(allPlaces, historical518Items);
+    allPlaces = mergePathData(allPlaces, pathItems);
 
     const centerLat = parseFloat(lat);
     const centerLng = parseFloat(lng);

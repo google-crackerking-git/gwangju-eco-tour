@@ -3,6 +3,7 @@ import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
 import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 import { fetchHistorical518, mergeHistorical518 } from '@/lib/historical518';
+import { fetchPathPlaces, mergePathData } from '@/lib/path';
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/areaBasedList2';
 const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
@@ -17,11 +18,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const [odcloudItems, jnTourItems, heritageItems, historical518Items, ...results] = await Promise.all([
+    const [odcloudItems, jnTourItems, heritageItems, historical518Items, pathItems, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
       fetchHeritagePlaces(),
       fetchHistorical518(),
+      fetchPathPlaces(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -63,6 +65,7 @@ export async function GET(request: NextRequest) {
     allPlaces = mergeJnTourData(allPlaces, jnTourItems);
     allPlaces = mergeHeritageData(allPlaces, heritageItems);
     allPlaces = mergeHistorical518(allPlaces, historical518Items);
+    allPlaces = mergePathData(allPlaces, pathItems);
 
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {

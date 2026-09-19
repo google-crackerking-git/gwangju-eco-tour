@@ -116,7 +116,12 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
             <div className="flex flex-col gap-1 items-end shrink-0">
               {place.isHeritage && (
                 <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded font-bold border border-amber-300 whitespace-nowrap shadow-sm">
-                  🏛️ 국가지정유산
+                  국가유산 지정구역
+                </span>
+              )}
+              {place.isPath && (
+                <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold border border-emerald-300 whitespace-nowrap shadow-sm">
+                  🥾 둘레길
                 </span>
               )}
               {place.isOfficial && (

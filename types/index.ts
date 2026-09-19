@@ -70,6 +70,7 @@ export interface TourismPlace {
   isOfficial?: boolean;
   isNamdoTour?: boolean;
   isHeritage?: boolean;
+  isPath?: boolean;
 }
 
 // ─── 즐겨찾기 / 방문기록 타입 ────────────────────────────────
