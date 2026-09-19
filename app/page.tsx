@@ -127,6 +127,12 @@ export default function HomePage() {
           >
             <span>💡</span> <span className="hidden sm:inline">사용법</span>
           </button>
+          <a
+            href="/minigame.html"
+            className="text-white bg-amber-500/80 hover:bg-amber-500 px-2 py-1.5 md:px-3 md:py-1.5 rounded-full text-[11px] md:text-xs font-bold transition-colors flex items-center gap-1 shadow-md border border-amber-400"
+          >
+            <span>🎮</span> <span className="hidden sm:inline">미니게임</span>
+          </a>
           <LoginButton />
         </div>
       </header>

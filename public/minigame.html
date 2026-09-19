@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>광주 에코투어: 오매나의 버스 노선 관광지 수집 대모험</title>
+    <!-- Tailwind CSS CDN for modern UI components -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+
+        * {
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #090d16;
+            color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Glassmorphism Containers */
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.78);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(56, 189, 248, 0.6);
+            transform: translateY(-3px) scale(1.01);
+            box-shadow: 0 10px 25px -5px rgba(56, 189, 248, 0.25);
+        }
+
+        .glass-card.selected {
+            border-color: #facc15;
+            background: rgba(30, 58, 138, 0.85);
+            box-shadow: 0 0 20px rgba(250, 204, 21, 0.35);
+        }
+
+        /* Canvas Wrapper */
+        #game-container {
+            position: relative;
+            width: 100%;
+            max-width: 920px;
+            height: 560px;
+            border-radius: 20px;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+
+        /* Route Progress Gauge */
+        .progress-bar-inner {
+            transition: width 0.3s ease-out;
+        }
+
+        /* Toast Animation */
+        @keyframes slideUpFade {
+            0% { transform: translateY(100%) scale(0.9); opacity: 0; }
+            100% { transform: translateY(0) scale(1); opacity: 1; }
+        }
+
+        .toast-pop {
+            animation: slideUpFade 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+
+        /* Pulse glow animation */
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 15px rgba(250, 204, 21, 0.4); }
+            50% { box-shadow: 0 0 28px rgba(250, 204, 21, 0.8); }
+        }
+
+        .pulse-btn {
+            animation: pulseGlow 2s infinite;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 3px;
+        }
+
+        /* Mobile Controls */
+        #mobile-controls {
+            display: none;
+            position: absolute;
+            bottom: 16px;
+            left: 16px;
+            right: 16px;
+            justify-content: space-between;
+            z-index: 30;
+        }
+
+        .ctrl-btn {
+            width: 58px;
+            height: 58px;
+            background: rgba(15, 23, 42, 0.75);
+            border: 2px solid rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(8px);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 22px;
+            color: white;
+            font-weight: bold;
+            touch-action: manipulation;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.4);
+        }
+
+        .ctrl-btn:active {
+            background: rgba(37, 99, 235, 0.9);
+            transform: scale(0.92);
+        }
+
+        @media (max-width: 768px) {
+            #mobile-controls {
+                display: flex;
+            }
+            #game-container {
+                height: 100vh;
+                border-radius: 0;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Game Container -->
+    <div id="game-container">
+        
+        <!-- Back Button (added for integration) -->
+        <button onclick="window.location.href='/'" class="absolute top-3 right-3 z-50 bg-white/20 hover:bg-white/30 text-white rounded-full p-2 backdrop-blur shadow" style="display: none;" id="back-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+        </button>
+
+        <!-- Top HUD Header -->
+        <div id="hud" class="absolute top-3 left-3 right-12 glass-panel rounded-2xl px-4 py-2.5 flex items-center justify-between text-xs sm:text-sm font-semibold z-20">
+            <!-- Bus Line Badge -->
+            <div class="flex items-center gap-2">
+                <span id="hud-bus-type" class="px-2.5 py-1 rounded-full text-xs font-black text-white bg-blue-600 shadow-md">급행</span>
+                <span id="hud-route-name" class="font-bold text-sky-300 text-sm">🚌 첨단09</span>
+            </div>
+
+            <!-- Route Progress Tracker -->
+            <div class="hidden md:flex flex-col w-48 mx-2">
+                <div class="flex justify-between text-[11px] text-slate-300 mb-1">
+                    <span>노선 진행도</span>
+                    <span id="progress-percent-text" class="text-amber-400 font-bold">0%</span>
+                </div>
+                <div class="w-full bg-slate-700/60 h-2 rounded-full overflow-hidden p-0.5 border border-slate-600">
+                    <div id="progress-bar" class="progress-bar-inner bg-gradient-to-r from-sky-400 to-amber-400 h-full rounded-full w-0"></div>
+                </div>
+            </div>
+
+            <!-- Eco Points & Spots Counter -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-1.5 bg-slate-800/80 px-3 py-1 rounded-xl border border-slate-700">
+                    <span class="text-emerald-400">🌱</span>
+                    <span id="score-val" class="text-amber-300 font-black">0</span>
+                    <span class="text-[10px] text-slate-400">PT</span>
+                </div>
+                <div class="flex items-center gap-1.5 bg-slate-800/80 px-3 py-1 rounded-xl border border-slate-700">
+                    <span class="text-sky-400">📍</span>
+                    <span id="spot-count-val" class="text-sky-300 font-bold">0 / 6</span>
+                </div>
+                <!-- Mute Toggle -->
+                <button id="sound-toggle-btn" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition">
+                    🔊
+                </button>
+            </div>
+        </div>
+
+        <!-- Canvas Game World -->
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- Discovery Toast Popup -->
+        <div id="spot-toast" class="absolute bottom-24 sm:bottom-6 left-1/2 -translate-x-1/2 glass-panel rounded-2xl p-3.5 px-5 flex items-center gap-3.5 z-30 hidden pointer-events-none toast-pop border-amber-400/40 min-w-[280px]">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xl shadow-lg shrink-0">
+                🏛️
+            </div>
+            <div>
+                <div class="flex items-center gap-2">
+                    <span id="toast-title" class="font-bold text-amber-300 text-sm">국립아시아문화전당</span>
+                    <span id="toast-badge" class="bg-blue-600/80 text-white text-[10px] px-2 py-0.5 rounded-full">버스 300m</span>
+                </div>
+                <p id="toast-desc" class="text-xs text-slate-200 mt-0.5 line-clamp-1">아시아 최대 규모의 복합 문화 예술 기관</p>
+            </div>
+        </div>
+
+        <!-- Start Screen / Route Selection Modal -->
+        <div id="start-screen" class="absolute inset-0 bg-slate-950/92 backdrop-blur-md flex flex-col items-center justify-between p-5 z-40 overflow-y-auto">
+            <!-- Header Title -->
+            <div class="text-center mt-2 relative w-full">
+                <button onclick="window.location.href='/'" class="absolute left-0 top-0 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 flex items-center gap-1 text-sm font-bold transition">
+                    ◀ 홈
+                </button>
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-sky-400 text-xs font-semibold mb-2">
+                    <span>🌱 광주광역시 대중교통 에코투어</span>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-emerald-300 mt-2 sm:mt-0">
+                    오매나의 노선별 관광지 수집 대모험
+                </h1>
+                <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl mx-auto">
+                    탑승할 <b>광주 버스 노선</b>을 선택하세요. 공공데이터 기반 유명 관광지 아이템을 점프로 수집하고 나만의 친환경 여행 코스를 완주하세요!
+                </p>
+            </div>
+
+            <!-- Route Filter Category Tabs -->
+            <div class="flex flex-wrap justify-center gap-1.5 my-3" id="category-filter-tabs">
+                <button data-cat="ALL" class="cat-tab active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md">전체 노선</button>
+                <button data-cat="CULTURE" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">🎨 문화·예술</button>
+                <button data-cat="HISTORY" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">🏛️ 역사·민주</button>
+                <button data-cat="NATURE" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">⛰️ 생태·무등산</button>
+                <button data-cat="FOOD" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">🍜 미식·핫플</button>
+            </div>
+
+            <!-- Route Card Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 w-full max-w-3xl my-1" id="route-selector-grid">
+                <!-- Injected via JavaScript -->
+            </div>
+
+            <!-- Start Button -->
+            <div class="mb-2 w-full max-w-xs mt-4">
+                <button id="start-btn" class="pulse-btn w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 text-white font-extrabold text-base shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2">
+                    <span>에코투어 출발하기</span>
+                    <span class="text-xl">🚀</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stage Clear / Completion Modal -->
+        <div id="end-screen" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 z-40 hidden text-center">
+            <div class="w-16 h-16 rounded-3xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-3xl mb-3 shadow-inner">
+                🏆
+            </div>
+            <h2 id="end-title" class="text-2xl sm:text-3xl font-black text-amber-300 mb-2">
+                노선 투어 완주 성공!
+            </h2>
+            <div id="end-desc" class="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed mb-4">
+                투어 완료
+            </div>
+
+            <!-- Collected Spots Grid -->
+            <div class="w-full max-w-lg bg-slate-900/80 rounded-2xl p-4 border border-slate-800 mb-6">
+                <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-3 px-1">
+                    <span>📍 수집한 광주 유명 관광지</span>
+                    <span id="end-collection-count" class="text-emerald-400">6 / 6 수집 완료</span>
+                </div>
+                <div id="collected-spots-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto pr-1">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Restart Button -->
+            <button id="restart-btn" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm shadow-xl active:scale-95 transition flex items-center gap-2">
+                <span>다른 버스 노선 투어하기</span>
+                <span>🔄</span>
+            </button>
+            <button onclick="window.location.href='/'" class="mt-4 px-8 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm shadow-xl active:scale-95 transition">
+                지도 홈으로 가기
+            </button>
+        </div>
+
+        <!-- Mobile Control Buttons -->
+        <div id="mobile-controls">
+            <div class="flex gap-2">
+                <div class="ctrl-btn" id="btn-left">◀</div>
+                <div class="ctrl-btn" id="btn-right">▶</div>
+            </div>
+            <div class="ctrl-btn !w-16 !h-16 !bg-blue-600/80 border-blue-400" id="btn-jump">▲</div>
+        </div>
+
+    </div>
+
+    <!-- JavaScript Game Logic -->
+    <script>
+        // Web Audio API Retro Sound Effects
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+        let soundMuted = false;
+
+        function playSound(type) {
+            if (soundMuted) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioCtx();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'jump') {
+                    osc.type = 'square';
+                    osc.frequency.setValueAtTime(150, now);
+                    osc.frequency.exponentialRampToValueAtTime(480, now + 0.12);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.12);
+                    osc.start(now);
+                    osc.stop(now + 0.12);
+                } else if (type === 'collect') {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.08);
+                    osc.frequency.setValueAtTime(783.99, now + 0.16);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.24);
+                    gain.gain.setValueAtTime(0.18, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.35);
+                    osc.start(now);
+                    osc.stop(now + 0.35);
+                } else if (type === 'clear') {
+                    osc.type = 'triangle';
+                    const freqs = [523.25, 659.25, 783.99, 987.77, 1046.50];
+                    freqs.forEach((f, idx) => {
+                        osc.frequency.setValueAtTime(f, now + idx * 0.1);
+                    });
+                    gain.gain.setValueAtTime(0.2, now);
+                    gain.gain.linearRampToValueAtTime(0, now + 0.65);
+                    osc.start(now);
+                    osc.stop(now + 0.65);
+                }
+            } catch (e) {}
+        }
+
+        const busRoutesData = [
+            {
+                id: "route_09",
+                num: "🚌 첨단09",
+                type: "급행",
+                typeBg: "bg-red-500",
+                category: "CULTURE",
+                theme: "문화예술 & 무등산",
+                bgColor: "gradient-sky",
+                touristSpots: [
+                    { name: "국립아시아문화전당(ACC)", x: 320, y: 280, desc: "아시아 최대 규모 복합 문화 예술 기관", distance: "300m" },
+                    { name: "동명동 카페거리", x: 650, y: 210, desc: "트렌디한 감성의 핫플레이스 카페 골목", distance: "300m" },
+                    { name: "광주 예술의 거리", x: 980, y: 270, desc: "전통 서화 및 갤러리가 늘어선 문화거리", distance: "500m" },
+                    { name: "조선대학교 장미원", x: 1350, y: 190, desc: "화려한 수만 송이 장미와 수변 산책로", distance: "300m" },
+                    { name: "지산유원지 모노레일", x: 1720, y: 270, desc: "무등산 능선을 조망하는 감성 리프트", distance: "500m" },
+                    { name: "무등산 국립공원", x: 2050, y: 210, desc: "세계지질공원 서석대 & 입석대 주상절리", distance: "300m" }
+                ]
+            },
+            {
+                id: "route_117",
+                num: "🚌 양림117",
+                type: "간선",
+                typeBg: "bg-amber-500",
+                category: "HISTORY",
+                theme: "근대역사 & 정크아트",
+                bgColor: "gradient-retro",
+                touristSpots: [
+                    { name: "양림동 펭귄마을", x: 330, y: 270, desc: "정겨운 버려진 예술 골목 정크아트 비엔날레", distance: "300m" },
+                    { name: "우일선 선교사 사택", x: 670, y: 200, desc: "광주에서 가장 오래된 고풍스러운 서양식 근대건축", distance: "500m" },
+                    { name: "사직공원 전망타워", x: 1000, y: 260, desc: "광주 도심 전체와 무등산 파노라마 전망", distance: "300m" },
+                    { name: "이이남 스튜디오", x: 1380, y: 200, desc: "세계적 미디어아트 작품을 감상하는 카페 공간", distance: "300m" },
+                    { name: "양림 미술관", x: 1740, y: 270, desc: "지역 예술가들의 다양한 기획 전시관", distance: "500m" },
+                    { name: "오원각 역사사택", x: 2060, y: 220, desc: "울창한 숲속 고즈넉한 힐링 역사 문화재", distance: "300m" }
+                ]
+            },
+            {
+                id: "route_151",
+                num: "🚌 지원151",
+                type: "지선",
+                typeBg: "bg-emerald-500",
+                category: "HISTORY",
+                theme: "민주·평화 유적 코스",
+                bgColor: "gradient-green",
+                touristSpots: [
+                    { name: "5·18 민주광장", x: 310, y: 280, desc: "민주화 운동의 상징적 역사 장소", distance: "300m" },
+                    { name: "국립5·18민주묘지", x: 660, y: 210, desc: "숭고한 5·18 정신을 기리는 민주 성지", distance: "500m" },
+                    { name: "광주학생독립운동기념관", x: 990, y: 270, desc: "1929년 학생 항일 운동을 기억하는 기념관", distance: "300m" },
+                    { name: "전남대학교 민주길", x: 1360, y: 190, desc: "역사와 자연 숲길이 어우러진 둘레길", distance: "500m" },
+                    { name: "5·18 민주화운동기념관", x: 1710, y: 260, desc: "유네스코 세계기록유산 보유 기록관", distance: "300m" },
+                    { name: "민주종각 평화광장", x: 2040, y: 210, desc: "평화와 화합을 기원하는 종각 명소", distance: "300m" }
+                ]
+            },
+            {
+                id: "route_12",
+                num: "🚌 수완12",
+                type: "간선",
+                typeBg: "bg-amber-500",
+                category: "FOOD",
+                theme: "1913 시장 & 비엔날레",
+                bgColor: "gradient-purple",
+                touristSpots: [
+                    { name: "1913 송정역 시장", x: 320, y: 270, desc: "100년 전통 레트로 청년 야시장 명소", distance: "300m" },
+                    { name: "광주비엔날레 전시관", x: 650, y: 200, desc: "아시아 대표 국제 현대미술 축제장", distance: "500m" },
+                    { name: "송정 떡갈비 거리", x: 980, y: 260, desc: "광주 5미(味) 명물 요리 거리", distance: "300m" },
+                    { name: "중외공원 명품숲", x: 1350, y: 190, desc: "시립미술관과 박물관이 모인 공원", distance: "500m" },
+                    { name: "국립광주박물관", x: 1700, y: 270, desc: "남도 문화유산을 보존한 종합박물관", distance: "300m" },
+                    { name: "광주 시립미술관", x: 2030, y: 220, desc: "현대 미술품과 드넓은 조각공원", distance: "300m" }
+                ]
+            },
+            {
+                id: "route_35",
+                num: "🚌 운림35",
+                type: "지선",
+                typeBg: "bg-emerald-500",
+                category: "NATURE",
+                theme: "무등산 생태 & 한옥",
+                bgColor: "gradient-nature",
+                touristSpots: [
+                    { name: "증심사 사찰", x: 330, y: 280, desc: "무등산 자락의 천년 고찰", distance: "300m" },
+                    { name: "의재미술관", x: 660, y: 210, desc: "허백련 화백의 남종화 미술관", distance: "500m" },
+                    { name: "광주 전통문화관", x: 990, y: 270, desc: "한옥 체험과 전통 국악 공연 중심지", distance: "300m" },
+                    { name: "무등산 춘설차밭", x: 1360, y: 190, desc: "은은한 차향이 가득한 녹차 밭 산책로", distance: "500m" },
+                    { name: "무등산 계곡 에코길", x: 1710, y: 260, desc: "맑은 청정 계곡을 따라 걷는 에코 코스", distance: "300m" },
+                    { name: "무등산 주상절리대", x: 2050, y: 210, desc: "천연기념물 병풍 모양 주상절리", distance: "300m" }
+                ]
+            },
+            {
+                id: "route_02",
+                num: "🚌 좌석02",
+                type: "좌석",
+                typeBg: "bg-blue-600",
+                category: "FOOD",
+                theme: "도심 랜드마크 스팟",
+                bgColor: "gradient-city",
+                touristSpots: [
+                    { name: "김대중컨벤션센터", x: 310, y: 270, desc: "각종 전시 및 국제 행사의 도심 거점", distance: "300m" },
+                    { name: "5·18 기념공원", x: 640, y: 200, desc: "도심 속 쾌적한 녹지공원과 기념관", distance: "500m" },
+                    { name: "상무시민공원 생태호수", x: 980, y: 260, desc: "조각공원과 수변 산책로가 우수한 명소", distance: "300m" },
+                    { name: "광주광역시청 시민광장", x: 1350, y: 190, desc: "시민 휴식공간과 야외 문화 광장", distance: "500m" },
+                    { name: "상무지구 명물 먹자거리", x: 1700, y: 270, desc: "광주의 맛있는 육전과 맛집 골목", distance: "300m" },
+                    { name: "광주역 문화광장", x: 2020, y: 220, desc: "철도 교통과 도심 문화 전시 공간", distance: "300m" }
+                ]
+            }
+        ];
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const CANVAS_WIDTH = 920;
+        const CANVAS_HEIGHT = 560;
+        canvas.width = CANVAS_WIDTH;
+        canvas.height = CANVAS_HEIGHT;
+
+        let selectedRouteIdx = 0;
+        let activeRoute = busRoutesData[0];
+        let gameState = 'START';
+        let score = 0;
+        let collectedCount = 0;
+        let collectedList = [];
+        let cameraX = 0;
+        let toastTimeout = null;
+
+        let particles = [];
+
+        const player = {
+            x: 80,
+            y: 300,
+            width: 38,
+            height: 48,
+            vx: 0,
+            vy: 0,
+            speed: 5.2,
+            jumpStrength: -13.6,
+            gravity: 0.68,
+            grounded: false,
+            facingLeft: false,
+            squash: 1.0
+        };
+
+        const keys = { left: false, right: false, jump: false };
+
+        const platforms = [
+            { x: 0, y: 470, w: 580, h: 90, type: 'ground' },
+            { x: 650, y: 470, w: 680, h: 90, type: 'ground' },
+            { x: 1380, y: 470, w: 920, h: 90, type: 'ground' },
+
+            { x: 250, y: 360, w: 140, h: 22, type: 'bus', label: '🚌 정류장 300m' },
+            { x: 460, y: 270, w: 140, h: 22, type: 'subway', label: '🚇 지하철 500m' },
+            
+            { x: 770, y: 350, w: 130, h: 22, type: 'bus', label: '🚌 스마트 길찾기' },
+            { x: 970, y: 260, w: 150, h: 22, type: 'subway', label: '🚇 에코 스팟' },
+            { x: 1180, y: 330, w: 130, h: 22, type: 'cloud', label: '💖 찜하기 코스' },
+
+            { x: 1520, y: 350, w: 140, h: 22, type: 'bus', label: '🚌 친환경 노선' },
+            { x: 1720, y: 270, w: 140, h: 22, type: 'subway', label: '🚇 공공데이터 API' },
+            { x: 1920, y: 360, w: 130, h: 22, type: 'cloud', label: '🏁 도착 종점' }
+        ];
+
+        let activeItems = [];
+        const goal = { x: 2200, y: 370, w: 70, h: 100 };
+
+        function renderRouteCards(categoryFilter = 'ALL') {
+            const grid = document.getElementById('route-selector-grid');
+            grid.innerHTML = '';
+
+            busRoutesData.forEach((route, idx) => {
+                if (categoryFilter !== 'ALL' && route.category !== categoryFilter) return;
+
+                const card = document.createElement('div');
+                card.className = `glass-card p-3.5 rounded-2xl cursor-pointer relative ${idx === selectedRouteIdx ? 'selected' : ''}`;
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="${route.typeBg} text-white text-[10px] font-black px-2 py-0.5 rounded-full">${route.type}</span>
+                            <span class="font-extrabold text-sm text-sky-300">${route.num}</span>
+                        </div>
+                        <span class="text-[11px] font-semibold text-amber-300/90 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">${route.theme}</span>
+                    </div>
+                    <div class="text-xs text-slate-300 leading-snug line-clamp-2">
+                        📍 ${route.touristSpots.map(s => s.name).slice(0, 3).join(', ')} 등 주요 명소
+                    </div>
+                `;
+
+                card.onclick = () => {
+                    document.querySelectorAll('.glass-card').forEach(c => c.classList.remove('selected'));
+                    card.classList.add('selected');
+                    selectedRouteIdx = idx;
+                };
+
+                grid.appendChild(card);
+            });
+        }
+
+        document.querySelectorAll('.cat-tab').forEach(tab => {
+            tab.onclick = () => {
+                document.querySelectorAll('.cat-tab').forEach(t => {
+                    t.classList.remove('bg-blue-600', 'text-white', 'shadow-md');
+                    t.classList.add('bg-slate-800', 'text-slate-300');
+                });
+                tab.classList.remove('bg-slate-800', 'text-slate-300');
+                tab.classList.add('bg-blue-600', 'text-white', 'shadow-md');
+
+                renderRouteCards(tab.getAttribute('data-cat'));
+            };
+        });
+
+        function showSpotToast(spot) {
+            const toast = document.getElementById('spot-toast');
+            document.getElementById('toast-title').innerText = spot.name;
+            document.getElementById('toast-desc').innerText = spot.desc;
+            document.getElementById('toast-badge').innerText = `반경 ${spot.distance}`;
+
+            toast.classList.remove('hidden');
+
+            if (toastTimeout) clearTimeout(toastTimeout);
+            toastTimeout = setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2800);
+        }
+
+        document.getElementById('sound-toggle-btn').onclick = () => {
+            soundMuted = !soundMuted;
+            document.getElementById('sound-toggle-btn').innerText = soundMuted ? '🔇' : '🔊';
+        };
+
+        function initControls() {
+            renderRouteCards('ALL');
+
+            window.addEventListener('keydown', (e) => {
+                if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = true;
+                if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = true;
+                if ((e.code === 'ArrowUp' || e.code === 'Space' || e.code === 'KeyW') && player.grounded && gameState === 'PLAYING') {
+                    player.vy = player.jumpStrength;
+                    player.grounded = false;
+                    player.squash = 1.3;
+                    createDustParticles(player.x + player.width / 2, player.y + player.height);
+                    playSound('jump');
+                }
+            });
+
+            window.addEventListener('keyup', (e) => {
+                if (e.code === 'ArrowLeft' || e.code === 'KeyA') keys.left = false;
+                if (e.code === 'ArrowRight' || e.code === 'KeyD') keys.right = false;
+            });
+
+            const bindTouch = (id, keyName) => {
+                const el = document.getElementById(id);
+                el.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (keyName === 'jump') {
+                        if (player.grounded && gameState === 'PLAYING') {
+                            player.vy = player.jumpStrength;
+                            player.grounded = false;
+                            player.squash = 1.3;
+                            createDustParticles(player.x + player.width / 2, player.y + player.height);
+                            playSound('jump');
+                        }
+                    } else {
+                        keys[keyName] = true;
+                    }
+                });
+                el.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    if (keyName !== 'jump') keys[keyName] = false;
+                });
+            };
+
+            bindTouch('btn-left', 'left');
+            bindTouch('btn-right', 'right');
+            bindTouch('btn-jump', 'jump');
+
+            document.getElementById('start-btn').onclick = () => {
+                activeRoute = busRoutesData[selectedRouteIdx];
+                document.getElementById('hud-bus-type').innerText = activeRoute.type;
+                document.getElementById('hud-bus-type').className = `${activeRoute.typeBg} px-2.5 py-1 rounded-full text-xs font-black text-white shadow-md`;
+                document.getElementById('hud-route-name').innerText = activeRoute.num;
+                document.getElementById('start-screen').classList.add('hidden');
+                document.getElementById('back-btn').style.display = 'block';
+                resetGame();
+                gameState = 'PLAYING';
+                playSound('collect');
+            };
+
+            document.getElementById('restart-btn').onclick = () => {
+                document.getElementById('end-screen').classList.add('hidden');
+                document.getElementById('start-screen').classList.remove('hidden');
+                document.getElementById('back-btn').style.display = 'none';
+                gameState = 'START';
+            };
+        }
+
+        function resetGame() {
+            player.x = 80;
+            player.y = 300;
+            player.vx = 0;
+            player.vy = 0;
+            score = 0;
+            collectedCount = 0;
+            collectedList = [];
+            cameraX = 0;
+            particles = [];
+
+            activeItems = activeRoute.touristSpots.map(spot => ({
+                name: spot.name,
+                x: spot.x,
+                y: spot.y,
+                w: 36,
+                h: 36,
+                desc: spot.desc,
+                distance: spot.distance,
+                collected: false
+            }));
+
+            updateHUD();
+        }
+
+        function updateHUD() {
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('spot-count-val').innerText = `${collectedCount} / ${activeItems.length}`;
+
+            const progress = Math.min(100, Math.max(0, Math.floor((player.x / goal.x) * 100)));
+            document.getElementById('progress-percent-text').innerText = `${progress}%`;
+            document.getElementById('progress-bar').style.width = `${progress}%`;
+        }
+
+        function createBurstParticles(x, y, color) {
+            for (let i = 0; i < 18; i++) {
+                const angle = Math.random() * Math.PI * 2;
+                const speed = Math.random() * 5 + 2;
+                particles.push({
+                    x: x,
+                    y: y,
+                    vx: Math.cos(angle) * speed,
+                    vy: Math.sin(angle) * speed,
+                    size: Math.random() * 5 + 3,
+                    color: color,
+                    alpha: 1.0,
+                    life: 0.03 + Math.random() * 0.02
+                });
+            }
+        }
+
+        function createDustParticles(x, y) {
+            for (let i = 0; i < 6; i++) {
+                particles.push({
+                    x: x + (Math.random() - 0.5) * 16,
+                    y: y,
+                    vx: (Math.random() - 0.5) * 2,
+                    vy: -Math.random() * 1.5,
+                    size: Math.random() * 4 + 2,
+                    color: '#e2e8f0',
+                    alpha: 0.6,
+                    life: 0.05
+                });
+            }
+        }
+
+        function updateParticles() {
+            particles.forEach((p, idx) => {
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= p.life;
+                if (p.alpha <= 0) particles.splice(idx, 1);
+            });
+        }
+
+        function drawParticles() {
+            particles.forEach(p => {
+                ctx.save();
+                ctx.globalAlpha = Math.max(0, p.alpha);
+                ctx.fillStyle = p.color;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+        }
+
+        function drawOmena(x, y, facingLeft, squash) {
+            ctx.save();
+            ctx.translate(x + player.width / 2, y + player.height / 2);
+            if (facingLeft) ctx.scale(-1, 1);
+            ctx.scale(1 / squash, squash);
+
+            ctx.fillStyle = '#facc15';
+            ctx.beginPath();
+            ctx.arc(0, 4, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#ca8a04';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.strokeStyle = '#334155';
+            ctx.lineWidth = 2;
+
+            ctx.beginPath();
+            ctx.moveTo(-6, -11);
+            ctx.lineTo(-12, -22);
+            ctx.stroke();
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            ctx.arc(-12, -22, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(0, -13);
+            ctx.lineTo(0, -26);
+            ctx.stroke();
+            ctx.fillStyle = '#22c55e';
+            ctx.beginPath();
+            ctx.arc(0, -26, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.moveTo(6, -11);
+            ctx.lineTo(12, -22);
+            ctx.stroke();
+            ctx.fillStyle = '#3b82f6';
+            ctx.beginPath();
+            ctx.arc(12, -22, 4.5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#0f172a';
+            ctx.beginPath();
+            ctx.arc(-5.5, -1, 3, 0, Math.PI * 2);
+            ctx.arc(5.5, -1, 3, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.arc(-6.5, -2, 1.2, 0, Math.PI * 2);
+            ctx.arc(4.5, -2, 1.2, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(244, 63, 94, 0.65)';
+            ctx.beginPath();
+            ctx.arc(-9.5, 4, 3.8, 0, Math.PI * 2);
+            ctx.arc(9.5, 4, 3.8, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.strokeStyle = '#0f172a';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.arc(0, 3, 5, 0.1 * Math.PI, 0.9 * Math.PI);
+            ctx.stroke();
+
+            ctx.fillStyle = '#ea580c';
+            const legOffset = (Math.abs(player.vx) > 0.1) ? Math.sin(Date.now() * 0.018) * 6 : 0;
+            ctx.beginPath();
+            ctx.arc(-6 + legOffset, 20, 5, 0, Math.PI * 2);
+            ctx.arc(6 - legOffset, 20, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        function update() {
+            if (gameState !== 'PLAYING') return;
+
+            if (keys.left) {
+                player.vx = -player.speed;
+                player.facingLeft = true;
+            } else if (keys.right) {
+                player.vx = player.speed;
+                player.facingLeft = false;
+            } else {
+                player.vx *= 0.8;
+            }
+
+            player.vy += player.gravity;
+
+            player.x += player.vx;
+            player.y += player.vy;
+
+            player.squash += (1.0 - player.squash) * 0.12;
+
+            player.grounded = false;
+            platforms.forEach(plat => {
+                if (
+                    player.x < plat.x + plat.w &&
+                    player.x + player.width > plat.x &&
+                    player.y + player.height >= plat.y &&
+                    player.y + player.height <= plat.y + plat.h + player.vy
+                ) {
+                    if (player.vy > 0) {
+                        player.y = plat.y - player.height;
+                        player.vy = 0;
+                        if (!player.grounded) {
+                            player.squash = 0.82; 
+                        }
+                        player.grounded = true;
+                    }
+                }
+            });
+
+            activeItems.forEach(item => {
+                if (!item.collected &&
+                    player.x < item.x + item.w &&
+                    player.x + player.width > item.x &&
+                    player.y < item.y + item.h &&
+                    player.y + player.height > item.y
+                ) {
+                    item.collected = true;
+                    playSound('collect');
+                    score += 100;
+                    collectedCount++;
+                    collectedList.push(item);
+
+                    createBurstParticles(item.x + 18, item.y + 18, '#facc15');
+                    showSpotToast(item);
+
+                    updateHUD();
+                }
+            });
+
+            if (player.y > CANVAS_HEIGHT + 80) {
+                player.x = Math.max(80, player.x - 240);
+                player.y = 200;
+                player.vy = 0;
+            }
+
+            const targetCamX = player.x - CANVAS_WIDTH / 3;
+            cameraX += (targetCamX - cameraX) * 0.1;
+            if (cameraX < 0) cameraX = 0;
+
+            updateParticles();
+
+            if (player.x >= goal.x) {
+                gameState = 'CLEAR';
+                playSound('clear');
+                createBurstParticles(goal.x + 35, goal.y + 30, '#38bdf8');
+
+                document.getElementById('end-title').innerText = `🏆 ${activeRoute.num} 완주 성공!`;
+                document.getElementById('end-desc').innerHTML = `
+                    오매나와 함께 <b>[${activeRoute.num} - ${activeRoute.theme}]</b> 노선을 타고,<br>
+                    공공데이터 연계 주요 유명 관광지를 성공적으로 수집했습니다!<br><br>
+                    🌱 <b>획득 에코포인트:</b> <span class="text-amber-300 font-extrabold text-lg">${score} PT</span>
+                `;
+
+                const spotContainer = document.getElementById('collected-spots-list');
+                document.getElementById('end-collection-count').innerText = `${collectedList.length} / ${activeItems.length} 수집 완료`;
+                spotContainer.innerHTML = '';
+
+                if (collectedList.length === 0) {
+                    spotContainer.innerHTML = '<span class="text-slate-500 text-xs col-span-3">수집한 관광지가 없습니다.</span>';
+                } else {
+                    collectedList.forEach(spot => {
+                        const tag = document.createElement('div');
+                        tag.className = 'bg-slate-800/90 border border-slate-700/80 rounded-xl p-2 flex flex-col justify-center text-left';
+                        tag.innerHTML = `
+                            <span class="text-[11px] font-bold text-amber-300 line-clamp-1">📍 ${spot.name}</span>
+                            <span class="text-[9px] text-slate-400 mt-0.5">반경 ${spot.distance}</span>
+                        `;
+                        spotContainer.appendChild(tag);
+                    });
+                }
+
+                document.getElementById('end-screen').classList.remove('hidden');
+                document.getElementById('back-btn').style.display = 'none';
+            }
+        }
+
+        function render() {
+            ctx.clearRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            const bgGradient = ctx.createLinearGradient(0, 0, 0, CANVAS_HEIGHT);
+            if (activeRoute.category === 'CULTURE') {
+                bgGradient.addColorStop(0, '#0f172a');
+                bgGradient.addColorStop(1, '#1e3a8a');
+            } else if (activeRoute.category === 'NATURE') {
+                bgGradient.addColorStop(0, '#064e3b');
+                bgGradient.addColorStop(1, '#022c22');
+            } else if (activeRoute.category === 'HISTORY') {
+                bgGradient.addColorStop(0, '#312e81');
+                bgGradient.addColorStop(1, '#1e1b4b');
+            } else {
+                bgGradient.addColorStop(0, '#111827');
+                bgGradient.addColorStop(1, '#1f2937');
+            }
+            ctx.fillStyle = bgGradient;
+            ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
+
+            ctx.save();
+            ctx.translate(-cameraX, 0);
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.06)';
+            ctx.beginPath();
+            ctx.moveTo(100, 470);
+            ctx.lineTo(450, 180);
+            ctx.lineTo(800, 470);
+            ctx.fill();
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+            ctx.beginPath();
+            ctx.moveTo(1000, 470);
+            ctx.lineTo(1380, 150);
+            ctx.lineTo(1750, 470);
+            ctx.fill();
+
+            platforms.forEach(plat => {
+                if (plat.type === 'ground') {
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillRect(plat.x, plat.y, plat.w, 14);
+                    ctx.fillStyle = '#1e293b';
+                    ctx.fillRect(plat.x, plat.y + 14, plat.w, plat.h - 14);
+                } else if (plat.type === 'bus') {
+                    ctx.fillStyle = '#2563eb';
+                    ctx.beginPath();
+                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 8);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.fillText(plat.label, plat.x + 10, plat.y + 15);
+                } else if (plat.type === 'subway') {
+                    ctx.fillStyle = '#6366f1';
+                    ctx.beginPath();
+                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 8);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.fillText(plat.label, plat.x + 10, plat.y + 15);
+                } else {
+                    ctx.fillStyle = '#e2e8f0';
+                    ctx.beginPath();
+                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 8);
+                    ctx.fill();
+                    ctx.fillStyle = '#0f172a';
+                    ctx.font = 'bold 11px sans-serif';
+                    ctx.fillText(plat.label, plat.x + 10, plat.y + 15);
+                }
+            });
+
+            activeItems.forEach(item => {
+                if (!item.collected) {
+                    const bobbingY = item.y + Math.sin(Date.now() * 0.006 + item.x) * 5;
+
+                    ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                    ctx.beginPath();
+                    ctx.ellipse(item.x + 18, item.y + 36, 12, 4, 0, 0, Math.PI * 2);
+                    ctx.fill();
+
+                    ctx.fillStyle = '#f59e0b';
+                    ctx.beginPath();
+                    ctx.arc(item.x + 18, bobbingY + 12, 15, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.strokeStyle = '#ffffff';
+                    ctx.lineWidth = 2.5;
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#ffffff';
+                    ctx.font = '13px sans-serif';
+                    ctx.fillText('🏛️', item.x + 10, bobbingY + 17);
+
+                    ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
+                    ctx.beginPath();
+                    ctx.roundRect(item.x - 42, bobbingY - 24, 120, 24, 8);
+                    ctx.fill();
+                    ctx.strokeStyle = '#facc15';
+                    ctx.lineWidth = 1;
+                    ctx.stroke();
+
+                    ctx.fillStyle = '#f8fafc';
+                    ctx.font = 'bold 10px sans-serif';
+                    ctx.fillText(item.name, item.x - 36, bobbingY - 8);
+                }
+            });
+
+            drawParticles();
+
+            ctx.fillStyle = '#3b82f6';
+            ctx.roundRect(goal.x, goal.y, goal.w, goal.h, 12);
+            ctx.fill();
+            ctx.strokeStyle = '#60a5fa';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.fillText('ARRIVE', goal.x + 9, goal.y + 32);
+            ctx.font = 'bold 11px sans-serif';
+            ctx.fillText('종점 승강장', goal.x + 6, goal.y + 58);
+
+            drawOmena(player.x, player.y, player.facingLeft, player.squash);
+
+            ctx.restore();
+        }
+
+        function gameLoop() {
+            update();
+            render();
+            requestAnimationFrame(gameLoop);
+        }
+
+        initControls();
+        requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
