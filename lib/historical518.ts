@@ -17,8 +17,15 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
     if (!json.data || !Array.isArray(json.data)) return [];
 
     const places = await Promise.all(json.data.map(async (item: any, idx: number) => {
-      const name = item['사 적 지 명'] || '';
-      let address = item['사적지 세부 위치'] || '';
+      // 공공데이터 API의 JSON 키값 띄어쓰기 불일치 문제를 해결하기 위해 키를 유연하게 찾습니다.
+      const keys = Object.keys(item);
+      const nameKey = keys.find(k => k.replace(/\s+/g, '') === '사적지명') || '사 적 지 명';
+      const addressKey = keys.find(k => k.replace(/\s+/g, '') === '사적지세부위치') || '사적지 세부 위치';
+      const reasonKey = keys.find(k => k.replace(/\s+/g, '').includes('지정사유')) || '지 정 사 유';
+
+      const name = item[nameKey] || '';
+      let address = item[addressKey] || '';
+      const overview = item[reasonKey] || '';
       
       let lat = 0;
       let lng = 0;
@@ -52,7 +59,7 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
         dist: 0,
         firstimage: '',
         tel: '',
-        overview: item['지 정 사 유'] || ''
+        overview: overview || '지정 사유가 제공되지 않았습니다.'
       } as TourismPlace;
     }));
 
