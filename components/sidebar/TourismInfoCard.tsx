@@ -72,10 +72,10 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
   };
 
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-in-up border border-gray-100 flex flex-col max-h-[80vh]">
+    <div className="bg-white rounded-2xl shadow-lg overflow-hidden animate-fade-in-up border border-gray-100 flex flex-col">
       {/* 이미지 영역 */}
       {detailInfo?.gallery?.length > 0 ? (
-        <div className="relative w-full h-48 bg-gray-100 shrink-0 flex overflow-x-auto snap-x">
+        <div className="relative w-full h-48 sm:h-56 bg-gray-100 shrink-0 flex overflow-x-auto snap-x">
           {detailInfo.gallery.map((img: string, i: number) => (
             <a key={i} href={img} target="_blank" rel="noreferrer" className="relative w-full h-full shrink-0 snap-center block">
               <Image src={img} alt={`${place.title} 사진 ${i+1}`} fill className="object-cover" sizes="(max-width: 768px) 100vw, 380px" />
@@ -84,32 +84,40 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
           <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-0.5 rounded text-xs z-10 pointer-events-none">
             {detailInfo.gallery.length}장
           </div>
-          {/* 카테고리 뱃지 */}
+          {/* 카테고리 배지 */}
           <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-white text-xs font-bold z-10 pointer-events-none" style={{ backgroundColor: categoryColor }}>
             {categoryIcon} {categoryLabel}
           </div>
           <button onClick={onClose} className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors z-10">✕</button>
         </div>
       ) : (
-        <div className="relative w-full h-48 bg-gray-100 shrink-0">
+        <div className="relative w-full h-40 sm:h-48 bg-gray-100 shrink-0">
           {place.firstimage && !imageError ? (
-            <a href={place.firstimage} target="_blank" rel="noreferrer" className="relative w-full h-full block">
-              <Image src={place.firstimage} alt={place.title} fill className="object-cover" onError={() => setImageError(true)} sizes="(max-width: 768px) 100vw, 380px" />
-            </a>
+            <Image 
+              src={place.firstimage} 
+              alt={place.title}
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 380px"
+              onError={() => setImageError(true)}
+            />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-5xl">
-              {categoryIcon}
+            <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 gap-2">
+              <span className="text-4xl">📸</span>
+              <span className="text-sm">이미지 없음</span>
             </div>
           )}
-          <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-white text-xs font-bold" style={{ backgroundColor: categoryColor }}>
+          
+          {/* 카테고리 배지 */}
+          <div className="absolute top-2 left-2 px-2 py-1 rounded-full text-white text-xs font-bold z-10 pointer-events-none" style={{ backgroundColor: categoryColor }}>
             {categoryIcon} {categoryLabel}
           </div>
-          <button onClick={onClose} className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors">✕</button>
+          <button onClick={onClose} className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors z-10">✕</button>
         </div>
       )}
 
-      {/* 정보 영역 (스크롤 가능) */}
-      <div className="p-4 space-y-3 overflow-y-auto">
+      {/* 정보 영역 (부모 스크롤 사용) */}
+      <div className="p-4 space-y-3">
         <div>
           <div className="flex justify-between items-start">
             <h3 className="font-bold text-lg text-gray-900 leading-tight pr-2">{place.title}</h3>
