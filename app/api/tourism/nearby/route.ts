@@ -6,6 +6,21 @@ import { NextRequest, NextResponse } from 'next/server';
 import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
 import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
+import { fetchHistorical518, mergeHistorical518 } from '@/lib/historical518';
+
+function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371e3; // metres
+  const φ1 = lat1 * Math.PI / 180;
+  const φ2 = lat2 * Math.PI / 180;
+  const Δφ = (lat2 - lat1) * Math.PI / 180;
+  const Δλ = (lon2 - lon1) * Math.PI / 180;
+
+  const a = Math.sin(Δφ/2) * Math.sin(Δφ/2) +
+            Math.cos(φ1) * Math.cos(φ2) *
+            Math.sin(Δλ/2) * Math.sin(Δλ/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c;
+}
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/locationBasedList2';
 const RADIUS = 300; // 반경 300미터
@@ -35,11 +50,12 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 4개 카테고리 동시 조회 및 외부 API 데이터 조회
-    const [odcloudItems, jnTourItems, heritageItems, ...results] = await Promise.all([
+    // 4개 카테고리 동시 조회 + ODCloud, JnTour, Heritage, 518
+    const [odcloudItems, jnTourItems, heritageItems, historical518Items, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
       fetchHeritagePlaces(),
+      fetchHistorical518(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -83,9 +99,22 @@ export async function GET(request: NextRequest) {
     allPlaces = mergeOdcloudData(allPlaces, odcloudItems);
     allPlaces = mergeJnTourData(allPlaces, jnTourItems);
     allPlaces = mergeHeritageData(allPlaces, heritageItems);
+    allPlaces = mergeHistorical518(allPlaces, historical518Items);
+
+    const centerLat = parseFloat(lat);
+    const centerLng = parseFloat(lng);
+    const maxRadius = parseFloat(radiusParam);
+
+    // Calculate dist for merged items if missing and filter by maxRadius
+    allPlaces = allPlaces.filter((place: any) => {
+      if (place.lat && place.lng && (place.dist === undefined || place.dist === 0 || isNaN(place.dist))) {
+        place.dist = getDistance(centerLat, centerLng, place.lat, place.lng);
+      }
+      return place.dist <= maxRadius;
+    });
 
     // 거리순 정렬
-    allPlaces.sort((a, b) => a.dist - b.dist);
+    allPlaces.sort((a: any, b: any) => a.dist - b.dist);
 
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {
