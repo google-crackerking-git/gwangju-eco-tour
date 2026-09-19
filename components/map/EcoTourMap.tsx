@@ -35,6 +35,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
   const {
     transportMode,
     busStops,
+    selectedRouteDir,
     subwayStations,
     nearbyTourism,
     selectedStop,
@@ -58,13 +59,18 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
     }
   }, [map, selectedStop, selectedTourism]);
 
+  const visibleStops = useMemo(() => {
+    if (!selectedRouteDir) return busStops;
+    return busStops.filter(stop => stop.dir === selectedRouteDir);
+  }, [busStops, selectedRouteDir]);
+
   // 버스 노선 선택 시 전체 정류장이 보이도록 bounds 설정
   useEffect(() => {
-    if (!map || transportMode !== 'bus' || busStops.length === 0) return;
+    if (!map || transportMode !== 'bus' || visibleStops.length === 0) return;
     const bounds = new kakao.maps.LatLngBounds();
-    busStops.forEach(stop => bounds.extend(new kakao.maps.LatLng(stop.lat, stop.lng)));
+    visibleStops.forEach(stop => bounds.extend(new kakao.maps.LatLng(stop.lat, stop.lng)));
     map.setBounds(bounds);
-  }, [map, transportMode, busStops]);
+  }, [map, transportMode, visibleStops]);
 
   const filteredTourism = nearbyTourism.filter((p) =>
     activeCategories.includes(p.contentTypeId)
@@ -122,7 +128,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
       }}
     >
       {/* 버스 정류장 마커 */}
-      {transportMode === 'bus' && busStops.map((stop) => (
+      {transportMode === 'bus' && visibleStops.map((stop) => (
         <BusStopMarker
           key={stop.nodeId}
           stop={stop}

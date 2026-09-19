@@ -16,6 +16,8 @@ interface EcoTourState {
   setSelectedBusRoute: (route: BusRoute | null) => void;
   busStops: BusStop[];
   setBusStops: (stops: BusStop[]) => void;
+  selectedRouteDir: 'up' | 'down' | null;
+  setSelectedRouteDir: (dir: 'up' | 'down' | null) => void;
 
   // ─── 지하철 상태 ───────────────────────────────
   subwayStations: SubwayStation[];
@@ -61,6 +63,7 @@ export const useEcoTourStore = create<EcoTourState>((set) => ({
     selectedTourism: null,
     busStops: [],
     selectedBusRoute: null,
+    selectedRouteDir: null,
   }),
 
   // 버스
@@ -73,9 +76,12 @@ export const useEcoTourStore = create<EcoTourState>((set) => ({
     selectedStop: null,
     nearbyTourism: [],
     selectedTourism: null,
+    selectedRouteDir: 'up', // 기본값으로 정방향(상행) 선택
   }),
   busStops: [],
   setBusStops: (stops) => set({ busStops: stops }),
+  selectedRouteDir: null,
+  setSelectedRouteDir: (dir) => set({ selectedRouteDir: dir }),
 
   // 지하철
   subwayStations: [],
@@ -116,6 +122,7 @@ export const useEcoTourStore = create<EcoTourState>((set) => ({
   // 초기화
   reset: () => set({
     selectedBusRoute: null,
+    selectedRouteDir: null,
     busStops: [],
     selectedStop: null,
     nearbyTourism: [],

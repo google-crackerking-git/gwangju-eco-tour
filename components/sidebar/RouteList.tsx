@@ -17,6 +17,8 @@ export default function RouteList({ onStopSelect }: RouteListProps) {
     setSelectedBusRoute,
     busStops,
     setBusStops,
+    selectedRouteDir,
+    setSelectedRouteDir,
   } = useEcoTourStore();
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -155,28 +157,31 @@ export default function RouteList({ onStopSelect }: RouteListProps) {
                 </button>
 
                 {isSelected && !isLoadingStops && busStops && busStops.length > 0 && (
-                  <div className="bg-gray-50 px-2 py-2 max-h-64 overflow-y-auto">
-                    <ul className="space-y-1">
-                      {busStops.map((stop) => (
-                        <li key={stop.nodeId}>
-                          <button
-                            type="button"
-                            onClick={() => onStopSelect({ type: 'bus', id: stop.nodeId, name: stop.nodeName, lat: stop.lat, lng: stop.lng })}
-                            className="w-full flex items-center justify-between text-left text-xs p-2 rounded hover:bg-white hover:shadow-sm transition-all"
-                          >
-                            <div className="flex flex-col">
-                              <span className="font-medium text-gray-800">{stop.nodeName}</span>
-                              {stop.arsId && <span className="text-[10px] text-gray-500">정류소번호: {stop.arsId}</span>}
-                            </div>
-                            {stop.dir && (
-                              <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${stop.dir === 'up' ? 'bg-blue-100 text-blue-700' : 'bg-orange-100 text-orange-700'}`}>
-                                {stop.dir === 'up' ? '기점행' : '종점행'}
-                              </span>
-                            )}
-                          </button>
-                        </li>
-                      ))}
-                    </ul>
+                  <div className="bg-gray-50 p-3 border-t border-gray-100 flex gap-2" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRouteDir('up')}
+                      className={`flex-1 py-2 px-2 text-xs font-bold rounded-lg border transition-all ${
+                        selectedRouteDir === 'up'
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-md'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      종점행<br/>
+                      <span className="text-[10px] font-normal opacity-90 block mt-1 truncate">[{route.endNodeName}] 방면</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSelectedRouteDir('down')}
+                      className={`flex-1 py-2 px-2 text-xs font-bold rounded-lg border transition-all ${
+                        selectedRouteDir === 'down'
+                          ? 'bg-orange-500 text-white border-orange-500 shadow-md'
+                          : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      기점행<br/>
+                      <span className="text-[10px] font-normal opacity-90 block mt-1 truncate">[{route.startNodeName}] 방면</span>
+                    </button>
                   </div>
                 )}
               </li>
