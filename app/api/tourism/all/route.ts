@@ -70,6 +70,9 @@ export async function GET(request: NextRequest) {
     allPlaces = mergePathData(allPlaces, pathItems);
     allPlaces = mergeMarkets(allPlaces, marketItems);
 
+    // Filter out items without coordinates
+    allPlaces = allPlaces.filter((p: any) => p.mapx && p.mapy);
+
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {
     console.error('[Tourism All API Error]', error);

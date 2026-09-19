@@ -114,7 +114,8 @@ export async function GET(request: NextRequest) {
 
     // Calculate dist for merged items if missing and filter by maxRadius
     allPlaces = allPlaces.filter((place: any) => {
-      if (place.mapy && place.mapx && (place.dist === undefined || place.dist === 0 || isNaN(place.dist))) {
+      if (!place.mapy || !place.mapx) return false; // Filter out places without coordinates
+      if (place.dist === undefined || place.dist === 0 || isNaN(place.dist)) {
         place.dist = getDistance(centerLat, centerLng, place.mapy, place.mapx);
       }
       return place.dist <= maxRadius;
