@@ -62,9 +62,10 @@
         /* Canvas Wrapper */
         #game-container {
             position: relative;
-            width: 100%;
+            width: 100vw;
+            height: 100dvh;
             max-width: 920px;
-            height: 560px;
+            max-height: 560px;
             border-radius: 20px;
             overflow: hidden;
             border: 3px solid rgba(255, 255, 255, 0.12);
@@ -155,29 +156,25 @@
             transform: scale(0.92);
         }
 
-        @media (max-width: 768px) {
+        /* Responsive Breakpoints */
+        @media (max-width: 950px), (max-height: 650px) {
             #mobile-controls {
                 display: flex;
             }
             #game-container {
-                height: 100dvh;
+                max-width: 100vw;
+                max-height: 100dvh;
                 border-radius: 0;
                 border: none;
             }
         }
     </style>
 </head>
-<body>
+<body class="antialiased selection:bg-amber-400 selection:text-slate-900">
 
     <!-- Main Game Container -->
     <div id="game-container">
         
-        <!-- Back Button (added for integration) -->
-        <button onclick="window.location.href='/'" class="absolute top-3 right-3 z-50 bg-white/20 hover:bg-white/30 text-white rounded-full p-2 backdrop-blur shadow" style="display: none;" id="back-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
-        </button>
-
-        <!-- Top HUD Header -->
         <div id="hud" class="absolute top-3 left-3 right-12 glass-panel rounded-2xl px-4 py-2.5 flex items-center justify-between text-xs sm:text-sm font-semibold z-20">
             <!-- Bus Line Badge -->
             <div class="flex items-center gap-2">
@@ -218,13 +215,13 @@
         <canvas id="gameCanvas"></canvas>
 
         <!-- Discovery Toast Popup -->
-        <div id="spot-toast" class="absolute top-16 left-1/2 glass-panel rounded-full p-2.5 px-5 flex items-center gap-3 z-30 hidden pointer-events-none toast-pop border border-amber-400/50 shadow-lg">
-            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-xl shadow-inner shrink-0">
+        <div id="spot-toast" class="absolute top-10 left-1/2 glass-panel rounded-full p-2.5 px-6 flex items-center gap-3 z-30 hidden pointer-events-none toast-pop border border-amber-400/50 shadow-lg w-max max-w-[90vw]">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl shadow-inner shrink-0">
                 📍
             </div>
             <div class="flex flex-col">
-                <span id="toast-title" class="font-bold text-amber-300 text-sm drop-shadow-sm">국립아시아문화전당</span>
-                <span id="toast-desc" class="text-[10px] text-slate-200 line-clamp-1 mt-0.5">아시아 최대 규모의 복합 문화 예술 기관</span>
+                <span id="toast-title" class="font-bold text-amber-300 text-[15px] drop-shadow-sm leading-tight">국립아시아문화전당</span>
+                <span id="toast-desc" class="text-[12px] text-slate-100 mt-0.5 leading-tight whitespace-normal break-keep">아시아 최대 규모의 복합 문화 예술 기관</span>
             </div>
             <span id="toast-badge" class="hidden"></span>
         </div>
