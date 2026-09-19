@@ -12,20 +12,6 @@ interface SubwayStationMarkerProps {
 }
 
 export default function SubwayStationMarker({ station, isSelected, hasTourism, onSelect }: SubwayStationMarkerProps) {
-  const [info, setInfo] = useState<any>(null);
-
-  useEffect(() => {
-    if (isSelected && !info) {
-      fetch(`/api/subway/stationInfo?stationId=${station.stationId}`)
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            setInfo(data.data);
-          }
-        })
-        .catch(console.error);
-    }
-  }, [isSelected, info, station.stationId]);
 
   const subwaySvg = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
@@ -52,7 +38,7 @@ export default function SubwayStationMarker({ station, isSelected, hasTourism, o
           size: isSelected ? { width: 36, height: 36 } : { width: 28, height: 28 },
         }}
       />
-      {isSelected && info && (
+      {isSelected && (
         <CustomOverlayMap position={{ lat: station.lat, lng: station.lng }} yAnchor={1.2} zIndex={30} clickable={true}>
           <div 
             className="bg-white rounded-xl shadow-xl overflow-hidden flex flex-col border border-purple-200" 
@@ -61,13 +47,12 @@ export default function SubwayStationMarker({ station, isSelected, hasTourism, o
             onTouchMove={(e) => e.stopPropagation()}
           >
             <div className="bg-purple-600 px-3 py-2 text-white font-bold flex justify-between items-center">
-              <span>🚇 {info.station_name}역</span>
+              <span>🚇 {station.stationName}역</span>
               <span className="text-xs opacity-80">1호선</span>
             </div>
-            <div className="p-3 text-sm text-gray-700 space-y-1">
-              <p>📍 {info.station_place}</p>
-              <p>📐 역사 면적: {info.station_area} ㎡</p>
-              <p>🪑 대합실 면적: {info.waiting_room_area} ㎡</p>
+            <div className="p-3 text-sm text-gray-700 text-center">
+              <p className="font-medium text-gray-800 mb-1">지하철역 주변 관광지</p>
+              <p className="text-xs text-gray-500">목록에서 관광지를 선택해주세요</p>
             </div>
           </div>
         </CustomOverlayMap>

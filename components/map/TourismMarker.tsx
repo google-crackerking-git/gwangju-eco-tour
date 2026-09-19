@@ -34,7 +34,7 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
   const [hovered, setHovered] = useState(false);
   const [detailInfo, setDetailInfo] = useState<any>(null);
   const [loading, setLoading] = useState(false);
-  const { allTourism, setSelectedTourism } = useEcoTourStore();
+  const { allTourism, setSelectedTourism, selectedStop } = useEcoTourStore();
 
   useEffect(() => {
     if (isSelected && !detailInfo && !loading) {
@@ -131,7 +131,11 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
                     </span>
                   )}
                   <a 
-                    href={`https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`}
+                    href={
+                      selectedStop
+                        ? `https://map.kakao.com/link/from/${selectedStop.name},${selectedStop.lat},${selectedStop.lng}/to/${place.title},${place.mapy},${place.mapx}`
+                        : `https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`
+                    }
                     target="_blank"
                     rel="noreferrer"
                     className="shrink-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold hover:bg-blue-700 transition-colors"

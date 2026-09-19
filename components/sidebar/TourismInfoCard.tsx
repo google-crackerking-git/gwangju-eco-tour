@@ -27,7 +27,7 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 export default function TourismInfoCard({ place, nearestStopName, onClose }: TourismInfoCardProps) {
   const [imageError, setImageError] = useState(false);
   const [detailInfo, setDetailInfo] = useState<any>(null);
-  const { allTourism, setSelectedTourism } = useEcoTourStore();
+  const { allTourism, setSelectedTourism, selectedStop } = useEcoTourStore();
 
   useEffect(() => {
     if (!place) return;
@@ -178,7 +178,11 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
         {/* 액션 버튼들 */}
         <div className="flex gap-2 pt-4 mt-4 border-t border-gray-100">
           <a
-            href={`https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`}
+            href={
+              selectedStop
+                ? `https://map.kakao.com/link/from/${selectedStop.name},${selectedStop.lat},${selectedStop.lng}/to/${place.title},${place.mapy},${place.mapx}`
+                : `https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`
+            }
             target="_blank"
             rel="noreferrer"
             className="flex-1 text-center py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1"
