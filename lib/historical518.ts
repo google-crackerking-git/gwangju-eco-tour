@@ -51,7 +51,8 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
         mapy: lat,
         dist: 0,
         firstimage: '',
-        tel: ''
+        tel: '',
+        overview: item['지 정 사 유'] || ''
       } as TourismPlace;
     }));
 
