@@ -15,6 +15,7 @@ export default function RouteList({ onStopSelect }: RouteListProps) {
     setBusRoutes,
     selectedBusRoute,
     setSelectedBusRoute,
+    busStops,
     setBusStops,
   } = useEcoTourStore();
 

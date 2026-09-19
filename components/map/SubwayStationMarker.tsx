@@ -48,7 +48,7 @@ export default function SubwayStationMarker({ station, isSelected, hasTourism, o
         title={station.stationName}
         onClick={onSelect}
         image={{
-          src: \`data:image/svg+xml;utf8,\${isSelected ? selectedSubwaySvg : subwaySvg}\`,
+          src: `data:image/svg+xml;utf8,${isSelected ? selectedSubwaySvg : subwaySvg}`,
           size: isSelected ? { width: 36, height: 36 } : { width: 28, height: 28 },
         }}
       />

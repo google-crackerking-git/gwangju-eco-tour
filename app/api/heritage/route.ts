@@ -1,4 +1,4 @@
-﻿import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -12,7 +12,7 @@ export async function GET(request: NextRequest) {
         if (key !== 'type') wfsParams.append(key, val);
       });
       
-      const url = \https://www.gis-heritage.go.kr/openapi/xmlService/spca.do?\\;
+      const url = `https://www.gis-heritage.go.kr/openapi/xmlService/spca.do?${wfsParams.toString()}`;
       
       const response = await fetch(url, {
         // next: { revalidate: 3600 }

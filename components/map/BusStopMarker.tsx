@@ -32,7 +32,7 @@ export default function BusStopMarker({ stop, isSelected, hasTourism, onSelect }
         title={stop.nodeName}
         onClick={onSelect}
         image={{
-          src: \`data:image/svg+xml;utf8,\${isSelected ? selectedBusSvg : busSvg}\`,
+          src: `data:image/svg+xml;utf8,${isSelected ? selectedBusSvg : busSvg}`,
           size: isSelected ? { width: 36, height: 36 } : { width: 28, height: 28 },
         }}
       />
