@@ -81,7 +81,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
     busStops.forEach(stop => {
       for (const place of allTourism) {
         if (activeCategories.includes(place.contentTypeId)) {
-          if (getDistance(stop.lat, stop.lng, place.mapy, place.mapx) <= 500) {
+          if (getDistance(stop.lat, stop.lng, place.mapy, place.mapx) <= 300) {
             set.add(stop.nodeId);
             break;
           }

@@ -184,11 +184,7 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
         <div className="flex gap-2 pt-4 mt-4 border-t border-gray-100">
           <a
             href={(() => {
-              const safePlaceTitle = place.title.replace(/,/g, '');
-              if (selectedStop) {
-                const safeStopName = selectedStop.name.replace(/,/g, '');
-                return `https://map.kakao.com/link/from/${safeStopName},${selectedStop.lat},${selectedStop.lng}/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
-              }
+              const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
               return `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
             })()}
             target="_blank"

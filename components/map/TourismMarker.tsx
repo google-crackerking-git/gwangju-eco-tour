@@ -132,11 +132,7 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
                   )}
                   <a 
                     href={(() => {
-                      const safePlaceTitle = place.title.replace(/,/g, '');
-                      if (selectedStop) {
-                        const safeStopName = selectedStop.name.replace(/,/g, '');
-                        return `https://map.kakao.com/link/from/${safeStopName},${selectedStop.lat},${selectedStop.lng}/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
-                      }
+                      const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
                       return `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
                     })()}
                     target="_blank"
