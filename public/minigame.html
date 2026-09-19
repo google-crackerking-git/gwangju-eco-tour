@@ -268,36 +268,38 @@
         </div>
 
         <!-- Stage Clear / Completion Modal -->
-        <div id="end-screen" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-center p-6 z-40 hidden text-center">
-            <div class="w-16 h-16 rounded-3xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-3xl mb-3 shadow-inner">
-                🏆
-            </div>
-            <h2 id="end-title" class="text-2xl sm:text-3xl font-black text-amber-300 mb-2">
-                노선 투어 완주 성공!
-            </h2>
-            <div id="end-desc" class="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed mb-4">
-                투어 완료
-            </div>
-
-            <!-- Collected Spots Grid -->
-            <div class="w-full max-w-lg bg-slate-900/80 rounded-2xl p-4 border border-slate-800 mb-6">
-                <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-3 px-1">
-                    <span>📍 수집한 광주 유명 관광지</span>
-                    <span id="end-collection-count" class="text-emerald-400">6 / 6 수집 완료</span>
+        <div id="end-screen" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md flex flex-col items-center justify-start p-6 py-10 sm:justify-center z-40 hidden text-center overflow-y-auto">
+            <div class="my-auto w-full flex flex-col items-center">
+                <div class="w-16 h-16 rounded-3xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-3xl mb-3 shadow-inner">
+                    🏆
                 </div>
-                <div id="collected-spots-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto pr-1">
-                    <!-- Injected via JS -->
+                <h2 id="end-title" class="text-2xl sm:text-3xl font-black text-amber-300 mb-2">
+                    노선 투어 완주 성공!
+                </h2>
+                <div id="end-desc" class="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed mb-4">
+                    투어 완료
+                </div>
+
+                <!-- Collected Spots Grid -->
+                <div class="w-full max-w-lg bg-slate-900/80 rounded-2xl p-4 border border-slate-800 mb-6 shrink-0">
+                    <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-3 px-1">
+                        <span>내 수집한 광주 유명 관광지</span>
+                        <span id="end-collection-count" class="text-emerald-400">6 / 6 수집 완료</span>
+                    </div>
+                    <div id="collected-spots-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto pr-1">
+                        <!-- Injected via JS -->
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 w-full max-w-sm shrink-0 pb-10">
+                    <button id="restart-btn" class="flex-1 bg-white hover:bg-slate-200 text-slate-900 font-bold py-3.5 rounded-xl shadow transition">
+                        다른 노선 즐기기
+                    </button>
+                    <button onclick="window.location.href='/'" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl shadow transition">
+                        지도로 돌아가기
+                    </button>
                 </div>
             </div>
-
-            <!-- Restart Button -->
-            <button id="restart-btn" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-bold text-sm shadow-xl active:scale-95 transition flex items-center gap-2">
-                <span>다른 버스 노선 투어하기</span>
-                <span>🔄</span>
-            </button>
-            <button onclick="window.location.href='/'" class="mt-4 px-8 py-2 rounded-2xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-sm shadow-xl active:scale-95 transition">
-                지도 홈으로 가기
-            </button>
         </div>
 
         <!-- Mobile Control Buttons -->
