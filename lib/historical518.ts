@@ -8,7 +8,7 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
   if (!serviceKey || !kakaoKey) return [];
 
   try {
-    const url = \https://api.odcloud.kr/api/15139075/v1/uddi:e27620e6-dff2-4ead-8c0c-f9819b77de99?page=1&perPage=50&serviceKey=\\;
+    const url = `https://api.odcloud.kr/api/15139075/v1/uddi:e27620e6-dff2-4ead-8c0c-f9819b77de99?page=1&perPage=50&serviceKey=${serviceKey}`;
     
     const response = await fetch(url, { next: { revalidate: 86400 } });
     if (!response.ok) return [];
@@ -17,17 +17,17 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
     if (!json.data || !Array.isArray(json.data)) return [];
 
     const places = await Promise.all(json.data.map(async (item: any, idx: number) => {
-      const name = item['»ç Àû Áö ¸í'] || '';
-      let address = item['»çÀûÁö ¼¼ºÎ À§Ä¡'] || '';
+      const name = item['ì‚¬ ì  ì§€ ëª…'] || '';
+      let address = item['ì‚¬ì ì§€ ì„¸ë¶€ ìœ„ì¹˜'] || '';
       
       let lat = 0;
       let lng = 0;
 
-      // ÁÖ¼Ò°¡ ÀÖ´Â °æ¿ì Ä«Ä«¿À ·ÎÄÃ API·Î ÁÂÇ¥ º¯È¯
+      // ì£¼ì†Œê°€ ìˆëŠ” ê²½ìš° ì¹´ì¹´ì˜¤ ë¡œì»¬ APIë¡œ ì¢Œí‘œ ë³€í™˜
       if (address) {
         try {
-          const geoRes = await fetch(\https://dapi.kakao.com/v2/local/search/address.json?query=\\, {
-            headers: { Authorization: \KakaoAK \\ },
+          const geoRes = await fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`, {
+            headers: { Authorization: `KakaoAK ${kakaoKey}` },
             next: { revalidate: 86400 }
           });
           if (geoRes.ok) {
@@ -43,19 +43,20 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
       }
 
       return {
-        contentId: \518_historical_\\,
-        contentTypeId: 12, // °ü±¤Áö ºĞ·ù
-        title: \[518»çÀûÁö] \\,
-        address: address,
-        lat,
-        lng,
-        imageUrl: '',
+        contentId: `518_historical_${idx}`,
+        contentTypeId: 12, // ê´€ê´‘ì§€ ë¶„ë¥˜
+        title: `[518ì‚¬ì ì§€] ${name}`,
+        addr1: address,
+        mapx: lng,
+        mapy: lat,
+        dist: 0,
+        firstimage: '',
         tel: ''
       } as TourismPlace;
     }));
 
-    // ÁÂÇ¥°¡ Ã£¾ÆÁø °Í¸¸ ¹İÈ¯
-    return places.filter(p => p.lat !== 0 && p.lng !== 0);
+    // ì¢Œí‘œê°€ ì°¾ì•„ì§„ ê²ƒë§Œ ë°˜í™˜
+    return places.filter(p => p.mapx !== 0 && p.mapy !== 0);
   } catch (error) {
     console.error('[518 API Error]', error);
     return [];
@@ -63,6 +64,6 @@ export async function fetchHistorical518(): Promise<TourismPlace[]> {
 }
 
 export function mergeHistorical518(existing: any[], newItems: TourismPlace[]) {
-  // °£´ÜÈ÷ µÚ¿¡ Ãß°¡
+  // ê°„ë‹¨íˆ ë’¤ì— ì¶”ê°€
   return [...existing, ...newItems];
 }
