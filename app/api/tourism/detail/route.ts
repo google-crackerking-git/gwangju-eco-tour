@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const API_KEY = process.env.TOUR_API_SERVICE_KEY;
+const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
+const API_KEY = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
 
 async function fetchCommon(contentId: string) {
   const url = `http://apis.data.go.kr/B551011/KorService2/detailCommon2?serviceKey=${API_KEY}&MobileOS=ETC&MobileApp=AppTest&_type=json&contentId=${contentId}`;

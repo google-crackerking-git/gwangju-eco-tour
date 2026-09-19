@@ -7,7 +7,8 @@ const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/areaBasedList
 const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
 const AREA_CODE = 5; // 광주광역시
 export async function GET() {
-  const serviceKey = process.env.TOUR_API_SERVICE_KEY;
+  const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
+  const serviceKey = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
 
   if (!serviceKey) {
     return NextResponse.json({ success: false, error: 'TOUR_API_SERVICE_KEY 환경변수가 설정되지 않았습니다.' }, { status: 500 });

@@ -6,7 +6,8 @@ import { NextRequest, NextResponse } from 'next/server';
 const BIS_BASE_URL = 'http://apis.data.go.kr/6290000/gj_bis';
 
 export async function GET(request: NextRequest) {
-  const serviceKey = process.env.BUS_API_SERVICE_KEY;
+  const rawKey = process.env.BUS_API_SERVICE_KEY || '';
+  const serviceKey = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
 
   if (!serviceKey) {
     return NextResponse.json(

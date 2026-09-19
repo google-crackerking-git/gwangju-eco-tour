@@ -12,7 +12,8 @@ const RADIUS = 300; // 반경 300미터
 const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
 
 export async function GET(request: NextRequest) {
-  const serviceKey = process.env.TOUR_API_SERVICE_KEY;
+  const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
+  const serviceKey = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
 
   if (!serviceKey) {
     return NextResponse.json(
