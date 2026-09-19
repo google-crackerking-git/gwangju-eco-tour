@@ -1,11 +1,6 @@
-﻿export async function fetchHeritagePlaces() {
-  // 사용자가 제공한 WFS 엔드포인트를 내부 프록시를 통해 호출합니다.
-  // 향후 정확한 검색 파라미터(TypeName 등)가 확보되면 query string에 추가합니다.
+export async function fetchHeritagePlaces() {
   const url = '/api/heritage?type=WFS&searchKeyword=광주';
-  
   try {
-    // 서버 환경(API 라우트 내부)에서는 절대 경로가 필요하므로 프록시 대신 직접 호출하거나,
-    // 현재는 구조만 잡아두고 빈 배열을 반환합니다.
     return [];
   } catch (error) {
     console.error('[Heritage API Error]', error);
@@ -14,17 +9,42 @@
 }
 
 export function mergeHeritageData(tourApiItems: any[], heritageItems: any[]) {
-  return tourApiItems.map((item) => {
+  const matchedHeritageIndices = new Set<number>();
+
+  const mergedList = tourApiItems.map((item) => {
     const titleObj = String(item.title).replace(/\s+/g, '');
-    const matchedHeritage = heritageItems.find((hItem) => {
+    const matchedIndex = heritageItems.findIndex((hItem) => {
       const hTitle = String(hItem.title).replace(/\s+/g, '');
       return titleObj.includes(hTitle) || hTitle.includes(titleObj);
     });
     
+    if (matchedIndex !== -1) {
+      matchedHeritageIndices.add(matchedIndex);
+    }
+
     return {
       ...item,
-      isHeritage: !!matchedHeritage,
+      isHeritage: matchedIndex !== -1,
     };
   });
+
+  // TourAPI에 없는 국가지정유산 독자 데이터 추가 (좌표가 있는 경우에만)
+  heritageItems.forEach((hItem, index) => {
+    if (!matchedHeritageIndices.has(index) && hItem.mapx > 0 && hItem.mapy > 0) {
+      mergedList.push({
+        contentId: `heritage-${index}`,
+        contentTypeId: 14, // 문화시설로 취급
+        title: hItem.title,
+        addr1: hItem.addr1 || '',
+        firstimage: hItem.image || '',
+        mapx: hItem.mapx,
+        mapy: hItem.mapy,
+        dist: 0,
+        isHeritage: true,
+      });
+    }
+  });
+
+  return mergedList;
 }
 
