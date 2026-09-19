@@ -20,6 +20,18 @@ const EcoTourMap = dynamic(() => import('@/components/map/EcoTourMap'), {
   loading: () => <CharacterLoader />,
 });
 
+// 거리 계산 함수 (Haversine)
+function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
+  const R = 6371e3;
+  const p1 = lat1 * Math.PI / 180;
+  const p2 = lat2 * Math.PI / 180;
+  const dp = (lat2 - lat1) * Math.PI / 180;
+  const dl = (lon2 - lon1) * Math.PI / 180;
+  const a = Math.sin(dp / 2) * Math.sin(dp / 2) + Math.cos(p1) * Math.cos(p2) * Math.sin(dl / 2) * Math.sin(dl / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  return R * c;
+}
+
 export default function HomePage() {
   const { data: session } = useSession();
   const {
@@ -35,6 +47,7 @@ export default function HomePage() {
     setMobileSheetOpen,
     activeCategories,
     setAllTourism,
+    allTourism,
   } = useEcoTourStore();
 
   // 초기 로딩 시 모든 관광지 데이터 미리 가져오기
@@ -49,7 +62,7 @@ export default function HomePage() {
       .catch(err => console.error('Failed to fetch all tourism data:', err));
   }, [setAllTourism]);
 
-  // 정류장/역 클릭 시 관광지 조회
+  // 정류장/역 클릭 시 관광지 조회 (클라이언트 사이드에서 즉시 필터링)
   const handleStopSelect = useCallback(async (stop: SelectedStop) => {
     setSelectedStop(stop);
     setNearbyTourism([]);
@@ -58,20 +71,23 @@ export default function HomePage() {
     setMobileSheetOpen(true);
 
     try {
-      const radius = stop.type === 'subway' ? '500' : '300';
-      const res = await fetch(
-        `/api/tourism/nearby?lat=${stop.lat}&lng=${stop.lng}&radius=${radius}`
-      );
-      const data = await res.json();
-      if (data.success) {
-        setNearbyTourism(data.data);
-      }
+      const radius = stop.type === 'subway' ? 500 : 300;
+      
+      const nearby = allTourism
+        .map(p => {
+          const dist = getDistance(stop.lat, stop.lng, p.mapy, p.mapx);
+          return { ...p, dist };
+        })
+        .filter(p => p.dist <= radius)
+        .sort((a, b) => a.dist - b.dist);
+        
+      setNearbyTourism(nearby);
     } catch {
       console.error('관광지 조회 실패');
     } finally {
       setIsTourismLoading(false);
     }
-  }, [setSelectedStop, setNearbyTourism, setSelectedTourism, setIsTourismLoading, setMobileSheetOpen]);
+  }, [setSelectedStop, setNearbyTourism, setSelectedTourism, setIsTourismLoading, setMobileSheetOpen, allTourism]);
 
   const filteredTourism = nearbyTourism.filter((p) =>
     activeCategories.includes(p.contentTypeId)
