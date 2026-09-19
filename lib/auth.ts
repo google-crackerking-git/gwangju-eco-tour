@@ -17,6 +17,8 @@ declare module 'next-auth' {
 }
 
 export const authConfig: NextAuthConfig = {
+  trustHost: true,
+  secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET,
   providers: [
     Kakao({
       clientId: process.env.KAKAO_CLIENT_ID!,
