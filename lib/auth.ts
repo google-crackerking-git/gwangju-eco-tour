@@ -26,7 +26,7 @@ export const authConfig: NextAuthConfig = {
       client: {
         token_endpoint_auth_method: process.env.KAKAO_CLIENT_SECRET ? 'client_secret_post' : 'none'
       },
-      checks: ['state']
+      checks: []
     })
   ],
   callbacks: {
