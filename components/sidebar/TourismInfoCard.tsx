@@ -114,6 +114,11 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
           <div className="flex justify-between items-start">
             <h3 className="font-bold text-lg text-gray-900 leading-tight pr-2">{place.title}</h3>
             <div className="flex flex-col gap-1 items-end shrink-0">
+              {place.isHeritage && (
+                <span className="bg-amber-100 text-amber-800 text-[10px] px-2 py-0.5 rounded font-bold border border-amber-300 whitespace-nowrap shadow-sm">
+                  🏛️ 국가지정유산
+                </span>
+              )}
               {place.isOfficial && (
                 <span className="bg-purple-100 text-purple-700 text-[10px] px-2 py-0.5 rounded font-bold border border-purple-200 whitespace-nowrap">
                   🏅 광주 관광명소

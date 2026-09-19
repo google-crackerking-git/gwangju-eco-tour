@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
 import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
+import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/areaBasedList2';
 const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
@@ -13,9 +14,10 @@ export async function GET() {
   }
 
   try {
-    const [odcloudItems, jnTourItems, ...results] = await Promise.all([
+    const [odcloudItems, jnTourItems, heritageItems, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
+      fetchHeritagePlaces(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -55,6 +57,7 @@ export async function GET() {
     let allPlaces = results.flat();
     allPlaces = mergeOdcloudData(allPlaces, odcloudItems);
     allPlaces = mergeJnTourData(allPlaces, jnTourItems);
+    allPlaces = mergeHeritageData(allPlaces, heritageItems);
 
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {

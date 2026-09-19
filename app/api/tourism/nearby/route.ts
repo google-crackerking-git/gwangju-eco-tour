@@ -5,6 +5,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
 import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
+import { fetchHeritagePlaces, mergeHeritageData } from '@/lib/heritage';
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/locationBasedList2';
 const RADIUS = 300; // 반경 300미터
@@ -32,10 +33,11 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    // 4개 카테고리 동시 조회 및 ODCloud, JnTour 데이터 조회
-    const [odcloudItems, jnTourItems, ...results] = await Promise.all([
+    // 4개 카테고리 동시 조회 및 외부 API 데이터 조회
+    const [odcloudItems, jnTourItems, heritageItems, ...results] = await Promise.all([
       fetchOdcloudAttractions(),
       fetchJnTourInfo(),
+      fetchHeritagePlaces(),
       ...CONTENT_TYPES.map(async (contentTypeId) => {
         const url = new URL(TOUR_API_BASE);
         url.searchParams.set('serviceKey', serviceKey);
@@ -78,6 +80,7 @@ export async function GET(request: NextRequest) {
     let allPlaces = results.flat();
     allPlaces = mergeOdcloudData(allPlaces, odcloudItems);
     allPlaces = mergeJnTourData(allPlaces, jnTourItems);
+    allPlaces = mergeHeritageData(allPlaces, heritageItems);
 
     // 거리순 정렬
     allPlaces.sort((a, b) => a.dist - b.dist);
