@@ -45,10 +45,10 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
   const categoryIcon = CONTENT_TYPE_ICONS[place.contentTypeId];
   const categoryLabel = CONTENT_TYPE_LABELS[place.contentTypeId];
 
-  // 연관 관광지 (500m 이내)
+  // 주변 관광지 (300m 이내)
   const relatedPlaces = allTourism.filter(p => 
     p.contentId !== place.contentId && 
-    getDistance(place.mapy, place.mapx, p.mapy, p.mapx) <= 500
+    getDistance(place.mapy, place.mapx, p.mapy, p.mapx) <= 300
   ).slice(0, 3);
 
   const favoriteData: Omit<FavoritePlace, 'savedAt'> = {
@@ -113,11 +113,18 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
         <div>
           <div className="flex justify-between items-start">
             <h3 className="font-bold text-lg text-gray-900 leading-tight pr-2">{place.title}</h3>
-            {detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능') && (
-              <span className="shrink-0 bg-green-100 text-green-700 text-xs px-2 py-1 rounded font-bold border border-green-200">
-                🐾 반려동물
-              </span>
-            )}
+            <div className="flex flex-col gap-1 items-end shrink-0">
+              {place.isOfficial && (
+                <span className="bg-purple-100 text-purple-700 text-[10px] px-2 py-0.5 rounded font-bold border border-purple-200 whitespace-nowrap">
+                  🏅 광주 관광명소
+                </span>
+              )}
+              {detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능') && (
+                <span className="bg-green-100 text-green-700 text-[10px] px-2 py-0.5 rounded font-bold border border-green-200 whitespace-nowrap">
+                  🐾 반려동물
+                </span>
+              )}
+            </div>
           </div>
           {place.addr1 && <p className="text-sm text-gray-500 mt-1">📍 {place.addr1}</p>}
         </div>

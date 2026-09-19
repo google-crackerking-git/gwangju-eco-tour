@@ -1,0 +1,359 @@
+{
+  "currentCount": 50,
+  "data": [
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "엠파이어관광호텔",
+      "시설명영문명": "Empire Tourist Hotel",
+      "연번": 1
+    },
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "MGM관광호텔",
+      "시설명영문명": "MGM Tourist Hotel",
+      "연번": 2
+    },
+    {
+      "구분": "체험/스포츠",
+      "세부구분": "공연장",
+      "시설명": "북구청소년수련관",
+      "시설명영문명": "Buk-gu Youth Training Center",
+      "연번": 3
+    },
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "무등파크호텔",
+      "시설명영문명": "Mudeung Park Hotel",
+      "연번": 4
+    },
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "벤틀리호텔",
+      "시설명영문명": "bentleyhotel",
+      "연번": 5
+    },
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "피렌체관광호텔",
+      "시설명영문명": "Firenze Tourist Hotel",
+      "연번": 6
+    },
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "마스터스관광호텔",
+      "시설명영문명": "Masters Tourist Hotel",
+      "연번": 7
+    },
+    {
+      "구분": "숙박",
+      "세부구분": "관광호텔·호스텔",
+      "시설명": "라마다플라자 광주호텔",
+      "시설명영문명": "Ramada Plaza Gwangju Hotel",
+      "연번": 8
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "하림가",
+      "시설명영문명": "Harimga",
+      "연번": 9
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "동원게장백반",
+      "시설명영문명": "Dongwon Gejangbakban",
+      "연번": 10
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "최다연샤브샤브",
+      "시설명영문명": "Choi Da-yeon Shabu Shabu",
+      "연번": 11
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "오얏리돌솥밥",
+      "시설명영문명": "Oyatri Dolsotbap",
+      "연번": 12
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "일식",
+      "시설명": "우미일식",
+      "시설명영문명": "Umiilsik",
+      "연번": 13
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "광양 중흥산성 쌍사자 석등",
+      "시설명영문명": "Jungheung-sanseong Ssangsaja-seokdeung* (sanseong-mountain fortress;  Ssangsajaseokdeung-a pair of lion-shaped stone lan",
+      "연번": 14
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "5·18/광주학생운동",
+      "시설명": "광주학생독립운동발상지(광주일고)",
+      "시설명영문명": "Gwangju Student Independence Movement Birthplace(Gwangju Jeil High School)",
+      "연번": 15
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "전통가옥/근대건축",
+      "시설명": "광주 서석초등학교 (본관, 체육관, 별관)",
+      "시설명영문명": "Gwangju Seoseok Elementary School (Main Building, Gymnasium, Separate Building)",
+      "연번": 16
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "전통가옥/근대건축",
+      "시설명": "광주 수창초등학교본관",
+      "시설명영문명": "Main Building of Gwangju Suchang Elementary School",
+      "연번": 17
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "고씨 삼강문",
+      "시설명영문명": "Go Clan Samgang Gate",
+      "연번": 18
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "금곡동 제철유적",
+      "시설명영문명": "Geumgok-dong Iron Making Relics",
+      "연번": 19
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "정지장군 예장석묘",
+      "시설명영문명": "General Jeong Ji’s Yejangseokmyo(picture-inscribed stone tomb)",
+      "연번": 20
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "무진고성지",
+      "시설명영문명": "Hoetteuneun Maeul",
+      "연번": 21
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "선비문화",
+      "시설명": "월봉서원(빙월당)",
+      "시설명영문명": "Wolbong Seowon-Confucian School(Bingwoldang)",
+      "연번": 22
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "덕림사 지장보살상과 시왕상 및 그 권속",
+      "시설명영문명": "Deongnimsa Jijangbosalsang, Siwangsang & Attached Statues (Buddhist statues)",
+      "연번": 23
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "전라남도 회의실 신축설계도",
+      "시설명영문명": "Jeollanam-do Conference Hall New Construction Blueprint",
+      "연번": 24
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "사찰/기독교",
+      "시설명": "광주 북동천주교회",
+      "시설명영문명": "Gwangju Buk-dong Catholic Church",
+      "연번": 25
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "금수저은수저",
+      "시설명영문명": "Geumsujeo Eunsujeo",
+      "연번": 26
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "옥천면옥",
+      "시설명영문명": "Okcheon Myeonok",
+      "연번": 27
+    },
+    {
+      "구분": "맛집",
+      "세부구분": "한식",
+      "시설명": "마한지",
+      "시설명영문명": "Mahanji",
+      "연번": 28
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "전남도청 본관",
+      "시설명영문명": "Main Building of Former Jeollanam-do Government Office",
+      "연번": 29
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "전통가옥/근대건축",
+      "시설명": "조선대학교 본관",
+      "시설명영문명": "Chosun University Main Building",
+      "연번": 30
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "충효동 정려비각",
+      "시설명영문명": "Chunghyo-dong Jeongryeobigak(a filial woman’s piety monument house)",
+      "연번": 31
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "칠석동 은행나무",
+      "시설명영문명": "Chilseok-dong Ginkgo Tree",
+      "연번": 32
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "전통가옥/근대건축",
+      "시설명": "허백련과 춘설헌",
+      "시설명영문명": "Heo Baekryeon Chunseolheon(tea field)",
+      "연번": 33
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "전통가옥/근대건축",
+      "시설명": "장덕동 근대한옥",
+      "시설명영문명": "House at 527, Jangdeok-dong, Gwangju Metropolitan City",
+      "연번": 34
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "사찰/기독교",
+      "시설명": "광주 구 수피아여학교 수피아홀",
+      "시설명영문명": "Speer Hall in Gwangju Old Speer Girls’ School",
+      "연번": 35
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "사찰/기독교",
+      "시설명": "광주 구 수피아여학교 윈스브로우홀",
+      "시설명영문명": "Winsborough Hall in Gwangju Old Speer Girls’ School",
+      "연번": 36
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "가야금 병창",
+      "시설명영문명": "Gayageum Byeongchang(Song to the Gayageum-Korean zither- play)",
+      "연번": 37
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "무등산 주상절리대",
+      "시설명영문명": "Mt. Mudeung Jusangjeollidae(pillar-shaped joint cliff)",
+      "연번": 38
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "5·18/광주학생운동",
+      "시설명": "광주학생독립운동발상지(전남여고)",
+      "시설명영문명": "Gwangju Student Independence Movement Birthplace(Chonnam Girls’ High School)",
+      "연번": 39
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "선비문화",
+      "시설명": "포충사",
+      "시설명영문명": "Pochungsa Shrine",
+      "연번": 40
+    },
+    {
+      "구분": "역사/전통",
+      "세부구분": "사찰/기독교",
+      "시설명": "광주 구 수피아여학교 커티스메모리얼홀",
+      "시설명영문명": "Curtis Memorial Hall in Gwangju Old Speer Girls’ School",
+      "연번": 41
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "광주 십신사지 석비",
+      "시설명영문명": "Gwangju Sipshinsa(temple) Stone Monument",
+      "연번": 42
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "광주 재명석등",
+      "시설명영문명": "Gwangju Jaemyeongseokdeung (stone lamp)",
+      "연번": 43
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "제봉문집 목판",
+      "시설명영문명": "A Collection of Go Gyeongmyeong (pen name Jebong)´s Works (block-book)",
+      "연번": 44
+    },
+    {
+      "구분": "자연",
+      "세부구분": "자연",
+      "시설명": "금봉산(송정공원)",
+      "시설명영문명": "Geumbongsan Mountain",
+      "연번": 45
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "증심사 삼층석탑",
+      "시설명영문명": "Jeungsimsa 3 Story Stone Pagoda",
+      "연번": 46
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "증심사 석조보살입상",
+      "시설명영문명": "Jeungsimsa Temple Seokjobosalipsang(standing stone Buddhist statue)",
+      "연번": 47
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "증심사 오백전",
+      "시설명영문명": "Jeungsimsa(temple) Obackjeon Hall",
+      "연번": 48
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "광주 지산동 오층석탑",
+      "시설명영문명": "Gwangju Jisan-dong 5-Story Stone Pagoda",
+      "연번": 49
+    },
+    {
+      "구분": "예술/문화",
+      "세부구분": "문화유산",
+      "시설명": "취병 조형 유허비",
+      "시설명영문명": "Cho Hyeong (pen name Chwibyeong) Monument",
+      "연번": 50
+    }
+  ],
+  "matchCount": 486,
+  "page": 1,
+  "perPage": 50,
+  "totalCount": 486
+}

@@ -1,9 +1,10 @@
 import { NextResponse } from 'next/server';
+import { fetchOdcloudAttractions, mergeOdcloudData } from '@/lib/odcloud';
+import { fetchJnTourInfo, mergeJnTourData } from '@/lib/jntour';
 
 const TOUR_API_BASE = 'https://apis.data.go.kr/B551011/KorService2/areaBasedList2';
 const CONTENT_TYPES = [12, 14, 39, 32]; // 관광지, 문화시설, 음식점, 숙박
 const AREA_CODE = 5; // 광주광역시
-
 export async function GET() {
   const serviceKey = process.env.TOUR_API_SERVICE_KEY;
 
@@ -12,43 +13,48 @@ export async function GET() {
   }
 
   try {
-    const fetchPromises = CONTENT_TYPES.map(async (contentTypeId) => {
-      const url = new URL(TOUR_API_BASE);
-      url.searchParams.set('serviceKey', serviceKey);
-      url.searchParams.set('numOfRows', '500'); // 충분히 큰 수
-      url.searchParams.set('pageNo', '1');
-      url.searchParams.set('MobileOS', 'ETC');
-      url.searchParams.set('MobileApp', 'GwangjuEcoTour');
-      url.searchParams.set('_type', 'json');
-      url.searchParams.set('areaCode', String(AREA_CODE));
-      url.searchParams.set('contentTypeId', String(contentTypeId));
+    const [odcloudItems, jnTourItems, ...results] = await Promise.all([
+      fetchOdcloudAttractions(),
+      fetchJnTourInfo(),
+      ...CONTENT_TYPES.map(async (contentTypeId) => {
+        const url = new URL(TOUR_API_BASE);
+        url.searchParams.set('serviceKey', serviceKey);
+        url.searchParams.set('numOfRows', '500'); // 충분히 큰 수
+        url.searchParams.set('pageNo', '1');
+        url.searchParams.set('MobileOS', 'ETC');
+        url.searchParams.set('MobileApp', 'GwangjuEcoTour');
+        url.searchParams.set('_type', 'json');
+        url.searchParams.set('areaCode', String(AREA_CODE));
+        url.searchParams.set('contentTypeId', String(contentTypeId));
 
-      const response = await fetch(url.toString(), {
-        next: { revalidate: 86400 }, // 24시간 캐시
-      });
+        const response = await fetch(url.toString(), {
+          next: { revalidate: 86400 }, // 24시간 캐시
+        });
 
-      if (!response.ok) return [];
+        if (!response.ok) return [];
 
-      const data = await response.json();
-      const items = data?.response?.body?.items?.item ?? [];
-      const itemArray = Array.isArray(items) ? items : items ? [items] : [];
+        const data = await response.json();
+        const items = data?.response?.body?.items?.item ?? [];
+        const itemArray = Array.isArray(items) ? items : items ? [items] : [];
 
-      return itemArray.map((item: any) => ({
-        contentId: String(item.contentid ?? ''),
-        contentTypeId,
-        title: String(item.title ?? ''),
-        addr1: String(item.addr1 ?? ''),
-        addr2: String(item.addr2 ?? ''),
-        firstimage: String(item.firstimage ?? ''),
-        firstimage2: String(item.firstimage2 ?? ''),
-        mapx: parseFloat(String(item.mapx ?? '0')),
-        mapy: parseFloat(String(item.mapy ?? '0')),
-        tel: String(item.tel ?? ''),
-      }));
-    });
+        return itemArray.map((item: any) => ({
+          contentId: String(item.contentid ?? ''),
+          contentTypeId,
+          title: String(item.title ?? ''),
+          addr1: String(item.addr1 ?? ''),
+          addr2: String(item.addr2 ?? ''),
+          firstimage: String(item.firstimage ?? ''),
+          firstimage2: String(item.firstimage2 ?? ''),
+          mapx: parseFloat(String(item.mapx ?? '0')),
+          mapy: parseFloat(String(item.mapy ?? '0')),
+          tel: String(item.tel ?? ''),
+        }));
+      }),
+    ]);
 
-    const results = await Promise.all(fetchPromises);
-    const allPlaces = results.flat();
+    let allPlaces = results.flat();
+    allPlaces = mergeOdcloudData(allPlaces, odcloudItems);
+    allPlaces = mergeJnTourData(allPlaces, jnTourItems);
 
     return NextResponse.json({ success: true, data: allPlaces });
   } catch (error) {
