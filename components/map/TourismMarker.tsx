@@ -131,11 +131,14 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
                     </span>
                   )}
                   <a 
-                    href={
-                      selectedStop
-                        ? `https://map.kakao.com/link/from/${selectedStop.name},${selectedStop.lat},${selectedStop.lng}/to/${place.title},${place.mapy},${place.mapx}`
-                        : `https://map.kakao.com/link/to/${place.title},${place.mapy},${place.mapx}`
-                    }
+                    href={(() => {
+                      const safePlaceTitle = place.title.replace(/,/g, '');
+                      if (selectedStop) {
+                        const safeStopName = selectedStop.name.replace(/,/g, '');
+                        return `https://map.kakao.com/link/from/${safeStopName},${selectedStop.lat},${selectedStop.lng}/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
+                      }
+                      return `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
+                    })()}
                     target="_blank"
                     rel="noreferrer"
                     className="shrink-0 bg-blue-600 text-white text-[10px] px-2 py-1 rounded font-bold hover:bg-blue-700 transition-colors"

@@ -98,18 +98,18 @@ export default function HomePage() {
             <p className="text-blue-200 text-xs">친환경 광주 관광</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 md:gap-2">
           <button
             onClick={() => window.location.reload()}
-            className="text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
+            className="text-white bg-white/20 hover:bg-white/30 px-2 py-1.5 md:px-3 md:py-1.5 rounded-full text-[11px] md:text-xs font-bold transition-colors flex items-center gap-1"
           >
-            <span>🏠</span> 홈
+            <span>🏠</span> <span className="hidden sm:inline">홈</span>
           </button>
           <button 
             onClick={() => window.dispatchEvent(new Event('openTutorial'))}
-            className="text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
+            className="text-white bg-white/20 hover:bg-white/30 px-2 py-1.5 md:px-3 md:py-1.5 rounded-full text-[11px] md:text-xs font-bold transition-colors flex items-center gap-1"
           >
-            <span>💡</span> 사용법
+            <span>💡</span> <span className="hidden sm:inline">사용법</span>
           </button>
           <LoginButton />
         </div>

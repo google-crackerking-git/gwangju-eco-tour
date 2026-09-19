@@ -35,7 +35,7 @@ export default function UserProfile({ session }: UserProfileProps) {
       <button
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
-        className="flex cursor-pointer items-center gap-2 rounded-full px-3 py-1.5 transition-colors hover:bg-gray-100"
+        className="flex cursor-pointer items-center gap-1.5 md:gap-2 rounded-full px-2 py-1 md:px-3 md:py-1.5 transition-colors hover:bg-white/20"
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
@@ -43,23 +43,22 @@ export default function UserProfile({ session }: UserProfileProps) {
           <Image
             src={avatarSrc}
             alt={`${nickname} 프로필`}
-            width={32}
-            height={32}
-            className="rounded-full object-cover"
+            width={28}
+            height={28}
+            className="md:w-8 md:h-8 rounded-full object-cover bg-white"
           />
         ) : (
           /* Fallback avatar */
           <span
-            className="flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold text-white"
-            style={{ backgroundColor: 'var(--color-brand-navy)' }}
+            className="flex h-7 w-7 md:h-8 md:w-8 items-center justify-center rounded-full text-xs md:text-sm font-bold text-brand-navy bg-white"
           >
             {nickname.charAt(0)}
           </span>
         )}
-        <span className="text-sm font-medium text-gray-800">{nickname}</span>
+        <span className="text-xs md:text-sm font-bold text-white hidden sm:block">{nickname}</span>
         {/* Chevron */}
         <svg
-          className={`h-4 w-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`}
+          className={`h-3 w-3 md:h-4 md:w-4 text-white/80 transition-transform ${isOpen ? 'rotate-180' : ''}`}
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
