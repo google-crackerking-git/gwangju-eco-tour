@@ -2,6 +2,7 @@
 
 import { MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import type { BusStop } from '@/types';
+import { useEcoTourStore } from '@/store/ecoTourStore';
 
 interface BusStopMarkerProps {
   stop: BusStop;
@@ -11,6 +12,7 @@ interface BusStopMarkerProps {
 }
 
 export default function BusStopMarker({ stop, isSelected, hasTourism, onSelect }: BusStopMarkerProps) {
+  const { setSelectedStop, setNearbyTourism } = useEcoTourStore();
   const busSvg = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
       <circle cx="14" cy="14" r="14" fill="#1E3A8A" stroke="white" stroke-width="2"/>
@@ -51,9 +53,21 @@ export default function BusStopMarker({ stop, isSelected, hasTourism, onSelect }
           position={{ lat: stop.lat, lng: stop.lng }}
           yAnchor={1.8}
         >
-          <div className="custom-marker-label bg-white border-2 border-blue-800 text-blue-900 px-3 py-1.5 rounded-lg text-sm font-bold shadow-lg whitespace-nowrap flex flex-col items-center">
-            <span>{stop.nodeName}</span>
-            {stop.arsId && <span className="text-[10px] text-gray-500 font-medium">{stop.arsId}</span>}
+          <div className="custom-marker-label bg-white border-2 border-blue-800 text-blue-900 pl-3 pr-2 py-1.5 rounded-lg text-sm font-bold shadow-lg whitespace-nowrap flex items-center gap-3">
+            <div className="flex flex-col items-center">
+              <span>{stop.nodeName}</span>
+              {stop.arsId && <span className="text-[10px] text-gray-500 font-medium">{stop.arsId}</span>}
+            </div>
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedStop(null);
+                setNearbyTourism([]);
+              }}
+              className="w-5 h-5 flex items-center justify-center rounded-full bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors shrink-0"
+            >
+              ✕
+            </button>
           </div>
         </CustomOverlayMap>
       )}

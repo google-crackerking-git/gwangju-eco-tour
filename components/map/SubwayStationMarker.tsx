@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { MapMarker, CustomOverlayMap } from 'react-kakao-maps-sdk';
 import type { SubwayStation } from '@/types';
+import { useEcoTourStore } from '@/store/ecoTourStore';
 
 interface SubwayStationMarkerProps {
   station: SubwayStation;
@@ -12,6 +13,7 @@ interface SubwayStationMarkerProps {
 }
 
 export default function SubwayStationMarker({ station, isSelected, hasTourism, onSelect }: SubwayStationMarkerProps) {
+  const { setSelectedStop, setNearbyTourism } = useEcoTourStore();
 
   const subwaySvg = encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
@@ -47,8 +49,20 @@ export default function SubwayStationMarker({ station, isSelected, hasTourism, o
             onTouchMove={(e) => e.stopPropagation()}
           >
             <div className="bg-purple-600 px-3 py-2 text-white font-bold flex justify-between items-center">
-              <span>🚇 {station.stationName}역</span>
-              <span className="text-xs opacity-80">1호선</span>
+              <div className="flex items-center gap-2">
+                <span>🚇 {station.stationName}역</span>
+                <span className="text-xs opacity-80">1호선</span>
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedStop(null);
+                  setNearbyTourism([]);
+                }}
+                className="w-6 h-6 flex items-center justify-center rounded-full bg-black/20 text-white hover:bg-black/40 transition-colors"
+              >
+                ✕
+              </button>
             </div>
             <div className="p-3 text-sm text-gray-700 text-center">
               <p className="font-medium text-gray-800 mb-1">지하철역 주변 관광지</p>

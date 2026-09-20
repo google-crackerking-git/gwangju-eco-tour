@@ -94,11 +94,22 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
       {isSelected && (
         <CustomOverlayMap position={{ lat: place.mapy, lng: place.mapx }} yAnchor={1.2} zIndex={30} clickable={true}>
           <div 
-            className="bg-white rounded-xl shadow-xl overflow-hidden flex flex-col" 
+            className="bg-white rounded-xl shadow-xl overflow-hidden flex flex-col relative" 
             style={{ width: '340px', maxHeight: '500px' }}
             onWheel={(e) => e.stopPropagation()}
             onTouchMove={(e) => e.stopPropagation()}
           >
+            {/* 닫기 버튼 */}
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                setSelectedTourism(null);
+              }}
+              className="absolute top-2 right-2 w-7 h-7 rounded-full bg-black/40 text-white flex items-center justify-center hover:bg-black/60 transition-colors z-20 shadow-sm"
+            >
+              ✕
+            </button>
+
             {/* Header Image or Gallery */}
             {detailInfo?.gallery?.length > 0 ? (
               <div className="relative w-full h-36 bg-gray-100 shrink-0 flex overflow-x-auto snap-x">
