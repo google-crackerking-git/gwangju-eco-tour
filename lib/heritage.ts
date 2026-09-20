@@ -1,77 +1,41 @@
 import { TourismPlace } from '@/types';
+import { parseStringPromise } from 'xml2js';
 
 export async function fetchHeritagePlaces(): Promise<TourismPlace[]> {
-  const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
-  const serviceKey = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
-  const kakaoKey = process.env.KAKAO_CLIENT_ID || '';
-
-  if (!serviceKey || !kakaoKey) return [];
-
   try {
-    const url = `https://api.odcloud.kr/api/15016304/v1/uddi:b1721406-7b47-4f34-9775-fadb76d58caf?page=1&perPage=500&serviceKey=${serviceKey}`;
-    
+    const url = 'http://www.khs.go.kr/cha/SearchKindOpenapiList.do?pageUnit=2000&ccbaCncl=N&ccbaCtcd=24';
     const response = await fetch(url, { next: { revalidate: 86400 } });
     if (!response.ok) return [];
 
-    const json = await response.json();
-    if (!json.data || !Array.isArray(json.data)) return [];
+    const text = await response.text();
+    const result = await parseStringPromise(text, { explicitArray: false });
 
-    // 동시 요청 수를 제한하기 위한 청크 실행 (Kakao Local API Rate Limit 방지)
-    const chunkSize = 10;
-    const places: TourismPlace[] = [];
-    
-    for (let i = 0; i < json.data.length; i += chunkSize) {
-      const chunk = json.data.slice(i, i + chunkSize);
-      const chunkResults = await Promise.all(chunk.map(async (item: any, idx: number) => {
-        const keys = Object.keys(item);
-        const nameKey = keys.find(k => k.replace(/\s+/g, '') === '명칭') || '명칭';
-        const addrKey = keys.find(k => k.replace(/\s+/g, '').includes('도로명주소')) || '소재지도로명주소';
-        const typeKey = keys.find(k => k.replace(/\s+/g, '') === '종별') || '종별';
-        const dateKey = keys.find(k => k.replace(/\s+/g, '') === '지정일자') || '지정일자';
+    let items = result?.result?.item || [];
+    if (!Array.isArray(items)) items = [items];
 
-        const name = item[nameKey] || '';
-        let address = item[addrKey] || '';
-        const category = item[typeKey] || '';
-        const date = item[dateKey] || '';
-        
-        let lat = 0;
-        let lng = 0;
+    // ccbaCtcd=24 (광주) 데이터만 필터링
+    const gwangjuItems = items.filter((i: any) => i.ccbaCtcd === '24');
 
-        if (address) {
-          try {
-            const geoRes = await fetch(`https://dapi.kakao.com/v2/local/search/address.json?query=${encodeURIComponent(address)}`, {
-              headers: { Authorization: `KakaoAK ${kakaoKey}` },
-              next: { revalidate: 86400 }
-            });
-            if (geoRes.ok) {
-              const geoJson = await geoRes.json();
-              if (geoJson.documents && geoJson.documents.length > 0) {
-                lat = parseFloat(geoJson.documents[0].y);
-                lng = parseFloat(geoJson.documents[0].x);
-              }
-            }
-          } catch (e) {
-            console.error('[Heritage Geocode Error]', e);
-          }
-        }
+    const places: TourismPlace[] = gwangjuItems.map((item: any) => {
+      const lat = parseFloat(item.latitude || '0');
+      const lng = parseFloat(item.longitude || '0');
 
-        return {
-          contentId: `heritage_${i + idx}`,
-          contentTypeId: 14, // 문화시설
-          title: `[국가유산] ${name}`,
-          addr1: address,
-          mapx: lng,
-          mapy: lat,
-          dist: 0,
-          firstimage: '',
-          tel: '',
-          overview: `종별: ${category}\n지정일자: ${date}`,
-          isHeritage: true
-        } as TourismPlace;
-      }));
-      places.push(...chunkResults);
-    }
+      return {
+        contentId: `heritage_${item.ccbaKdcd}_${item.ccbaAsno}_${item.ccbaCtcd}`,
+        contentTypeId: 14, // 문화시설 카테고리로 통합
+        title: `[${item.ccmaName}] ${item.ccbaMnm1}`,
+        addr1: `광주광역시 ${item.ccsiName}`,
+        mapx: lng,
+        mapy: lat,
+        dist: 0,
+        firstimage: '', // 상세 이미지는 추후 필요시 상세API 호출
+        tel: '',
+        overview: `관리자: ${item.ccbaAdmin || '정보 없음'}`,
+        isHeritage: true
+      } as TourismPlace;
+    });
 
+    // 좌표가 유효한 것만 반환
     return places.filter(p => p.mapx !== 0 && p.mapy !== 0);
   } catch (error) {
     console.error('[Heritage API Error]', error);
@@ -85,7 +49,8 @@ export function mergeHeritageData(existing: any[], newItems: TourismPlace[]) {
   const mergedList = existing.map((item) => {
     const titleObj = String(item.title).replace(/\s+/g, '');
     const matchedIndex = newItems.findIndex((hItem) => {
-      const hTitle = String(hItem.title).replace(/\[국가유산\] /g, '').replace(/\s+/g, '');
+      // '[국보] ', '[보물] ' 등의 태그 제거 후 비교
+      const hTitle = String(hItem.title).replace(/\[.*?\] /g, '').replace(/\s+/g, '');
       return titleObj.includes(hTitle) || hTitle.includes(titleObj);
     });
     
