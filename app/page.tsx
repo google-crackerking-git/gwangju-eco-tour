@@ -223,9 +223,22 @@ export default function HomePage() {
                 <p className="font-bold text-sm" style={{ color: '#1E3A8A' }}>
                   📍 {selectedStop.name} 주변 관광지
                 </p>
-                <span className="text-gray-400 text-xs">
-                  {isMobileSheetOpen ? '접기 ▼' : '펼치기 ▲'}
-                </span>
+                <div className="flex items-center gap-3">
+                  <span className="text-gray-400 text-xs font-medium">
+                    {isMobileSheetOpen ? '접기 ▼' : '펼치기 ▲'}
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedStop(null);
+                      setNearbyTourism([]);
+                      setSelectedTourism(null);
+                    }}
+                    className="w-7 h-7 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-gray-200 transition-colors"
+                  >
+                    ✕
+                  </button>
+                </div>
               </div>
             </div>
 
