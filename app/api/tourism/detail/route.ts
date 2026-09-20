@@ -108,7 +108,8 @@ async function fetchHeritageDetail(contentId: string) {
         overview = String(dtXml.result.item.content).replace(/<[^>]*>?/gm, '');
       }
       if (dtXml?.result?.item?.imageUrl) {
-        images.push(dtXml.result.item.imageUrl);
+        const urls = Array.isArray(dtXml.result.item.imageUrl) ? dtXml.result.item.imageUrl : [dtXml.result.item.imageUrl];
+        images.push(...urls);
       }
     }
 
@@ -119,7 +120,10 @@ async function fetchHeritageDetail(contentId: string) {
       if (items) {
         if (!Array.isArray(items)) items = [items];
         items.forEach((imgItem: any) => {
-          if (imgItem.imageUrl) images.push(imgItem.imageUrl);
+          if (imgItem.imageUrl) {
+            const urls = Array.isArray(imgItem.imageUrl) ? imgItem.imageUrl : [imgItem.imageUrl];
+            images.push(...urls);
+          }
         });
       }
     }

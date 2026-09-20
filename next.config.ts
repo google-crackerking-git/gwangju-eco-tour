@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
       // 카카오 프로필 이미지
       { protocol: 'https', hostname: 'k.kakaocdn.net' },
       { protocol: 'http', hostname: 'k.kakaocdn.net' },
+      // 국가유산청 이미지 서버
+      { protocol: 'http', hostname: 'www.khs.go.kr' },
+      { protocol: 'https', hostname: 'www.khs.go.kr' },
+      { protocol: 'http', hostname: 'search.cha.go.kr' },
+      { protocol: 'https', hostname: 'search.cha.go.kr' },
     ],
   },
   // Firebase Admin SDK 서버사이드 전용 패키지 설정
