@@ -49,6 +49,21 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
 
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
+  // 지도 컨테이너 크기 변경(사이드바 토글 등) 시 레이아웃 재계산
+  useEffect(() => {
+    if (!map) return;
+    
+    const container = document.getElementById('map-wrapper');
+    if (!container) return;
+    
+    const resizeObserver = new ResizeObserver(() => {
+      map.relayout();
+    });
+    
+    resizeObserver.observe(container);
+    return () => resizeObserver.disconnect();
+  }, [map]);
+
   // 선택된 정류장이나 관광지가 변경될 때 중심 이동 및 확대
   useEffect(() => {
     if (!map) return;
@@ -139,8 +154,9 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
   }
 
   return (
-    <Map
-      center={{ lat: GWANGJU_CENTER.lat, lng: GWANGJU_CENTER.lng }}
+    <div id="map-wrapper" className="w-full h-full">
+      <Map
+        center={{ lat: GWANGJU_CENTER.lat, lng: GWANGJU_CENTER.lng }}
       style={{ width: '100%', height: '100%' }}
       level={7}
       onCreate={setMap}
@@ -222,6 +238,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
           </div>
         </CustomOverlayMap>
       )}
-    </Map>
+      </Map>
+    </div>
   );
 }
