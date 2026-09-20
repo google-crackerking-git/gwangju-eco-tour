@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { parseStringPromise } from 'xml2js';
 
 const rawKey = process.env.TOUR_API_SERVICE_KEY || '';
 const API_KEY = rawKey.includes('%') ? rawKey : encodeURIComponent(rawKey);
@@ -26,7 +27,7 @@ async function fetchPetInfo(contentId: string) {
 }
 
 async function fetchGalleryAndImages(contentId: string, title: string, addr1: string) {
-  const keyword = encodeURIComponent(title); // Use exact full title
+  const keyword = encodeURIComponent(title);
   const galleryUrl = `http://apis.data.go.kr/B551011/PhotoGalleryService1/gallerySearchList1?serviceKey=${API_KEY}&MobileOS=ETC&MobileApp=AppTest&_type=json&keyword=${keyword}&pageNo=1&numOfRows=10`;
   const detailImageUrl = `http://apis.data.go.kr/B551011/KorService2/detailImage2?serviceKey=${API_KEY}&MobileOS=ETC&MobileApp=AppTest&_type=json&contentId=${contentId}&imageYN=Y&subImageYN=Y&pageNo=1&numOfRows=10`;
 
@@ -42,7 +43,7 @@ async function fetchGalleryAndImages(contentId: string, title: string, addr1: st
       let items = gData?.response?.body?.items?.item;
       if (items) {
         if (!Array.isArray(items)) items = [items];
-        const city = addr1 ? addr1.split(' ')[0].substring(0, 2) : ''; // e.g. "광주"
+        const city = addr1 ? addr1.split(' ')[0].substring(0, 2) : '';
         const validItems = items.filter((img: any) => {
           if (!city) return true;
           const loc = img.galPhotographyLocation || '';
@@ -64,12 +65,10 @@ async function fetchGalleryAndImages(contentId: string, title: string, addr1: st
     console.error('Image fetch error:', e);
   }
   
-  // 중복 제거
   return Array.from(new Set(images));
 }
 
 async function fetchRelated(areaCd: string = '5', signguCd: string = '1') {
-  // TarRlteTarService1 - Using hardcoded baseYm since it requires it.
   const url = `http://apis.data.go.kr/B551011/TarRlteTarService1/areaBasedList1?serviceKey=${API_KEY}&MobileOS=ETC&MobileApp=AppTest&_type=json&baseYm=202401&areaCd=${areaCd}&signguCd=${signguCd}&pageNo=1&numOfRows=5`;
   try {
     const res = await fetch(url, { next: { revalidate: 86400 } });
@@ -79,6 +78,61 @@ async function fetchRelated(areaCd: string = '5', signguCd: string = '1') {
     return [];
   }
 }
+
+// 국가유산청(KHS) 상세 정보 및 이미지 조회
+async function fetchHeritageDetail(contentId: string) {
+  // contentId: "heritage_{ccbaKdcd}_{ccbaAsno}_{ccbaCtcd}"
+  const parts = contentId.split('_');
+  if (parts.length !== 4) return { overview: '상세 정보가 없습니다.', gallery: [] };
+  
+  const ccbaKdcd = parts[1];
+  const ccbaAsno = parts[2];
+  const ccbaCtcd = parts[3];
+
+  const dtUrl = `http://www.khs.go.kr/cha/SearchKindOpenapiDt.do?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`;
+  const imgUrl = `http://www.khs.go.kr/cha/SearchImageOpenapi.do?ccbaKdcd=${ccbaKdcd}&ccbaAsno=${ccbaAsno}&ccbaCtcd=${ccbaCtcd}`;
+
+  let overview = '상세 정보가 없습니다.';
+  let images: string[] = [];
+
+  try {
+    const [dtRes, imgRes] = await Promise.all([
+      fetch(dtUrl, { next: { revalidate: 86400 } }),
+      fetch(imgUrl, { next: { revalidate: 86400 } })
+    ]);
+
+    if (dtRes.ok) {
+      const dtText = await dtRes.text();
+      const dtXml = await parseStringPromise(dtText, { explicitArray: false });
+      if (dtXml?.result?.item?.content) {
+        overview = String(dtXml.result.item.content).replace(/<[^>]*>?/gm, '');
+      }
+      if (dtXml?.result?.item?.imageUrl) {
+        images.push(dtXml.result.item.imageUrl);
+      }
+    }
+
+    if (imgRes.ok) {
+      const imgText = await imgRes.text();
+      const imgXml = await parseStringPromise(imgText, { explicitArray: false });
+      let items = imgXml?.result?.item;
+      if (items) {
+        if (!Array.isArray(items)) items = [items];
+        items.forEach((imgItem: any) => {
+          if (imgItem.imageUrl) images.push(imgItem.imageUrl);
+        });
+      }
+    }
+  } catch (e) {
+    console.error('Heritage detail fetch error:', e);
+  }
+
+  // 중복 이미지 URL 제거
+  images = Array.from(new Set(images));
+
+  return { overview, gallery: images };
+}
+
 
 export async function GET(request: NextRequest) {
   if (!API_KEY) {
@@ -94,7 +148,20 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ success: false, error: 'contentId and title required' }, { status: 400 });
   }
 
-  // 커스텀 contentId (예: 518_..., heritage_...)인 경우 TourAPI 호출 생략
+  if (contentId.startsWith('heritage_')) {
+    const heritageData = await fetchHeritageDetail(contentId);
+    return NextResponse.json({
+      success: true,
+      data: {
+        overview: heritageData.overview,
+        homepage: '',
+        petInfo: null,
+        gallery: heritageData.gallery,
+        apiRelated: []
+      }
+    });
+  }
+
   const isCustomId = !/^\d+$/.test(contentId);
 
   const [common, pet, gallery, related] = isCustomId 
@@ -103,7 +170,7 @@ export async function GET(request: NextRequest) {
         fetchCommon(contentId),
         fetchPetInfo(contentId),
         fetchGalleryAndImages(contentId, title, addr1),
-        fetchRelated('5', '1') // default to gwangju dong-gu for the API call
+        fetchRelated('5', '1') // default to gwangju dong-gu
       ]);
 
   return NextResponse.json({
@@ -112,10 +179,10 @@ export async function GET(request: NextRequest) {
       overview: common?.overview ? String(common.overview).replace(/<[^>]*>?/gm, '') : '상세 정보가 없습니다.',
       homepage: common?.homepage ? String(common.homepage).replace(/<[^>]*>?/gm, '') : '',
       petInfo: pet ? {
-        acmpyPsblCpam: pet.acmpyPsblCpam, // 동반가능여부
-        relaRntlPrdlst: pet.relaRntlPrdlst, // 관련 비품
-        acmpyNeedMtr: pet.acmpyNeedMtr, // 동반시 필요사항
-        etcAcmpyInfo: pet.etcAcmpyInfo, // 기타 동반 정보
+        acmpyPsblCpam: pet.acmpyPsblCpam,
+        relaRntlPrdlst: pet.relaRntlPrdlst,
+        acmpyNeedMtr: pet.acmpyNeedMtr,
+        etcAcmpyInfo: pet.etcAcmpyInfo,
       } : null,
       gallery,
       apiRelated: related
