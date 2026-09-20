@@ -3,7 +3,7 @@
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { useEcoTourStore } from '@/store/ecoTourStore';
 import TransportPanel from '@/components/sidebar/TransportPanel';
@@ -33,6 +33,7 @@ function getDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
 }
 
 export default function HomePage() {
+  const [isDesktopSidebarOpen, setIsDesktopSidebarOpen] = useState(true);
   const { data: session } = useSession();
   const {
     selectedStop,
@@ -140,7 +141,7 @@ export default function HomePage() {
       {/* ─── 메인 컨텐츠 ────────────────────────────────────────── */}
       <div className="flex flex-1 overflow-hidden">
         {/* 사이드바 (데스크탑/태블릿) */}
-        <aside className="hidden md:flex flex-col w-80 lg:w-96 border-r border-gray-200 bg-white overflow-hidden shrink-0">
+        <aside className={`hidden md:flex flex-col border-r border-gray-200 bg-white overflow-hidden shrink-0 transition-all duration-300 ease-in-out ${isDesktopSidebarOpen ? 'w-80 lg:w-96' : 'w-0 border-r-0 opacity-0'}`}>
           {/* 교통 선택 패널 */}
           <div className="flex-1 overflow-y-auto">
             <TransportPanel onStopSelect={handleStopSelect} />
@@ -200,6 +201,13 @@ export default function HomePage() {
         {/* 지도 영역 */}
         <main className="flex-1 relative">
           <EcoTourMap onStopSelect={handleStopSelect} />
+          {/* 데스크탑 사이드바 토글 버튼 */}
+          <button
+            onClick={() => setIsDesktopSidebarOpen(!isDesktopSidebarOpen)}
+            className="hidden md:flex absolute top-1/2 -translate-y-1/2 left-0 z-40 w-5 h-12 bg-white border border-gray-200 border-l-0 rounded-r-md shadow-md items-center justify-center hover:bg-gray-50 text-gray-500 focus:outline-none transition-colors text-[10px]"
+          >
+            {isDesktopSidebarOpen ? '◀' : '▶'}
+          </button>
         </main>
       </div>
 
