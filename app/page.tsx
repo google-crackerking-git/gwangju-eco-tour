@@ -94,7 +94,7 @@ export default function HomePage() {
   );
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col h-[100dvh] overflow-hidden">
       <OnboardingModal />
       {/* ─── 헤더 ──────────────────────────────────────────────── */}
       <header
@@ -148,7 +148,7 @@ export default function HomePage() {
 
           {/* 관광지 정보 패널 */}
           {selectedStop && (
-            <div className="border-t border-gray-100 overflow-y-auto max-h-[55vh]">
+            <div className="border-t border-gray-100 overflow-y-auto max-h-[55dvh]">
               <div className="p-3">
                 <div className="flex items-center justify-between mb-3">
                   <div>
@@ -205,13 +205,13 @@ export default function HomePage() {
 
       {/* ─── 모바일 하단 시트 ──────────────────────────────────── */}
       <div className="md:hidden">
-        {/* 시트 핸들 */}
+        {/* 모바일 하단 시트 핸들 */}
         {selectedStop && (
           <div
             className={`fixed inset-x-0 bottom-0 bg-white rounded-t-3xl shadow-2xl z-40 transition-transform duration-300 ${
               isMobileSheetOpen ? 'translate-y-0' : 'translate-y-[calc(100%-60px)]'
             }`}
-            style={{ maxHeight: '75vh' }}
+            style={{ maxHeight: '85dvh', paddingBottom: 'env(safe-area-inset-bottom)' }}
           >
             {/* 핸들 바 */}
             <div
@@ -221,16 +221,16 @@ export default function HomePage() {
               <div className="w-10 h-1 bg-gray-300 rounded-full mb-2" />
               <div className="flex items-center justify-between w-full px-4">
                 <p className="font-bold text-sm" style={{ color: '#1E3A8A' }}>
-                  🚏 {selectedStop.name} 주변 관광지
+                  📍 {selectedStop.name} 주변 관광지
                 </p>
                 <span className="text-gray-400 text-xs">
-                  {isMobileSheetOpen ? '▼' : '▲'}
+                  {isMobileSheetOpen ? '접기 ▼' : '펼치기 ▲'}
                 </span>
               </div>
             </div>
 
             {/* 관광지 목록 */}
-            <div className="overflow-y-auto px-4 pb-8" style={{ maxHeight: 'calc(75vh - 60px)' }}>
+            <div className="overflow-y-auto px-4 pb-12" style={{ maxHeight: 'calc(85dvh - 60px - env(safe-area-inset-bottom))' }}>
               {isTourismLoading ? (
                 <div className="flex items-center justify-center py-8">
                   <Image
@@ -259,12 +259,12 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* 모바일 하단 교통 탭 */}
+        {/* 모바일 하단 교통 패널 */}
         {!selectedStop && (
           <div
             className="fixed inset-x-0 bottom-0 bg-white border-t border-gray-200 z-40 flex flex-col"
             style={{ 
-              height: '45vh', 
+              height: '45dvh', 
               paddingBottom: 'env(safe-area-inset-bottom)' 
             }}
           >

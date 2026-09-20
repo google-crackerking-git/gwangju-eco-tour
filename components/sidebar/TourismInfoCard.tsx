@@ -187,23 +187,23 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
             </div>
           </div>
         )}
+      </div>
 
-        {/* 액션 버튼들 */}
-        <div className="flex gap-2 pt-4 mt-4 border-t border-gray-100">
-          <a
-            href={(() => {
-              const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
-              return `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
-            })()}
-            target="_blank"
-            rel="noreferrer"
-            className="flex-1 text-center py-2 bg-blue-600 text-white rounded font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1"
-          >
-            <span>🚶</span> 길찾기
-          </a>
-          <FavoriteButton placeId={place.contentId} placeData={favoriteData} />
-          <VisitButton placeData={visitData} />
-        </div>
+      {/* 액션 버튼들 */}
+      <div className="flex gap-2 p-4 pt-0 border-t border-gray-100 bg-white">
+        <a
+          href={(() => {
+            const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
+            return `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
+          })()}
+          target="_blank"
+          rel="noreferrer"
+          className="flex-1 text-center py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1 shadow-sm"
+        >
+          <span>🧭</span> 길찾기
+        </a>
+        <FavoriteButton placeId={place.contentId} placeData={favoriteData} />
+        <VisitButton placeData={visitData} />
       </div>
     </div>
   );
