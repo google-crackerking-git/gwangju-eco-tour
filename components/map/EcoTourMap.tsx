@@ -49,14 +49,41 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
 
   const [map, setMap] = useState<kakao.maps.Map | null>(null);
 
-  // 선택된 정류장이나 관광지가 변경될 때 중심 이동
+  // 선택된 정류장이나 관광지가 변경될 때 중심 이동 및 확대
   useEffect(() => {
     if (!map) return;
+    
+    let targetLat = 0;
+    let targetLng = 0;
+
     if (selectedTourism) {
-      map.panTo(new kakao.maps.LatLng(selectedTourism.mapy, selectedTourism.mapx));
+      targetLat = selectedTourism.mapy;
+      targetLng = selectedTourism.mapx;
     } else if (selectedStop) {
-      map.panTo(new kakao.maps.LatLng(selectedStop.lat, selectedStop.lng));
+      targetLat = selectedStop.lat;
+      targetLng = selectedStop.lng;
+    } else {
+      return;
     }
+
+    // 지도 레벨 확대 (레벨 3)
+    map.setLevel(3, { animate: true });
+
+    // 위치로 이동
+    const targetPos = new kakao.maps.LatLng(targetLat, targetLng);
+    map.panTo(targetPos);
+
+    // 마커가 패널(사이드바/바텀시트)에 가려지지 않도록 약간 오프셋 적용
+    setTimeout(() => {
+      if (window.innerWidth < 768) {
+        // 모바일: 바텀시트가 거의 화면을 덮으므로(85dvh), 마커를 화면 상단으로 올림 (화면 중심을 아래로 이동)
+        map.panBy(0, window.innerHeight * 0.35);
+      } else {
+        // 데스크탑: 사이드바가 왼쪽을 가리므로 마커를 우측으로 옮김 (화면 중심을 왼쪽으로 이동)
+        map.panBy(-150, 0);
+      }
+    }, 100); // panTo가 시작된 직후 panBy를 적용하여 자연스럽게 이동
+
   }, [map, selectedStop, selectedTourism]);
 
   const visibleStops = useMemo(() => {

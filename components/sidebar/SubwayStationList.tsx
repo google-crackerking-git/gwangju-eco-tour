@@ -2,8 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { useEcoTourStore } from '@/store/ecoTourStore';
+import type { SelectedStop } from '@/types';
 
-export default function SubwayStationList() {
+interface SubwayStationListProps {
+  onStopSelect: (stop: SelectedStop) => void;
+}
+
+export default function SubwayStationList({ onStopSelect }: SubwayStationListProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const { subwayStations, setSubwayStations } = useEcoTourStore();
   const [cultureInfo, setCultureInfo] = useState<{spaces: any[], routes: any[]}>({ spaces: [], routes: [] });
 
@@ -33,6 +39,7 @@ export default function SubwayStationList() {
     <div className="divide-y divide-gray-100 flex flex-col">
       <button
         type="button"
+        onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-purple-50 shrink-0"
       >
         <div className="shrink-0 rounded-full w-10 h-10 bg-purple-100 flex items-center justify-center text-purple-600 font-bold text-lg">
@@ -45,9 +52,36 @@ export default function SubwayStationList() {
         <span className="shrink-0 rounded px-2 py-1 text-xs font-bold bg-purple-600 text-white">
           운행중
         </span>
+        <span className="text-gray-400">{isOpen ? '▲' : '▼'}</span>
       </button>
       
-      <div className="p-4 bg-gray-50 flex-1 overflow-y-auto space-y-6">
+      <div className="flex-1 overflow-y-auto bg-gray-50 flex flex-col">
+        {/* 지하철 역 목록 */}
+        {isOpen && (
+          <div className="bg-white border-b border-gray-100 divide-y divide-gray-50">
+            {subwayStations.map((station) => (
+              <button
+                key={station.stationId}
+                onClick={() => onStopSelect({
+                  type: 'subway',
+                  id: String(station.stationId),
+                  name: station.stationName,
+                  lat: station.lat,
+                  lng: station.lng,
+                })}
+                className="w-full text-left px-4 py-3 hover:bg-purple-50 transition-colors flex items-center justify-between"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-2 h-2 rounded-full bg-purple-400"></div>
+                  <span className="font-medium text-gray-800">{station.stationName}역</span>
+                </div>
+                <span className="text-xs text-gray-400">자세히 보기</span>
+              </button>
+            ))}
+          </div>
+        )}
+
+        <div className="p-4 space-y-6">
         
         {/* PDF Guide Section */}
         <div className="bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -98,6 +132,7 @@ export default function SubwayStationList() {
           )}
         </div>
 
+        </div>
       </div>
     </div>
   );

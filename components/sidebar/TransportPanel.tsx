@@ -115,7 +115,7 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
       <div className="min-h-0 flex-1 overflow-y-auto">
         {activeTab === 'bus'
           ? <RouteList onStopSelect={onStopSelect} />
-          : <SubwayStationList />}
+          : <SubwayStationList onStopSelect={onStopSelect} />}
       </div>
     </div>
   );
