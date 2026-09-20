@@ -31,16 +31,30 @@ export default function UserProfile({ session }: UserProfileProps) {
 
   const [ecoPoints, setEcoPoints] = useState(0);
 
-  // Load eco points from localStorage
+  // Load eco points from API
   useEffect(() => {
-    const loadPoints = () => {
-      const pts = parseInt(localStorage.getItem('eco_points') || '0', 10);
-      setEcoPoints(pts);
+    const loadPoints = async () => {
+      try {
+        const res = await fetch('/api/game/score');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setEcoPoints(data.totalScore);
+          }
+        }
+      } catch (err) {
+        console.error('Failed to load points');
+      }
     };
     loadPoints();
-    // Also listen for changes (in case they play the game in another tab/iframe, but for our setup this is fine)
-    window.addEventListener('storage', loadPoints);
-    return () => window.removeEventListener('storage', loadPoints);
+    // Listen for visibility change to reload points when coming back from game tab
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        loadPoints();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => document.removeEventListener('visibilitychange', handleVisibilityChange);
   }, []);
 
   return (
