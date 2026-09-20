@@ -211,7 +211,7 @@ export default function HomePage() {
             className={`fixed inset-x-0 bottom-0 bg-white rounded-t-3xl shadow-2xl z-40 transition-transform duration-300 ${
               isMobileSheetOpen ? 'translate-y-0' : 'translate-y-[calc(100%-60px)]'
             }`}
-            style={{ maxHeight: '85dvh', paddingBottom: 'env(safe-area-inset-bottom)' }}
+            style={{ maxHeight: '55dvh', paddingBottom: 'env(safe-area-inset-bottom)' }}
           >
             {/* 핸들 바 */}
             <div
@@ -230,7 +230,7 @@ export default function HomePage() {
             </div>
 
             {/* 관광지 목록 */}
-            <div className="overflow-y-auto px-4 pb-12" style={{ maxHeight: 'calc(85dvh - 60px - env(safe-area-inset-bottom))' }}>
+            <div className="overflow-y-auto px-4 pb-12" style={{ maxHeight: 'calc(55dvh - 60px - env(safe-area-inset-bottom))' }}>
               {isTourismLoading ? (
                 <div className="flex items-center justify-center py-8">
                   <Image
