@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>광주 에코투어: 오매나의 버스 노선 관광지 수집 대모험</title>
+    <title>愿묒＜ ?먯퐫?ъ뼱: ?ㅻℓ?섏쓽 踰꾩뒪 ?몄꽑 愿愿묒? ?섏쭛 ?紐⑦뿕</title>
     <!-- Tailwind CSS CDN for modern UI components -->
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -178,14 +178,14 @@
         <div id="hud" class="absolute top-3 left-3 right-12 glass-panel rounded-2xl px-4 py-2.5 flex items-center justify-between text-xs sm:text-sm font-semibold z-20">
             <!-- Bus Line Badge -->
             <div class="flex items-center gap-2">
-                <span id="hud-bus-type" class="px-2.5 py-1 rounded-full text-xs font-black text-white bg-blue-600 shadow-md">급행</span>
-                <span id="hud-route-name" class="font-bold text-sky-300 text-sm">🚌 첨단09</span>
+                <span id="hud-bus-type" class="px-2.5 py-1 rounded-full text-xs font-black text-white bg-blue-600 shadow-md">湲됲뻾</span>
+                <span id="hud-route-name" class="font-bold text-sky-300 text-sm">?쉶 泥⑤떒09</span>
             </div>
 
             <!-- Route Progress Tracker -->
             <div class="hidden md:flex flex-col w-48 mx-2">
                 <div class="flex justify-between text-[11px] text-slate-300 mb-1">
-                    <span>노선 진행도</span>
+                    <span>?몄꽑 吏꾪뻾??/span>
                     <span id="progress-percent-text" class="text-amber-400 font-bold">0%</span>
                 </div>
                 <div class="w-full bg-slate-700/60 h-2 rounded-full overflow-hidden p-0.5 border border-slate-600">
@@ -196,17 +196,17 @@
             <!-- Eco Points & Spots Counter -->
             <div class="flex items-center gap-3">
                 <div class="flex items-center gap-1.5 bg-slate-800/80 px-3 py-1 rounded-xl border border-slate-700">
-                    <span class="text-emerald-400">🌱</span>
+                    <span class="text-emerald-400">?뙮</span>
                     <span id="score-val" class="text-amber-300 font-black">0</span>
                     <span class="text-[10px] text-slate-400">PT</span>
                 </div>
                 <div class="flex items-center gap-1.5 bg-slate-800/80 px-3 py-1 rounded-xl border border-slate-700">
-                    <span class="text-sky-400">📍</span>
+                    <span class="text-sky-400">?뱧</span>
                     <span id="spot-count-val" class="text-sky-300 font-bold">0 / 6</span>
                 </div>
                 <!-- Mute Toggle -->
                 <button id="sound-toggle-btn" class="p-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-200 transition">
-                    🔊
+                    ?뵄
                 </button>
             </div>
         </div>
@@ -217,11 +217,11 @@
         <!-- Discovery Toast Popup -->
         <div id="spot-toast" class="absolute top-10 left-1/2 glass-panel rounded-full p-2.5 px-6 flex items-center gap-3 z-30 hidden pointer-events-none toast-pop border border-amber-400/50 shadow-lg w-max max-w-[90vw]">
             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-2xl shadow-inner shrink-0">
-                📍
+                ?뱧
             </div>
             <div class="flex flex-col">
-                <span id="toast-title" class="font-bold text-amber-300 text-[15px] drop-shadow-sm leading-tight">국립아시아문화전당</span>
-                <span id="toast-desc" class="text-[12px] text-slate-100 mt-0.5 leading-tight whitespace-normal break-keep">아시아 최대 규모의 복합 문화 예술 기관</span>
+                <span id="toast-title" class="font-bold text-amber-300 text-[15px] drop-shadow-sm leading-tight">援?┰?꾩떆?꾨Ц?붿쟾??/span>
+                <span id="toast-desc" class="text-[12px] text-slate-100 mt-0.5 leading-tight whitespace-normal break-keep">?꾩떆??理쒕? 洹쒕え??蹂듯빀 臾명솕 ?덉닠 湲곌?</span>
             </div>
             <span id="toast-badge" class="hidden"></span>
         </div>
@@ -232,26 +232,26 @@
             <!-- Header Title -->
             <div class="text-center mt-2 relative w-full">
                 <button onclick="window.location.href='/'" class="absolute left-0 top-0 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 flex items-center gap-1 text-sm font-bold transition">
-                    ◀ 홈
+                    ? ??
                 </button>
                 <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/30 text-sky-400 text-xs font-semibold mb-2">
-                    <span>🌱 광주광역시 대중교통 에코투어</span>
+                    <span>?뙮 愿묒＜愿묒뿭???以묎탳???먯퐫?ъ뼱</span>
                 </div>
                 <h1 class="text-2xl sm:text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-emerald-300 mt-2 sm:mt-0">
-                    오매나의 노선별 관광지 수집 대모험
+                    ?ㅻℓ?섏쓽 ?몄꽑蹂?愿愿묒? ?섏쭛 ?紐⑦뿕
                 </h1>
                 <p class="text-xs sm:text-sm text-slate-400 mt-1 max-w-xl mx-auto">
-                    탑승할 <b>광주 버스 노선</b>을 선택하세요. 공공데이터 기반 유명 관광지 아이템을 점프로 수집하고 나만의 친환경 여행 코스를 완주하세요!
+                    ?묒듅??<b>愿묒＜ 踰꾩뒪 ?몄꽑</b>???좏깮?섏꽭?? 怨듦났?곗씠??湲곕컲 ?좊챸 愿愿묒? ?꾩씠?쒖쓣 ?먰봽濡??섏쭛?섍퀬 ?섎쭔??移쒗솚寃??ы뻾 肄붿뒪瑜??꾩＜?섏꽭??
                 </p>
             </div>
 
             <!-- Route Filter Category Tabs -->
             <div class="flex flex-wrap justify-center gap-1.5 my-3" id="category-filter-tabs">
-                <button data-cat="ALL" class="cat-tab active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md">전체 노선</button>
-                <button data-cat="CULTURE" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">🎨 문화·예술</button>
-                <button data-cat="HISTORY" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">🏛️ 역사·민주</button>
-                <button data-cat="NATURE" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">⛰️ 생태·무등산</button>
-                <button data-cat="FOOD" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">🍜 미식·핫플</button>
+                <button data-cat="ALL" class="cat-tab active px-3.5 py-1.5 rounded-xl text-xs font-bold bg-blue-600 text-white shadow-md">?꾩껜 ?몄꽑</button>
+                <button data-cat="CULTURE" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">?렓 臾명솕쨌?덉닠</button>
+                <button data-cat="HISTORY" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">?룢截???궗쨌誘쇱＜</button>
+                <button data-cat="NATURE" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">?곤툘 ?앺깭쨌臾대벑??/button>
+                <button data-cat="FOOD" class="cat-tab px-3.5 py-1.5 rounded-xl text-xs font-bold bg-slate-800 text-slate-300 hover:bg-slate-700">?뜙 誘몄떇쨌?ロ뵆</button>
             </div>
 
             <!-- Route Card Grid -->
@@ -262,8 +262,8 @@
             <!-- Start Button -->
             <div class="mb-2 w-full max-w-xs mt-4">
                 <button id="start-btn" class="pulse-btn w-full py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-500 text-white font-extrabold text-base shadow-lg hover:brightness-110 active:scale-95 transition flex items-center justify-center gap-2">
-                    <span>에코투어 출발하기</span>
-                    <span class="text-xl">🚀</span>
+                    <span>?먯퐫?ъ뼱 異쒕컻?섍린</span>
+                    <span class="text-xl">??</span>
                 </button>
             </div>
             </div>
@@ -273,20 +273,20 @@
         <div id="end-screen" class="absolute inset-0 bg-slate-950/95 backdrop-blur-md z-40 hidden overflow-y-auto">
             <div class="min-h-full w-full flex flex-col items-center justify-center p-6 py-10 text-center">
                 <div class="w-16 h-16 rounded-3xl bg-amber-400/20 border border-amber-400/40 flex items-center justify-center text-3xl mb-3 shadow-inner">
-                    🏆
+                    ?룇
                 </div>
                 <h2 id="end-title" class="text-2xl sm:text-3xl font-black text-amber-300 mb-2">
-                    노선 투어 완주 성공!
+                    ?몄꽑 ?ъ뼱 ?꾩＜ ?깃났!
                 </h2>
                 <div id="end-desc" class="text-xs sm:text-sm text-slate-300 max-w-md leading-relaxed mb-4">
-                    투어 완료
+                    ?ъ뼱 ?꾨즺
                 </div>
 
                 <!-- Collected Spots Grid -->
                 <div class="w-full max-w-lg bg-slate-900/80 rounded-2xl p-4 border border-slate-800 mb-6 shrink-0">
                     <div class="flex items-center justify-between text-xs font-bold text-slate-400 mb-3 px-1">
-                        <span>내 수집한 광주 유명 관광지</span>
-                        <span id="end-collection-count" class="text-emerald-400">6 / 6 수집 완료</span>
+                        <span>???섏쭛??愿묒＜ ?좊챸 愿愿묒?</span>
+                        <span id="end-collection-count" class="text-emerald-400">6 / 6 ?섏쭛 ?꾨즺</span>
                     </div>
                     <div id="collected-spots-list" class="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-40 overflow-y-auto pr-1">
                         <!-- Injected via JS -->
@@ -295,10 +295,10 @@
 
                 <div class="flex flex-col sm:flex-row gap-3 w-full max-w-sm shrink-0 pb-10">
                     <button id="restart-btn" class="flex-1 bg-white hover:bg-slate-200 text-slate-900 font-bold py-3.5 rounded-xl shadow transition">
-                        다른 노선 즐기기
+                        ?ㅻⅨ ?몄꽑 利먭린湲?
                     </button>
                     <button onclick="window.location.href='/'" class="flex-1 bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl shadow transition">
-                        지도로 돌아가기
+                        吏?꾨줈 ?뚯븘媛湲?
                     </button>
                 </div>
             </div>
@@ -307,10 +307,10 @@
         <!-- Mobile Control Buttons -->
         <div id="mobile-controls">
             <div class="flex gap-2">
-                <div class="ctrl-btn" id="btn-left">◀</div>
-                <div class="ctrl-btn" id="btn-right">▶</div>
+                <div class="ctrl-btn" id="btn-left">?</div>
+                <div class="ctrl-btn" id="btn-right">??/div>
             </div>
-            <div class="ctrl-btn !w-16 !h-16 !bg-blue-600/80 border-blue-400" id="btn-jump">▲</div>
+            <div class="ctrl-btn !w-16 !h-16 !bg-blue-600/80 border-blue-400" id="btn-jump">??/div>
         </div>
 
     </div>
@@ -369,99 +369,99 @@
 
         const busRoutesData = [
             {
-                id: "route_09", num: "🚌 첨단09", type: "급행", typeBg: "bg-red-500", category: "CULTURE",
-                theme: "문화예술 & 무등산", bgColor: "gradient-sky",
+                id: "route_09", num: "?쉶 泥⑤떒09", type: "湲됲뻾", typeBg: "bg-red-500", category: "CULTURE",
+                theme: "臾명솕?덉닠 & 臾대벑??, bgColor: "gradient-sky",
                 touristSpots: [
-                    { name: "국립아시아문화전당", x: 320, y: 280, desc: "아시아 최대 규모 복합 문화 예술 기관", distance: "300m" },
-                    { name: "동명동 카페거리", x: 650, y: 210, desc: "트렌디한 감성의 핫플레이스 카페 골목", distance: "300m" },
-                    { name: "광주 예술의거리", x: 980, y: 270, desc: "전통 문화 및 갤러리가 모인 문화거리", distance: "500m" },
-                    { name: "조선대학교 장미원", x: 1350, y: 190, desc: "수만 송이 장미가 피는 산책로", distance: "300m" },
-                    { name: "지산유원지 모노레일", x: 1720, y: 270, desc: "무등산 능선을 조망하는 감성 리프트", distance: "500m" },
-                    { name: "무등산국립공원", x: 2050, y: 210, desc: "세계지질공원 입석대 & 서석대 절경", distance: "300m" }
+                    { name: "援?┰?꾩떆?꾨Ц?붿쟾??, x: 320, y: 280, desc: "?꾩떆??理쒕? 洹쒕え 蹂듯빀 臾명솕 ?덉닠 湲곌?", distance: "300m" },
+                    { name: "?숇챸??移댄럹嫄곕━", x: 650, y: 210, desc: "?몃젋?뷀븳 媛먯꽦???ロ뵆?덉씠??移댄럹 怨⑤ぉ", distance: "300m" },
+                    { name: "愿묒＜ ?덉닠?섍굅由?, x: 980, y: 270, desc: "?꾪넻 臾명솕 諛?媛ㅻ윭由ш? 紐⑥씤 臾명솕嫄곕━", distance: "500m" },
+                    { name: "議곗꽑??숆탳 ?λ???, x: 1350, y: 190, desc: "?섎쭔 ?≪씠 ?λ?媛 ?쇰뒗 ?곗콉濡?, distance: "300m" },
+                    { name: "吏?곗쑀?먯? 紐⑤끂?덉씪", x: 1720, y: 270, desc: "臾대벑???μ꽑??議곕쭩?섎뒗 媛먯꽦 由ы봽??, distance: "500m" },
+                    { name: "臾대벑?곌뎅由쎄났??, x: 2050, y: 210, desc: "?멸퀎吏吏덇났???낆꽍? & ?쒖꽍? ?덇꼍", distance: "300m" }
                 ]
             },
             {
-                id: "route_01", num: "🚌 순환01", type: "순환", typeBg: "bg-blue-600", category: "NATURE",
-                theme: "도심 속 자연 코스", bgColor: "gradient-nature",
+                id: "route_01", num: "?쉶 ?쒗솚01", type: "?쒗솚", typeBg: "bg-blue-600", category: "NATURE",
+                theme: "?꾩떖 ???먯뿰 肄붿뒪", bgColor: "gradient-nature",
                 touristSpots: [
-                    { name: "상무시민공원", x: 330, y: 270, desc: "도심 속 거대한 호수와 산책로", distance: "200m" },
-                    { name: "5·18자유공원", x: 670, y: 200, desc: "민주화 운동의 역사적 상징", distance: "400m" },
-                    { name: "김대중컨벤션센터", x: 1000, y: 260, desc: "국제 규모의 대형 전시관", distance: "100m" },
-                    { name: "광주월드컵경기장", x: 1380, y: 200, desc: "2002년 4강 신화의 성지", distance: "300m" },
-                    { name: "풍암호수공원", x: 1740, y: 270, desc: "수변 데크길이 아름다운 공원", distance: "200m" },
-                    { name: "광주학생독립운동기념탑", x: 2060, y: 220, desc: "학생들의 항일 운동을 기리는 탑", distance: "300m" }
+                    { name: "?곷Т?쒕?怨듭썝", x: 330, y: 270, desc: "?꾩떖 ??嫄곕????몄닔? ?곗콉濡?, distance: "200m" },
+                    { name: "5쨌18?먯쑀怨듭썝", x: 670, y: 200, desc: "誘쇱＜???대룞????궗???곸쭠", distance: "400m" },
+                    { name: "源?以묒빻踰ㅼ뀡?쇳꽣", x: 1000, y: 260, desc: "援?젣 洹쒕え??????꾩떆愿", distance: "100m" },
+                    { name: "愿묒＜?붾뱶而듦꼍湲곗옣", x: 1380, y: 200, desc: "2002??4媛??좏솕???깆?", distance: "300m" },
+                    { name: "?띿븫?몄닔怨듭썝", x: 1740, y: 270, desc: "?섎? ?고겕湲몄씠 ?꾨쫫?ㅼ슫 怨듭썝", distance: "200m" },
+                    { name: "愿묒＜?숈깮?낅┰?대룞湲곕뀗??, x: 2060, y: 220, desc: "?숈깮?ㅼ쓽 ??씪 ?대룞??湲곕━????, distance: "300m" }
                 ]
             },
             {
-                id: "route_117", num: "🚌 양림117", type: "간선", typeBg: "bg-amber-500", category: "HISTORY",
-                theme: "근대역사 & 스트리트", bgColor: "gradient-retro",
+                id: "route_117", num: "?쉶 ?묐┝117", type: "媛꾩꽑", typeBg: "bg-amber-500", category: "HISTORY",
+                theme: "洹쇰???궗 & ?ㅽ듃由ы듃", bgColor: "gradient-retro",
                 touristSpots: [
-                    { name: "양림펭귄마을", x: 330, y: 270, desc: "버려진 정크아트로 꾸며진 예술 골목", distance: "300m" },
-                    { name: "우일선 선교사 사택", x: 670, y: 200, desc: "가장 오래된 서양식 근대건축물", distance: "500m" },
-                    { name: "사직공원 전망타워", x: 1000, y: 260, desc: "무등산과 도심 파노라마 조망", distance: "300m" },
-                    { name: "이이남 스튜디오", x: 1380, y: 200, desc: "세계적 미디어아트 작품이 있는 카페", distance: "300m" },
-                    { name: "양림 미술관", x: 1740, y: 270, desc: "지역 예술가들의 다양한 기획 전시", distance: "500m" },
-                    { name: "최승효 가옥", x: 2060, y: 220, desc: "도심 속 고즈넉한 힐링 한옥", distance: "300m" }
+                    { name: "?묐┝??톬留덉쓣", x: 330, y: 270, desc: "踰꾨젮吏??뺥겕?꾪듃濡?袁몃ŉ吏??덉닠 怨⑤ぉ", distance: "300m" },
+                    { name: "?곗씪???좉탳???ы깮", x: 670, y: 200, desc: "媛???ㅻ옒???쒖뼇??洹쇰?嫄댁텞臾?, distance: "500m" },
+                    { name: "?ъ쭅怨듭썝 ?꾨쭩???, x: 1000, y: 260, desc: "臾대벑?곌낵 ?꾩떖 ?뚮끂?쇰쭏 議곕쭩", distance: "300m" },
+                    { name: "?댁씠???ㅽ뒠?붿삤", x: 1380, y: 200, desc: "?멸퀎??誘몃뵒?댁븘???묓뭹???덈뒗 移댄럹", distance: "300m" },
+                    { name: "?묐┝ 誘몄닠愿", x: 1740, y: 270, desc: "吏???덉닠媛?ㅼ쓽 ?ㅼ뼇??湲고쉷 ?꾩떆", distance: "500m" },
+                    { name: "理쒖듅??媛??, x: 2060, y: 220, desc: "?꾩떖 ??怨좎쫰?됲븳 ?먮쭅 ?쒖삦", distance: "300m" }
                 ]
             },
             {
-                id: "route_151", num: "🚌 지원151", type: "지선", typeBg: "bg-emerald-500", category: "HISTORY",
-                theme: "민주·평화 유적 코스", bgColor: "gradient-green",
+                id: "route_151", num: "?쉶 吏??51", type: "吏??, typeBg: "bg-emerald-500", category: "HISTORY",
+                theme: "誘쇱＜쨌?됲솕 ?좎쟻 肄붿뒪", bgColor: "gradient-green",
                 touristSpots: [
-                    { name: "5·18 민주광장", x: 310, y: 280, desc: "민주화 운동의 상징적인 중심 장소", distance: "300m" },
-                    { name: "국립5·18민주묘지", x: 660, y: 210, desc: "5·18 영령을 기리는 민주 성지", distance: "500m" },
-                    { name: "광주학생독립운동기념관", x: 990, y: 270, desc: "1929년 학생 항일 운동 기억 공간", distance: "300m" },
-                    { name: "전남대학교 민주길", x: 1360, y: 190, desc: "자연 경관이 어우러진 둘레길", distance: "500m" },
-                    { name: "5·18 민주화운동기록관", x: 1710, y: 260, desc: "유네스코 세계기록유산 보유 전시관", distance: "300m" },
-                    { name: "민주종각 평화광장", x: 2040, y: 210, desc: "평화와 화합을 기원하는 종각", distance: "300m" }
+                    { name: "5쨌18 誘쇱＜愿묒옣", x: 310, y: 280, desc: "誘쇱＜???대룞???곸쭠?곸씤 以묒떖 ?μ냼", distance: "300m" },
+                    { name: "援?┰5쨌18誘쇱＜臾섏?", x: 660, y: 210, desc: "5쨌18 ?곷졊??湲곕━??誘쇱＜ ?깆?", distance: "500m" },
+                    { name: "愿묒＜?숈깮?낅┰?대룞湲곕뀗愿", x: 990, y: 270, desc: "1929???숈깮 ??씪 ?대룞 湲곗뼲 怨듦컙", distance: "300m" },
+                    { name: "?꾨궓??숆탳 誘쇱＜湲?, x: 1360, y: 190, desc: "?먯뿰 寃쎄????댁슦?ъ쭊 ?섎젅湲?, distance: "500m" },
+                    { name: "5쨌18 誘쇱＜?붿슫?숆린濡앷?", x: 1710, y: 260, desc: "?좊꽕?ㅼ퐫 ?멸퀎湲곕줉?좎궛 蹂댁쑀 ?꾩떆愿", distance: "300m" },
+                    { name: "誘쇱＜醫낃컖 ?됲솕愿묒옣", x: 2040, y: 210, desc: "?됲솕? ?뷀빀??湲곗썝?섎뒗 醫낃컖", distance: "300m" }
                 ]
             },
             {
-                id: "route_29", num: "🚌 송정29", type: "간선", typeBg: "bg-amber-500", category: "FOOD",
-                theme: "교통 & 전통 시장", bgColor: "gradient-purple",
+                id: "route_29", num: "?쉶 ?≪젙29", type: "媛꾩꽑", typeBg: "bg-amber-500", category: "FOOD",
+                theme: "援먰넻 & ?꾪넻 ?쒖옣", bgColor: "gradient-purple",
                 touristSpots: [
-                    { name: "광주송정역", x: 310, y: 280, desc: "호남선의 관문이자 KTX 거점역", distance: "100m" },
-                    { name: "1913송정역시장", x: 660, y: 210, desc: "100년 전통 레트로 야시장 명소", distance: "200m" },
-                    { name: "송정공원", x: 990, y: 270, desc: "벚꽃이 만개하는 도심 속 휴식처", distance: "400m" },
-                    { name: "송정 떡갈비거리", x: 1360, y: 190, desc: "육즙 가득한 떡갈비 특화 거리", distance: "200m" },
-                    { name: "영산강 자전거길", x: 1710, y: 260, desc: "시원한 강바람을 맞는 에코 코스", distance: "300m" },
-                    { name: "극락강역", x: 2040, y: 210, desc: "가장 작은 꼬마역의 아날로그 감성", distance: "300m" }
+                    { name: "愿묒＜?≪젙??, x: 310, y: 280, desc: "?몃궓?좎쓽 愿臾몄씠??KTX 嫄곗젏??, distance: "100m" },
+                    { name: "1913?≪젙??떆??, x: 660, y: 210, desc: "100???꾪넻 ?덊듃濡??쇱떆??紐낆냼", distance: "200m" },
+                    { name: "?≪젙怨듭썝", x: 990, y: 270, desc: "踰싰퐙??留뚭컻?섎뒗 ?꾩떖 ???댁떇泥?, distance: "400m" },
+                    { name: "?≪젙 ?↔컝鍮꾧굅由?, x: 1360, y: 190, desc: "?≪쬂 媛?앺븳 ?↔컝鍮??뱁솕 嫄곕━", distance: "200m" },
+                    { name: "?곸궛媛??먯쟾嫄곌만", x: 1710, y: 260, desc: "?쒖썝??媛뺣컮?뚯쓣 留욌뒗 ?먯퐫 肄붿뒪", distance: "300m" },
+                    { name: "洹밸씫媛뺤뿭", x: 2040, y: 210, desc: "媛???묒? 瑗щ쭏??쓽 ?꾨궇濡쒓렇 媛먯꽦", distance: "300m" }
                 ]
             },
             {
-                id: "route_12", num: "🚌 수완12", type: "간선", typeBg: "bg-amber-500", category: "FOOD",
-                theme: "중외공원 & 비엔날레", bgColor: "gradient-sky",
+                id: "route_12", num: "?쉶 ?섏셿12", type: "媛꾩꽑", typeBg: "bg-amber-500", category: "FOOD",
+                theme: "以묒쇅怨듭썝 & 鍮꾩뿏?좊젅", bgColor: "gradient-sky",
                 touristSpots: [
-                    { name: "광주비엔날레 전시관", x: 320, y: 270, desc: "세계적인 현대 미술 축제의 장", distance: "500m" },
-                    { name: "중외공원 명품길", x: 650, y: 200, desc: "시립미술관과 박물관이 모인 공원", distance: "500m" },
-                    { name: "국립광주박물관", x: 980, y: 260, desc: "남도 문화유산을 보존하는 박물관", distance: "300m" },
-                    { name: "광주 시립미술관", x: 1350, y: 190, desc: "현대 미술품과 넓은 조각공원", distance: "300m" },
-                    { name: "광주역사민속박물관", x: 1700, y: 270, desc: "전통 민속 농경 문화를 체험하는 곳", distance: "400m" },
-                    { name: "어린이대공원", x: 2030, y: 220, desc: "가족 나들이하기 좋은 놀이공원", distance: "200m" }
+                    { name: "愿묒＜鍮꾩뿏?좊젅 ?꾩떆愿", x: 320, y: 270, desc: "?멸퀎?곸씤 ?꾨? 誘몄닠 異뺤젣????, distance: "500m" },
+                    { name: "以묒쇅怨듭썝 紐낇뭹湲?, x: 650, y: 200, desc: "?쒕┰誘몄닠愿怨?諛뺣Ъ愿??紐⑥씤 怨듭썝", distance: "500m" },
+                    { name: "援?┰愿묒＜諛뺣Ъ愿", x: 980, y: 260, desc: "?⑤룄 臾명솕?좎궛??蹂댁〈?섎뒗 諛뺣Ъ愿", distance: "300m" },
+                    { name: "愿묒＜ ?쒕┰誘몄닠愿", x: 1350, y: 190, desc: "?꾨? 誘몄닠?덇낵 ?볦? 議곌컖怨듭썝", distance: "300m" },
+                    { name: "愿묒＜??궗誘쇱냽諛뺣Ъ愿", x: 1700, y: 270, desc: "?꾪넻 誘쇱냽 ?띻꼍 臾명솕瑜?泥댄뿕?섎뒗 怨?, distance: "400m" },
+                    { name: "?대┛?대?怨듭썝", x: 2030, y: 220, desc: "媛議??섎뱾?댄븯湲?醫뗭? ??닿났??, distance: "200m" }
                 ]
             },
             {
-                id: "route_35", num: "🚌 운림35", type: "지선", typeBg: "bg-emerald-500", category: "NATURE",
-                theme: "무등산 생태 & 한옥", bgColor: "gradient-nature",
+                id: "route_35", num: "?쉶 ?대┝35", type: "吏??, typeBg: "bg-emerald-500", category: "NATURE",
+                theme: "臾대벑???앺깭 & ?쒖삦", bgColor: "gradient-nature",
                 touristSpots: [
-                    { name: "증심사 사찰", x: 330, y: 280, desc: "무등산 자락의 천년 고찰", distance: "300m" },
-                    { name: "의재미술관", x: 660, y: 210, desc: "허백련 화백의 한국화 미술관", distance: "500m" },
-                    { name: "광주 전통문화관", x: 990, y: 270, desc: "한옥 체험 및 전통 국악 공연 중심지", distance: "300m" },
-                    { name: "포충사", x: 1370, y: 200, desc: "임진왜란 의병장을 모신 사당", distance: "500m" },
-                    { name: "충장사", x: 1730, y: 280, desc: "김덕령 장군의 얼이 깃든 곳", distance: "300m" },
-                    { name: "원효사 계곡", x: 2050, y: 210, desc: "무등산의 시원하고 맑은 자연 계곡", distance: "300m" }
+                    { name: "利앹떖???ъ같", x: 330, y: 280, desc: "臾대벑???먮씫??泥쒕뀈 怨좎같", distance: "300m" },
+                    { name: "?섏옱誘몄닠愿", x: 660, y: 210, desc: "?덈갚???붾갚???쒓뎅??誘몄닠愿", distance: "500m" },
+                    { name: "愿묒＜ ?꾪넻臾명솕愿", x: 990, y: 270, desc: "?쒖삦 泥댄뿕 諛??꾪넻 援?븙 怨듭뿰 以묒떖吏", distance: "300m" },
+                    { name: "?ъ땐??, x: 1370, y: 200, desc: "?꾩쭊?쒕? ?섎퀝?μ쓣 紐⑥떊 ?щ떦", distance: "500m" },
+                    { name: "異⑹옣??, x: 1730, y: 280, desc: "源?뺣졊 ?κ뎔???쇱씠 源껊뱺 怨?, distance: "300m" },
+                    { name: "?먰슚??怨꾧끝", x: 2050, y: 210, desc: "臾대벑?곗쓽 ?쒖썝?섍퀬 留묒? ?먯뿰 怨꾧끝", distance: "300m" }
                 ]
             },
             {
-                id: "route_06", num: "🚌 풍암06", type: "지선", typeBg: "bg-emerald-500", category: "NATURE",
-                theme: "호수 & 향교 탐방", bgColor: "gradient-green",
+                id: "route_06", num: "?쉶 ?띿븫06", type: "吏??, typeBg: "bg-emerald-500", category: "NATURE",
+                theme: "?몄닔 & ?κ탳 ?먮갑", bgColor: "gradient-green",
                 touristSpots: [
-                    { name: "광주향교", x: 310, y: 280, desc: "조선시대 유학 교육의 산실", distance: "200m" },
-                    { name: "사직공원", x: 660, y: 210, desc: "가을 단풍이 아름다운 시민의 숲", distance: "300m" },
-                    { name: "광주공원 포장마차", x: 990, y: 270, desc: "야간 불빛 아래 열리는 낭만 포차거리", distance: "400m" },
-                    { name: "남광주시장", x: 1360, y: 190, desc: "활기찬 수산물 및 먹거리 새벽시장", distance: "200m" },
-                    { name: "풍암호수 장미원", x: 1710, y: 260, desc: "수만 송이 장미가 만개하는 테마파크", distance: "300m" },
-                    { name: "월드컵경기장 마실길", x: 2040, y: 210, desc: "여유로운 저녁 산책을 위한 공원길", distance: "300m" }
+                    { name: "愿묒＜?κ탳", x: 310, y: 280, desc: "議곗꽑?쒕? ?좏븰 援먯쑁???곗떎", distance: "200m" },
+                    { name: "?ъ쭅怨듭썝", x: 660, y: 210, desc: "媛???⑦뭾???꾨쫫?ㅼ슫 ?쒕?????, distance: "300m" },
+                    { name: "愿묒＜怨듭썝 ?ъ옣留덉감", x: 990, y: 270, desc: "?쇨컙 遺덈튆 ?꾨옒 ?대━????쭔 ?ъ감嫄곕━", distance: "400m" },
+                    { name: "?④킅二쇱떆??, x: 1360, y: 190, desc: "?쒓린李??섏궛臾?諛?癒밴굅由??덈꼍?쒖옣", distance: "200m" },
+                    { name: "?띿븫?몄닔 ?λ???, x: 1710, y: 260, desc: "?섎쭔 ?≪씠 ?λ?媛 留뚭컻?섎뒗 ?뚮쭏?뚰겕", distance: "300m" },
+                    { name: "?붾뱶而듦꼍湲곗옣 留덉떎湲?, x: 2040, y: 210, desc: "?ъ쑀濡쒖슫 ????곗콉???꾪븳 怨듭썝湲?, distance: "300m" }
                 ]
             }
         ];
@@ -488,13 +488,13 @@
         const player = {
             x: 80,
             y: 300,
-            width: 38,
-            height: 48,
+            width: 58,
+            height: 75,
             vx: 0,
             vy: 0,
-            speed: 5.2,
-            jumpStrength: -13.6,
-            gravity: 0.68,
+            speed: 6.5,
+            jumpStrength: -16.5,
+            gravity: 0.8,
             grounded: false,
             facingLeft: false,
             squash: 1.0,
@@ -508,16 +508,16 @@
             { x: 650, y: 470, w: 680, h: 90, type: 'ground' },
             { x: 1380, y: 470, w: 920, h: 90, type: 'ground' },
 
-            { x: 250, y: 360, w: 140, h: 22, type: 'bus', label: '🌱 친환경 정류장' },
-            { x: 460, y: 270, w: 140, h: 22, type: 'subway', label: '♻️ 탄소 제로 코스' },
+            { x: 250, y: 360, w: 140, h: 22, type: 'bus', label: '?뙮 移쒗솚寃??뺣쪟?? },
+            { x: 460, y: 270, w: 140, h: 22, type: 'subway', label: '?삼툘 ?꾩냼 ?쒕줈 肄붿뒪' },
             
-            { x: 770, y: 350, w: 130, h: 22, type: 'bus', label: '👟 도보 300m 투어' },
-            { x: 970, y: 260, w: 150, h: 22, type: 'subway', label: '🚲 자전거 환승' },
-            { x: 1180, y: 330, w: 130, h: 22, type: 'cloud', label: '🌳 무등산 둘레길' },
+            { x: 770, y: 350, w: 130, h: 22, type: 'bus', label: '?몷 ?꾨낫 300m ?ъ뼱' },
+            { x: 970, y: 260, w: 150, h: 22, type: 'subway', label: '?슩 ?먯쟾嫄??섏듅' },
+            { x: 1180, y: 330, w: 130, h: 22, type: 'cloud', label: '?뙰 臾대벑???섎젅湲? },
 
-            { x: 1520, y: 350, w: 140, h: 22, type: 'bus', label: '🚌 에코 환승센터' },
-            { x: 1720, y: 270, w: 140, h: 22, type: 'subway', label: '🏛️ 광주 공공데이터' },
-            { x: 1920, y: 360, w: 130, h: 22, type: 'cloud', label: '🏁 에코투어 완주' }
+            { x: 1520, y: 350, w: 140, h: 22, type: 'bus', label: '?쉶 ?먯퐫 ?섏듅?쇳꽣' },
+            { x: 1720, y: 270, w: 140, h: 22, type: 'subway', label: '?룢截?愿묒＜ 怨듦났?곗씠?? },
+            { x: 1920, y: 360, w: 130, h: 22, type: 'cloud', label: '?뢾 ?먯퐫?ъ뼱 ?꾩＜' }
         ];
 
         let activeItems = [];
@@ -541,7 +541,7 @@
                         <span class="text-[11px] font-semibold text-amber-300/90 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">${route.theme}</span>
                     </div>
                     <div class="text-xs text-slate-300 leading-snug line-clamp-2">
-                        📍 ${route.touristSpots.map(s => s.name).slice(0, 3).join(', ')} 등 주요 명소
+                        ?뱧 ${route.touristSpots.map(s => s.name).slice(0, 3).join(', ')} ??二쇱슂 紐낆냼
                     </div>
                 `;
 
@@ -572,7 +572,7 @@
             const toast = document.getElementById('spot-toast');
             document.getElementById('toast-title').innerText = spot.name;
             document.getElementById('toast-desc').innerText = spot.desc;
-            document.getElementById('toast-badge').innerText = `반경 ${spot.distance}`;
+            document.getElementById('toast-badge').innerText = `諛섍꼍 ${spot.distance}`;
 
             toast.classList.remove('hidden');
 
@@ -584,7 +584,7 @@
 
         document.getElementById('sound-toggle-btn').onclick = () => {
             soundMuted = !soundMuted;
-            document.getElementById('sound-toggle-btn').innerText = soundMuted ? '🔇' : '🔊';
+            document.getElementById('sound-toggle-btn').innerText = soundMuted ? '?뵁' : '?뵄';
         };
 
         function handleJump() {
@@ -747,9 +747,9 @@
         }
 
         // Preload Omena Images
-        const imgOmenaRun = new Image(); imgOmenaRun.src = '/characters/5. 응용형(자전거).png';
-        const imgOmenaJump = new Image(); imgOmenaJump.src = '/characters/15. 응용형(최고).png';
-        const imgOmenaIdle = new Image(); imgOmenaIdle.src = '/characters/31. 응용형(길찾기).png';
+        const imgOmenaRun = new Image(); imgOmenaRun.src = '/characters/5. ?묒슜???먯쟾嫄?.png';
+        const imgOmenaJump = new Image(); imgOmenaJump.src = '/characters/15. ?묒슜??理쒓퀬).png';
+        const imgOmenaIdle = new Image(); imgOmenaIdle.src = '/characters/31. ?묒슜??湲몄갼湲?.png';
 
         function drawOmena(x, y, facingLeft, squash) {
             ctx.save();
@@ -851,27 +851,27 @@
                 const currentPoints = parseInt(localStorage.getItem('eco_points') || '0', 10);
                 localStorage.setItem('eco_points', (currentPoints + score).toString());
 
-                document.getElementById('end-title').innerText = `🏆 ${activeRoute.num} 완주 성공!`;
+                document.getElementById('end-title').innerText = `?룇 ${activeRoute.num} ?꾩＜ ?깃났!`;
                 document.getElementById('end-desc').innerHTML = `
-                    오매나와 함께 <b>[${activeRoute.num} - ${activeRoute.theme}]</b> 노선을 타고,<br>
-                    공공데이터 연계 주요 유명 관광지를 성공적으로 수집했습니다!<br><br>
-                    🌱 <b>획득 에코포인트:</b> <span class="text-amber-300 font-extrabold text-lg">+${score} PT</span><br>
-                    <span class="text-emerald-300 text-xs mt-1 block">(총 누적: ${currentPoints + score} PT)</span>
+                    ?ㅻℓ?섏? ?④퍡 <b>[${activeRoute.num} - ${activeRoute.theme}]</b> ?몄꽑???怨?<br>
+                    怨듦났?곗씠???곌퀎 二쇱슂 ?좊챸 愿愿묒?瑜??깃났?곸쑝濡??섏쭛?덉뒿?덈떎!<br><br>
+                    ?뙮 <b>?띾뱷 ?먯퐫?ъ씤??</b> <span class="text-amber-300 font-extrabold text-lg">+${score} PT</span><br>
+                    <span class="text-emerald-300 text-xs mt-1 block">(珥??꾩쟻: ${currentPoints + score} PT)</span>
                 `;
 
                 const spotContainer = document.getElementById('collected-spots-list');
-                document.getElementById('end-collection-count').innerText = `${collectedList.length} / ${activeItems.length} 수집 완료`;
+                document.getElementById('end-collection-count').innerText = `${collectedList.length} / ${activeItems.length} ?섏쭛 ?꾨즺`;
                 spotContainer.innerHTML = '';
 
                 if (collectedList.length === 0) {
-                    spotContainer.innerHTML = '<span class="text-slate-500 text-xs col-span-3">수집한 관광지가 없습니다.</span>';
+                    spotContainer.innerHTML = '<span class="text-slate-500 text-xs col-span-3">?섏쭛??愿愿묒?媛 ?놁뒿?덈떎.</span>';
                 } else {
                     collectedList.forEach(spot => {
                         const tag = document.createElement('div');
                         tag.className = 'bg-slate-800/90 border border-slate-700/80 rounded-xl p-2 flex flex-col justify-center text-left';
                         tag.innerHTML = `
-                            <span class="text-[11px] font-bold text-amber-300 line-clamp-1">📍 ${spot.name}</span>
-                            <span class="text-[9px] text-slate-400 mt-0.5">반경 ${spot.distance}</span>
+                            <span class="text-[11px] font-bold text-amber-300 line-clamp-1">?뱧 ${spot.name}</span>
+                            <span class="text-[9px] text-slate-400 mt-0.5">諛섍꼍 ${spot.distance}</span>
                         `;
                         spotContainer.appendChild(tag);
                     });
@@ -921,33 +921,33 @@
             platforms.forEach(plat => {
                 if (plat.type === 'ground') {
                     ctx.fillStyle = '#10b981';
-                    ctx.fillRect(plat.x, plat.y, plat.w, 14);
+                    ctx.fillRect(plat.x, plat.y, plat.w, 20);
                     ctx.fillStyle = '#1e293b';
-                    ctx.fillRect(plat.x, plat.y + 14, plat.w, plat.h - 14);
+                    ctx.fillRect(plat.x, plat.y + 20, plat.w, plat.h - 20);
                 } else if (plat.type === 'bus') {
                     ctx.fillStyle = '#2563eb';
                     ctx.beginPath();
-                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 8);
+                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 12);
                     ctx.fill();
                     ctx.fillStyle = '#ffffff';
-                    ctx.font = 'bold 11px sans-serif';
-                    ctx.fillText(plat.label, plat.x + 10, plat.y + 15);
+                    ctx.font = 'bold 16px sans-serif';
+                    ctx.fillText(plat.label, plat.x + 15, plat.y + 24);
                 } else if (plat.type === 'subway') {
                     ctx.fillStyle = '#6366f1';
                     ctx.beginPath();
-                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 8);
+                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 12);
                     ctx.fill();
                     ctx.fillStyle = '#ffffff';
-                    ctx.font = 'bold 11px sans-serif';
-                    ctx.fillText(plat.label, plat.x + 10, plat.y + 15);
+                    ctx.font = 'bold 16px sans-serif';
+                    ctx.fillText(plat.label, plat.x + 15, plat.y + 24);
                 } else {
                     ctx.fillStyle = '#e2e8f0';
                     ctx.beginPath();
-                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 8);
+                    ctx.roundRect(plat.x, plat.y, plat.w, plat.h, 12);
                     ctx.fill();
                     ctx.fillStyle = '#0f172a';
-                    ctx.font = 'bold 11px sans-serif';
-                    ctx.fillText(plat.label, plat.x + 10, plat.y + 15);
+                    ctx.font = 'bold 16px sans-serif';
+                    ctx.fillText(plat.label, plat.x + 15, plat.y + 24);
                 }
             });
 
@@ -957,32 +957,32 @@
 
                     ctx.fillStyle = 'rgba(0,0,0,0.3)';
                     ctx.beginPath();
-                    ctx.ellipse(item.x + 18, item.y + 36, 12, 4, 0, 0, Math.PI * 2);
+                    ctx.ellipse(item.x + 24, item.y + 48, 20, 6, 0, 0, Math.PI * 2);
                     ctx.fill();
 
                     ctx.fillStyle = '#f59e0b';
                     ctx.beginPath();
-                    ctx.arc(item.x + 18, bobbingY + 12, 15, 0, Math.PI * 2);
+                    ctx.arc(item.x + 24, bobbingY + 20, 24, 0, Math.PI * 2);
                     ctx.fill();
                     ctx.strokeStyle = '#ffffff';
                     ctx.lineWidth = 2.5;
                     ctx.stroke();
 
                     ctx.fillStyle = '#ffffff';
-                    ctx.font = '13px sans-serif';
-                    ctx.fillText('🏛️', item.x + 10, bobbingY + 17);
+                    ctx.font = '22px sans-serif';
+                    ctx.fillText('?룢截?, item.x + 10, bobbingY + 17);
 
                     ctx.fillStyle = 'rgba(15, 23, 42, 0.9)';
                     ctx.beginPath();
-                    ctx.roundRect(item.x - 42, bobbingY - 24, 120, 24, 8);
+                    ctx.roundRect(item.x - 60, bobbingY - 40, 168, 36, 12);
                     ctx.fill();
                     ctx.strokeStyle = '#facc15';
                     ctx.lineWidth = 1;
                     ctx.stroke();
 
                     ctx.fillStyle = '#f8fafc';
-                    ctx.font = 'bold 10px sans-serif';
-                    ctx.fillText(item.name, item.x - 36, bobbingY - 8);
+                    ctx.font = 'bold 16px sans-serif';
+                    ctx.fillText(item.name, item.x - 50, bobbingY - 16);
                 }
             });
 
@@ -998,8 +998,8 @@
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 14px sans-serif';
             ctx.fillText('ARRIVE', goal.x + 9, goal.y + 32);
-            ctx.font = 'bold 11px sans-serif';
-            ctx.fillText('종점 승강장', goal.x + 6, goal.y + 58);
+            ctx.font = 'bold 16px sans-serif';
+            ctx.fillText('醫낆젏 ?밴컯??, goal.x + 6, goal.y + 58);
 
             drawOmena(player.x, player.y, player.facingLeft, player.squash);
 
@@ -1017,3 +1017,4 @@
     </script>
 </body>
 </html>
+
