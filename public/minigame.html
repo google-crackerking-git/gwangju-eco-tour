@@ -605,9 +605,7 @@ const canvas = document.getElementById('gameCanvas');
                         </div>
                         <span class="text-[11px] font-semibold text-amber-300/90 bg-amber-400/10 px-2 py-0.5 rounded-full border border-amber-400/20">${route.theme}</span>
                     </div>
-                    <div class="text-xs text-slate-300 leading-snug line-clamp-2">
-                        📍 ${route.touristSpots.map(s => s.name).slice(0, 3).join(', ')} 등 주요 명소
-                    </div>
+                    <div class="text-xs text-slate-300 leading-snug line-clamp-2">📍 주요경유: ${route.stops.slice(0, 4).join(' ➔ ')} 등</div>
                 `;
 
                 card.onclick = () => {
