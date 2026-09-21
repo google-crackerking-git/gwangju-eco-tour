@@ -304,6 +304,13 @@
             </div>
         </div>
 
+        <!-- Exit Game Button -->
+        <button onclick="window.location.href='/'" class="absolute top-5 right-5 w-10 h-10 bg-slate-900/60 hover:bg-red-500/80 backdrop-blur-md rounded-full flex items-center justify-center text-white z-40 shadow-lg border border-white/20 transition transform hover:scale-110 active:scale-95 hidden" id="ingame-exit-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+        
         <!-- Mobile Control Buttons -->
         <div id="mobile-controls">
             <div class="flex gap-2">
@@ -705,6 +712,7 @@ const canvas = document.getElementById('gameCanvas');
                 document.getElementById('hud-bus-type').className = `${activeRoute.typeBg} px-2.5 py-1 rounded-full text-xs font-black text-white shadow-md`;
                 document.getElementById('hud-route-name').innerText = activeRoute.num;
                 document.getElementById('start-screen').classList.add('hidden');
+                  document.getElementById('ingame-exit-btn').classList.remove('hidden');
                 resetGame();
                 gameState = 'PLAYING';
                 playSound('collect');
@@ -713,6 +721,7 @@ const canvas = document.getElementById('gameCanvas');
             document.getElementById('restart-btn').onclick = () => {
                 document.getElementById('end-screen').classList.add('hidden');
                 document.getElementById('start-screen').classList.remove('hidden');
+                  document.getElementById('ingame-exit-btn').classList.add('hidden');
                 gameState = 'START';
             };
         }
@@ -797,7 +806,6 @@ const canvas = document.getElementById('gameCanvas');
                     x: plat.x + plat.w/2 - 20, y: plat.y - 80, w: 48, h: 48, collected: false
                 });
             }
-            });
 
             updateHUD();
         }
@@ -1025,6 +1033,7 @@ const canvas = document.getElementById('gameCanvas');
                         });
                     }
                     document.getElementById('end-screen').classList.remove('hidden');
+                    document.getElementById('ingame-exit-btn').classList.add('hidden');
                 }
             }
         }
