@@ -770,19 +770,33 @@ const canvas = document.getElementById('gameCanvas');
 
             // Items
             let floatPlats = platforms.filter(p => p.type !== 'ground');
-            activeRoute.touristSpots.forEach(spot => {
-                let plat = floatPlats[Math.floor(random() * floatPlats.length)];
-                if(!plat) plat = platforms[0];
+            
+            floatPlats.forEach(plat => {
+                if (plat.stopName && ktoSpotMap[plat.stopName]) {
+                    if (random() < 0.70) {
+                        let spotData = ktoSpotMap[plat.stopName];
+                        activeItems.push({
+                            name: spotData.name,
+                            desc: spotData.desc,
+                            distance: spotData.distance,
+                            x: plat.x + plat.w/2 - 20,
+                            y: plat.y - 80,
+                            w: 48,
+                            h: 48,
+                            collected: false
+                        });
+                    }
+                }
+            });
+            
+            if (activeItems.length === 0 && floatPlats.length > 0) {
+                let plat = floatPlats[0];
+                let spotData = ktoSpotMap[plat.stopName] || { name: "광주의 숨은 명소", desc: "아름다운 힐링 공간", distance: "100m" };
                 activeItems.push({
-                    name: spot.name,
-                    x: plat.x + plat.w/2 - 20,
-                    y: plat.y - 80,
-                    w: 48,
-                    h: 48,
-                    desc: spot.desc,
-                    distance: spot.distance,
-                    collected: false
+                    name: spotData.name, desc: spotData.desc, distance: spotData.distance,
+                    x: plat.x + plat.w/2 - 20, y: plat.y - 80, w: 48, h: 48, collected: false
                 });
+            }
             });
 
             updateHUD();
