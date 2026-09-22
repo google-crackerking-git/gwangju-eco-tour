@@ -169,6 +169,26 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
           </p>
         </div>
 
+        {/* 반려동물 동반 상세 정보 */}
+        {detailInfo?.petInfo && detailInfo.petInfo.acmpyPsblCpam && (
+          <div className="mt-4 pt-4 border-t border-gray-100 bg-green-50 p-3 rounded-lg border border-green-100">
+            <h4 className="font-bold text-sm text-green-800 mb-2 flex items-center gap-1">
+              <span>🐾</span> 반려동물 동반 정보
+            </h4>
+            <ul className="text-xs text-green-700 space-y-1.5 list-disc list-inside">
+              {detailInfo.petInfo.acmpyPsblCpam && (
+                <li><span className="font-semibold">동반 여부:</span> {detailInfo.petInfo.acmpyPsblCpam}</li>
+              )}
+              {detailInfo.petInfo.acmpyNeedMtr && detailInfo.petInfo.acmpyNeedMtr !== '없음' && (
+                <li><span className="font-semibold">필요 사항:</span> {detailInfo.petInfo.acmpyNeedMtr}</li>
+              )}
+              {detailInfo.petInfo.etcAcmpyInfo && detailInfo.petInfo.etcAcmpyInfo !== '없음' && (
+                <li><span className="font-semibold">기타 정보:</span> {detailInfo.petInfo.etcAcmpyInfo}</li>
+              )}
+            </ul>
+          </div>
+        )}
+
         {/* 연관 관광지 (500m 이내) */}
         {relatedPlaces.length > 0 && (
           <div className="mt-4 pt-4 border-t border-gray-100">
@@ -191,17 +211,45 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
 
       {/* 액션 버튼들 */}
       <div className="flex gap-2 p-4 pt-0 border-t border-gray-100 bg-white">
-        <a
-          href={(() => {
+        <button
+          onClick={(e) => {
+            e.preventDefault();
             const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
-            return `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
-          })()}
-          target="_blank"
-          rel="noreferrer"
+            const safeStopTitle = selectedStop ? encodeURIComponent(selectedStop.name) : '출발지';
+            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+            
+            if (isMobile) {
+              // 모바일: 정류장을 출발지로 설정하여 카카오맵 앱 도보 경로 실행
+              let schemeUrl = `kakaomap://route?ep=${place.mapy},${place.mapx}&by=FOOT`;
+              if (selectedStop) {
+                schemeUrl = `kakaomap://route?sp=${selectedStop.lat},${selectedStop.lng}&ep=${place.mapy},${place.mapx}&by=FOOT`;
+              }
+              const fallbackUrl = selectedStop 
+                ? `https://map.kakao.com/?sName=${safeStopTitle}&eName=${safePlaceTitle}`
+                : `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
+              
+              window.location.href = schemeUrl;
+              
+              // 앱 미설치 시 웹으로 폴백 (앱 이동으로 인해 백그라운드로 가면 실행 안됨)
+              const now = Date.now();
+              setTimeout(() => {
+                if (Date.now() - now < 1000) {
+                  window.location.href = fallbackUrl;
+                }
+              }, 500);
+            } else {
+              // PC: 출발지가 있으면 통합 길찾기 웹 페이지 오픈, 없으면 도착지만 지정
+              if (selectedStop) {
+                window.open(`https://map.kakao.com/?sName=${safeStopTitle}&eName=${safePlaceTitle}`, '_blank');
+              } else {
+                window.open(`https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`, '_blank');
+              }
+            }
+          }}
           className="flex-1 text-center py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1 shadow-sm"
         >
           <span>🧭</span> 길찾기
-        </a>
+        </button>
         <FavoriteButton placeId={place.contentId} placeData={favoriteData} />
         <VisitButton placeData={visitData} />
       </div>

@@ -6,11 +6,8 @@ export default function OnboardingModal() {
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    // Check if the user has seen the tutorial
-    const hasSeen = localStorage.getItem('ecoTour_hasSeenTutorial');
-    if (!hasSeen) {
-      setIsOpen(true);
-    }
+    // 사용자가 항상 튜토리얼을 보도록 수정 (로컬스토리지 체크 제거)
+    setIsOpen(true);
     
     // Add event listener to open tutorial from header button
     const handleOpenTutorial = () => setIsOpen(true);
@@ -19,7 +16,6 @@ export default function OnboardingModal() {
   }, []);
 
   const handleClose = () => {
-    localStorage.setItem('ecoTour_hasSeenTutorial', 'true');
     setIsOpen(false);
   };
 
