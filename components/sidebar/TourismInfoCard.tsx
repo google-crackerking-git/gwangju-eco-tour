@@ -212,40 +212,47 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
       {/* 액션 버튼들 */}
       <div className="flex gap-2 p-4 pt-0 border-t border-gray-100 bg-white">
         <button
-          onClick={(e) => {
-            e.preventDefault();
-            const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
-            const safeStopTitle = selectedStop ? encodeURIComponent(selectedStop.name) : '출발지';
-            const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-            
-            if (isMobile) {
-              // 모바일: 정류장을 출발지로 설정하여 카카오맵 앱 도보 경로 실행
-              let schemeUrl = `kakaomap://route?ep=${place.mapy},${place.mapx}&by=FOOT`;
-              if (selectedStop) {
-                schemeUrl = `kakaomap://route?sp=${selectedStop.lat},${selectedStop.lng}&ep=${place.mapy},${place.mapx}&by=FOOT`;
-              }
-              const fallbackUrl = selectedStop 
-                ? `https://map.kakao.com/?sName=${safeStopTitle}&eName=${safePlaceTitle}`
-                : `https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`;
+            onClick={async (e) => {
+              e.preventDefault();
+              const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
+              const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
               
-              window.location.href = schemeUrl;
-              
-              // 앱 미설치 시 웹으로 폴백 (앱 이동으로 인해 백그라운드로 가면 실행 안됨)
-              const now = Date.now();
-              setTimeout(() => {
-                if (Date.now() - now < 1000) {
-                  window.location.href = fallbackUrl;
-                }
-              }, 500);
-            } else {
-              // PC: 출발지가 있으면 통합 길찾기 웹 페이지 오픈, 없으면 도착지만 지정
-              if (selectedStop) {
-                window.open(`https://map.kakao.com/?sName=${safeStopTitle}&eName=${safePlaceTitle}`, '_blank');
+              if (isMobile) {
+                // 모바일: 정류장을 출발지로 설정하여 카카오맵 앱 도보 경로 즉시 실행 (fallback 제거)
+                const schemeUrl = selectedStop 
+                  ? `kakaomap://route?sp=${selectedStop.lat},${selectedStop.lng}&ep=${place.mapy},${place.mapx}&by=FOOT`
+                  : `kakaomap://route?ep=${place.mapy},${place.mapx}&by=FOOT`;
+                
+                window.location.href = schemeUrl;
               } else {
-                window.open(`https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`, '_blank');
+                // PC: 카카오웹맵은 WCONGNAMUL 좌표계만 출발지 지원하므로 API 통해 변환 후 오픈
+                if (selectedStop) {
+                  // 팝업 차단을 피하기 위해 먼저 탭을 띄움
+                  const newWindow = window.open('', '_blank');
+                  if (newWindow) {
+                    newWindow.document.write('<div style="display:flex;justify-content:center;align-items:center;height:100vh;font-family:sans-serif;font-size:18px;color:#333;">카카오맵 길찾기를 준비 중입니다...</div>');
+                    
+                    try {
+                      const safeStopName = encodeURIComponent(selectedStop.name.replace(/,/g, ''));
+                      const res = await fetch(`/api/kakao/route-url?sLat=${selectedStop.lat}&sLng=${selectedStop.lng}&sName=${safeStopName}&eLat=${place.mapy}&eLng=${place.mapx}&eName=${safePlaceTitle}`);
+                      const data = await res.json();
+                      
+                      if (data.url) {
+                        newWindow.location.href = data.url;
+                      } else {
+                        newWindow.close();
+                        alert('경로를 생성하지 못했습니다.');
+                      }
+                    } catch (error) {
+                      newWindow.close();
+                      alert('경로 생성 중 오류가 발생했습니다.');
+                    }
+                  }
+                } else {
+                  window.open(`https://map.kakao.com/link/to/${safePlaceTitle},${place.mapy},${place.mapx}`, '_blank');
+                }
               }
-            }
-          }}
+            }}
           className="flex-1 text-center py-2 bg-blue-600 text-white rounded-lg font-bold hover:bg-blue-700 transition-colors flex items-center justify-center gap-1 shadow-sm"
         >
           <span>🧭</span> 길찾기
