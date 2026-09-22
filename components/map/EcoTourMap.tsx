@@ -102,52 +102,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
 
   }, [map, selectedStop, selectedTourism]);
 
-  // 바닐라 카카오맵 API를 사용한 정류장-관광지 도보 경로선 직접 렌더링
-  useEffect(() => {
-    if (!map || !selectedStop || !selectedTourism) return;
-    
-    // 점선 그리기
-    const linePath = [
-      new kakao.maps.LatLng(Number(selectedStop.lat), Number(selectedStop.lng)),
-      new kakao.maps.LatLng(Number(selectedTourism.mapy), Number(selectedTourism.mapx))
-    ];
 
-    const polyline = new kakao.maps.Polyline({
-      path: linePath,
-      strokeWeight: 4,
-      strokeColor: '#10B981',
-      strokeOpacity: 0.8,
-      strokeStyle: 'shortdash'
-    });
-    
-    polyline.setMap(map);
-
-    // 거리 기반 도보 소요시간 오버레이
-    const minutes = Math.max(1, Math.round(getDistance(
-      Number(selectedStop.lat), Number(selectedStop.lng), 
-      Number(selectedTourism.mapy), Number(selectedTourism.mapx)
-    ) / 67));
-
-    const content = document.createElement('div');
-    content.className = "bg-white/95 px-2 py-1 rounded-full shadow-md text-[11px] font-bold text-emerald-700 border border-emerald-200 flex items-center gap-1 mt-4";
-    content.innerHTML = `<span>🚶</span> 약 ${minutes}분`;
-
-    const midLat = (Number(selectedStop.lat) + Number(selectedTourism.mapy)) / 2;
-    const midLng = (Number(selectedStop.lng) + Number(selectedTourism.mapx)) / 2;
-
-    const overlay = new kakao.maps.CustomOverlay({
-      position: new kakao.maps.LatLng(midLat, midLng),
-      content: content,
-      zIndex: 5
-    });
-
-    overlay.setMap(map);
-
-    return () => {
-      polyline.setMap(null);
-      overlay.setMap(null);
-    };
-  }, [map, selectedStop, selectedTourism]);
 
   const visibleStops = useMemo(() => {
     if (!selectedRouteDir) return busStops;
