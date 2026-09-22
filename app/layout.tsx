@@ -5,9 +5,9 @@ import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/lib/auth';
 
 export const metadata: Metadata = {
-  title: '광주에코투어 🌿',
-  description: '오메나와 함께하는 광주광역시 친환경 대중교통 관광 가이드',
-  keywords: ['광주', '에코투어', '관광', '버스', '지하철', '오메나'],
+  title: '광주에코투어',
+  description: '오매나와 함께하는 광주광역시 친환경 대중교통 관광 가이드',
+  keywords: ['광주', '에코투어', '관광', '버스', '지하철', '오매나'],
   openGraph: {
     title: '광주에코투어',
     description: '광주 대중교통으로 떠나는 친환경 관광',
