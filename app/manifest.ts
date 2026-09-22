@@ -3,7 +3,7 @@ import { MetadataRoute } from 'next'
 export default function manifest(): MetadataRoute.Manifest {
   return {
     name: '광주에코투어',
-    short_name: '에코투어',
+    short_name: '광주에코투어',
     description: '대중교통으로 떠나는 친환경 광주 여행',
     start_url: '/',
     display: 'standalone',
