@@ -48,13 +48,18 @@ export default function AboutModal() {
         <div className="p-5 sm:p-6 overflow-y-auto flex-1 space-y-6 bg-gray-50/50 text-gray-800 text-xs sm:text-sm">
           {/* 1. 개발팀 및 기획 의도 */}
           <div className="bg-white rounded-2xl p-4 sm:p-5 border border-gray-200 shadow-xs space-y-2.5">
-            <div className="flex items-center justify-between">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2">
               <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900">
                 기획 및 개발
               </span>
-              <span className="font-extrabold text-sm sm:text-base text-blue-950">
-                방송대 코드아이 (Team KNOU Code-i)
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="font-extrabold text-sm sm:text-base text-blue-950">
+                  방송대 코드아이
+                </span>
+                <span className="text-xs text-gray-600 bg-gray-100 px-2.5 py-0.5 rounded-md font-medium">
+                  대표자 : 박승재
+                </span>
+              </div>
             </div>
             <p className="text-gray-600 leading-relaxed pt-1">
               『광주에코투어』는 광주광역시의 대중교통(시내버스, 도시철도)과 도보 길찾기를 연계하여,
