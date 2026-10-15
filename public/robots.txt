@@ -1,2 +1,6 @@
 User-agent: *
-Allow:/
+Allow: /
+Disallow: /api/
+Disallow: /my
+
+Sitemap: https://ecotour.gwangju.kr/sitemap.xml
