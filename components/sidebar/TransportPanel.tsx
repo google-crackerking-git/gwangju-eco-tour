@@ -117,6 +117,18 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
           ? <RouteList onStopSelect={onStopSelect} />
           : <SubwayStationList onStopSelect={onStopSelect} />}
       </div>
+
+      {/* ── 하단 팀 정보 및 출처 안내 ── */}
+      <div className="border-t border-gray-100 bg-gray-50/80 px-3 py-2 flex items-center justify-between text-[11px] text-gray-500 shrink-0">
+        <span>© 방송대 코드아이</span>
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event('openAbout'))}
+          className="text-blue-700 hover:text-blue-900 hover:underline font-medium flex items-center gap-1 transition-colors"
+        >
+          <span>ℹ️</span> 서비스 소개 및 출처
+        </button>
+      </div>
     </div>
   );
 }

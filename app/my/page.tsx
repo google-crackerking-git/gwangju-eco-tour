@@ -10,6 +10,7 @@ import type { FavoritePlace, VisitRecord } from '@/types';
 import { CONTENT_TYPE_ICONS, CONTENT_TYPE_LABELS, CONTENT_TYPE_COLORS } from '@/types';
 import CharacterEmptyState from '@/components/character/CharacterEmptyState';
 import NoticeModal from '@/components/notice/NoticeModal';
+import AboutModal from '@/components/about/AboutModal';
 
 type Tab = 'favorites' | 'visits';
 
@@ -99,6 +100,7 @@ export default function MyPage() {
   return (
     <div className="min-h-screen" style={{ backgroundColor: '#F8FAFF' }}>
       <NoticeModal />
+      <AboutModal />
       {/* 헤더 */}
       <header className="px-4 py-4 shadow-sm flex items-center justify-between" style={{ backgroundColor: '#1E3A8A' }}>
         <div className="flex items-center gap-3">
@@ -119,14 +121,23 @@ export default function MyPage() {
             </div>
           </div>
         </div>
-        <button 
-          onClick={() => window.dispatchEvent(new Event('openNotice'))}
-          className="relative text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
-          title="공지사항"
-        >
-          <span>📢</span> <span>공지사항</span>
-          <span className="w-2 h-2 rounded-full bg-amber-400 absolute -top-0.5 -right-0.5 animate-pulse" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button 
+            onClick={() => window.dispatchEvent(new Event('openNotice'))}
+            className="relative text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
+            title="공지사항"
+          >
+            <span>📢</span> <span>공지사항</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400 absolute -top-0.5 -right-0.5 animate-pulse" />
+          </button>
+          <button 
+            onClick={() => window.dispatchEvent(new Event('openAbout'))}
+            className="text-white bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full text-xs font-bold transition-colors flex items-center gap-1"
+            title="서비스 소개"
+          >
+            <span>ℹ️</span> <span>소개</span>
+          </button>
+        </div>
       </header>
 
       {/* 오메나 배너 */}

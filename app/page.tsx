@@ -13,6 +13,7 @@ import CharacterLoader from '@/components/character/CharacterLoader';
 import CharacterEmptyState from '@/components/character/CharacterEmptyState';
 import OnboardingModal from '@/components/guide/OnboardingModal';
 import NoticeModal from '@/components/notice/NoticeModal';
+import AboutModal from '@/components/about/AboutModal';
 import type { SelectedStop } from '@/types';
 
 // 카카오 지도는 SSR 불가 → 클라이언트에서만 로드
@@ -99,6 +100,7 @@ export default function HomePage() {
     <div className="flex flex-col h-[100dvh] overflow-hidden">
       <OnboardingModal />
       <NoticeModal />
+      <AboutModal />
       {/* ─── 헤더 ──────────────────────────────────────────────── */}
       <header
         className="flex items-center justify-between px-4 py-2 shadow-md z-50 shrink-0"
@@ -137,6 +139,13 @@ export default function HomePage() {
           >
             <span>📢</span> <span className="hidden sm:inline">공지사항</span>
             <span className="w-2 h-2 rounded-full bg-amber-400 absolute -top-0.5 -right-0.5 animate-pulse" />
+          </button>
+          <button 
+            onClick={() => window.dispatchEvent(new Event('openAbout'))}
+            className="text-white bg-white/20 hover:bg-white/30 px-2 py-1.5 md:px-3 md:py-1.5 rounded-full text-[11px] md:text-xs font-bold transition-colors flex items-center gap-1"
+            title="서비스 소개"
+          >
+            <span>ℹ️</span> <span className="hidden sm:inline">소개</span>
           </button>
           <a
             href="/minigame.html"
