@@ -4,3 +4,5 @@ Disallow: /api/
 Disallow: /my
 
 Sitemap: https://ecotour.gwangju.kr/sitemap.xml
+
+#DaumWebMasterTool:6335cc82ff64dcf82d7be10dad5cafb9391ced90a64b30fd09f9316219cce435:n4Bdeh3er8dd+gRpPxKBoA==
