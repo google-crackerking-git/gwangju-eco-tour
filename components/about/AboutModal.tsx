@@ -5,6 +5,17 @@ import Image from 'next/image';
 
 export default function AboutModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyPhone = async () => {
+    try {
+      await navigator.clipboard.writeText('010-6460-0003');
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      alert('연락처: 010-6460-0003');
+    }
+  };
 
   useEffect(() => {
     const handleOpenAbout = () => setIsOpen(true);
@@ -178,6 +189,52 @@ export default function AboutModal() {
                 <p className="text-[10px] text-gray-500 pt-0.5">
                   광주광역시 대표 관광 캐릭터 &apos;오매나&apos;의 저작권 규정을 준수하여 적법하게 활용하고 있습니다.
                 </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 5. 기능 개선 및 문의하기 */}
+          <div className="bg-blue-50/80 border border-blue-200 rounded-2xl p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-1.5 text-blue-950 font-bold text-xs sm:text-sm">
+                <span className="text-base">💬</span>
+                <h4>기능 개선 및 문의하기</h4>
+              </div>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-200 text-blue-900">
+                문자 전송 안내
+              </span>
+            </div>
+
+            <p className="text-gray-600 text-xs leading-relaxed">
+              광주에코투어 이용 중 불편 사항이나 오류 제보, 추가를 원하시는 기능 아이디어가 있으시면 언제든 편하게 의견을 보내주세요!
+            </p>
+
+            <div className="bg-white p-3.5 rounded-xl border border-blue-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div>
+                <span className="text-[11px] text-gray-500 font-medium">문의 연락처 (문자 메시지)</span>
+                <p className="text-base font-extrabold text-blue-900 tracking-wide">
+                  010-6460-0003
+                </p>
+                <p className="text-[10px] text-gray-400 mt-0.5">
+                  ※ 전화 통화보다는 문자 메시지로 남겨주시면 더욱 빠르고 꼼꼼하게 확인 후 반영하겠습니다.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0">
+                <a
+                  href="sms:01064600003"
+                  className="flex-1 sm:flex-initial inline-flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl bg-blue-900 text-white font-bold text-xs hover:bg-blue-800 active:scale-[0.98] transition-all shadow-sm"
+                >
+                  <span>✉️</span> 문자 보내기
+                </a>
+                <button
+                  type="button"
+                  onClick={handleCopyPhone}
+                  className="inline-flex items-center justify-center gap-1 px-3 py-2.5 rounded-xl bg-gray-100 text-gray-700 font-medium text-xs hover:bg-gray-200 active:scale-[0.98] transition-colors"
+                  title="전화번호 복사"
+                >
+                  <span>📋</span> {copied ? '복사됨!' : '번호 복사'}
+                </button>
               </div>
             </div>
           </div>
