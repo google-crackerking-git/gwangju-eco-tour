@@ -4,24 +4,58 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { NOTICES, type NoticeItem } from '@/data/notices';
 
+export const NOTICE_STORAGE_KEY = `ecotour_hide_notice_${NOTICES[0]?.id || 'v1'}`;
+
 export default function NoticeModal() {
   const [isOpen, setIsOpen] = useState(false);
+  const [dontShowAgain, setDontShowAgain] = useState(false);
   const [selectedNotice, setSelectedNotice] = useState<NoticeItem>(NOTICES[0]);
   const [isZoomed, setIsZoomed] = useState(false);
 
   useEffect(() => {
-    const handleOpenNotice = () => setIsOpen(true);
+    // 자동 팝업 검사 (다시 보지 않기가 설정되어 있지 않으면 자동 노출)
+    try {
+      const isDismissed = localStorage.getItem(NOTICE_STORAGE_KEY);
+      if (!isDismissed) {
+        setIsOpen(true);
+      } else {
+        // 이미 공지를 닫은 경우 온보딩 튜토리얼 검사 트리거
+        window.dispatchEvent(new Event('checkOnboarding'));
+      }
+    } catch {
+      setIsOpen(true);
+    }
+
+    // 헤더 버튼 클릭 시 수동 열기
+    const handleOpenNotice = () => {
+      setDontShowAgain(false);
+      setIsOpen(true);
+    };
+
     window.addEventListener('openNotice', handleOpenNotice);
     return () => window.removeEventListener('openNotice', handleOpenNotice);
   }, []);
+
+  const handleClose = () => {
+    if (dontShowAgain) {
+      try {
+        localStorage.setItem(NOTICE_STORAGE_KEY, 'true');
+      } catch {
+        // localStorage 접근 예외 처리
+      }
+    }
+    setIsOpen(false);
+    // 공지 팝업이 닫히면 온보딩(사용법) 팝업 여부 확인
+    window.dispatchEvent(new Event('checkOnboarding'));
+  };
 
   if (!isOpen) return null;
 
   return (
     <>
       <div
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm transition-opacity"
-        onClick={() => setIsOpen(false)}
+        className="fixed inset-0 z-[105] flex items-center justify-center bg-black/60 p-3 sm:p-4 backdrop-blur-sm transition-opacity"
+        onClick={handleClose}
       >
         <div
           className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh] animate-in fade-in zoom-in duration-200"
@@ -40,7 +74,7 @@ export default function NoticeModal() {
               </div>
             </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
               className="text-white/80 hover:text-white text-3xl leading-none font-light p-1"
               aria-label="닫기"
             >
@@ -88,7 +122,7 @@ export default function NoticeModal() {
               </div>
             </div>
 
-            {/* 포스터 이미지 (있을 경우) */}
+            {/* 포스터 이미지 */}
             {selectedNotice.imageUrl && (
               <div className="space-y-1.5">
                 <div
@@ -146,10 +180,24 @@ export default function NoticeModal() {
             </div>
           </div>
 
-          {/* 모달 푸터 버튼 */}
-          <div className="p-4 bg-white border-t border-gray-100 shrink-0">
+          {/* 모달 푸터: 다시 보지 않기 체크박스 및 닫기 버튼 */}
+          <div className="p-4 sm:p-5 bg-white border-t border-gray-100 shrink-0 flex flex-col gap-3">
+            <div className="flex items-center justify-between px-1">
+              <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-gray-600 hover:text-gray-900 select-none">
+                <input
+                  type="checkbox"
+                  checked={dontShowAgain}
+                  onChange={(e) => setDontShowAgain(e.target.checked)}
+                  className="w-4 h-4 rounded text-blue-900 border-gray-300 focus:ring-blue-900 accent-blue-900 cursor-pointer"
+                />
+                <span>다시 보지 않기</span>
+              </label>
+              <span className="text-[11px] text-gray-400">
+                상단 📢 공지사항에서 다시 확인 가능
+              </span>
+            </div>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={handleClose}
               className="w-full text-white font-bold text-base py-3.5 rounded-2xl hover:opacity-95 active:scale-[0.99] transition-all shadow-md"
               style={{ backgroundColor: '#1E3A8A' }}
             >
@@ -162,7 +210,7 @@ export default function NoticeModal() {
       {/* 포스터 확대 보기 모달 */}
       {isZoomed && selectedNotice.imageUrl && (
         <div
-          className="fixed inset-0 z-[110] flex items-center justify-center bg-black/90 p-2 sm:p-4 backdrop-blur-md"
+          className="fixed inset-0 z-[120] flex items-center justify-center bg-black/90 p-2 sm:p-4 backdrop-blur-md"
           onClick={() => setIsZoomed(false)}
         >
           <div
