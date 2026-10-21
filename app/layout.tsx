@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import { SessionProvider } from 'next-auth/react';
 import { auth } from '@/lib/auth';
+import { Analytics } from '@vercel/analytics/next';
 
 const SITE_URL = 'https://ecotour.gwangju.kr';
 
@@ -113,6 +114,7 @@ export default async function RootLayout({
         <SessionProvider session={session}>
           {children}
         </SessionProvider>
+        <Analytics />
       </body>
     </html>
   );
