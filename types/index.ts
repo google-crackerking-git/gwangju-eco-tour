@@ -75,6 +75,7 @@ export interface TourismPlace {
   isHeritage?: boolean;
   isPath?: boolean;
   isShopping?: boolean;
+  isPetFriendly?: boolean;
 }
 
 // ─── 즐겨찾기 / 방문기록 타입 ────────────────────────────────

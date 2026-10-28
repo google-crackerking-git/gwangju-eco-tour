@@ -16,6 +16,7 @@ const CATEGORY_COLORS: Record<number, string> = {
   14: '#7C3AED',
   39: '#EA580C',
   32: '#2D7A3A',
+  38: '#BE185D',
 };
 
 // 거리 계산 함수 (Haversine)
@@ -136,9 +137,9 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
               <div className="flex justify-between items-start mb-1">
                 <h3 className="font-bold text-base text-gray-900 leading-tight">{place.title}</h3>
                 <div className="flex flex-col items-end gap-1">
-                  {detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능') && (
-                    <span className="shrink-0 bg-green-100 text-green-700 text-[10px] px-1.5 py-0.5 rounded font-bold border border-green-200">
-                      🐕 반려동물
+                  {(place.isPetFriendly || detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능')) && (
+                    <span className="shrink-0 bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold border border-emerald-300">
+                      🐾 반려동물
                     </span>
                   )}
                   <a 
@@ -163,6 +164,25 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
                   {place.overview || detailInfo?.overview || '상세 정보를 불러오는 중입니다...'}
                 </p>
               </div>
+
+              {/* 반려동물 정보 */}
+              {place.isPetFriendly && (
+                <div className="mt-3 pt-2 border-t border-emerald-100 bg-emerald-50/70 p-2.5 rounded-lg text-xs text-emerald-900">
+                  <p className="font-bold flex items-center gap-1 text-emerald-800">
+                    <span>🐾</span> 한국관광공사 등록 반려동물 동반 가능
+                  </p>
+                  {detailInfo?.petInfo?.acmpyPsblCpam && (
+                    <p className="text-[11px] mt-1 text-emerald-700">
+                      <span className="font-semibold">동반 안내:</span> {detailInfo.petInfo.acmpyPsblCpam}
+                    </p>
+                  )}
+                  {detailInfo?.petInfo?.acmpyNeedMtr && detailInfo.petInfo.acmpyNeedMtr !== '없음' && (
+                    <p className="text-[11px] mt-0.5 text-emerald-700">
+                      <span className="font-semibold">필수 사항:</span> {detailInfo.petInfo.acmpyNeedMtr}
+                    </p>
+                  )}
+                </div>
+              )}
 
               {/* 연관 관광지 (500m 이내) */}
               {relatedPlaces.length > 0 && (

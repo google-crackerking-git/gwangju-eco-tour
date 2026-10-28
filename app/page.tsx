@@ -49,6 +49,7 @@ export default function HomePage() {
     isMobileSheetOpen,
     setMobileSheetOpen,
     activeCategories,
+    petOnlyFilter,
     setAllTourism,
     allTourism,
   } = useEcoTourStore();
@@ -93,7 +94,7 @@ export default function HomePage() {
   }, [setSelectedStop, setNearbyTourism, setSelectedTourism, setIsTourismLoading, setMobileSheetOpen, allTourism]);
 
   const filteredTourism = nearbyTourism.filter((p) =>
-    activeCategories.includes(p.contentTypeId)
+    activeCategories.includes(p.contentTypeId) && (!petOnlyFilter || p.isPetFriendly)
   );
 
   return (

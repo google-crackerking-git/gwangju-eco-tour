@@ -44,6 +44,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
     setSelectedStop,
     setNearbyTourism,
     activeCategories,
+    petOnlyFilter,
     allTourism,
   } = useEcoTourStore();
 
@@ -118,14 +119,14 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
   }, [map, transportMode, visibleStops]);
 
   const filteredTourism = nearbyTourism.filter((p) =>
-    activeCategories.includes(p.contentTypeId)
+    activeCategories.includes(p.contentTypeId) && (!petOnlyFilter || p.isPetFriendly)
   );
 
   const stopsWithTourism = useMemo(() => {
     const set = new Set<string>();
     busStops.forEach(stop => {
       for (const place of allTourism) {
-        if (activeCategories.includes(place.contentTypeId)) {
+        if (activeCategories.includes(place.contentTypeId) && (!petOnlyFilter || place.isPetFriendly)) {
           if (getDistance(stop.lat, stop.lng, place.mapy, place.mapx) <= 300) {
             set.add(stop.nodeId);
             break;
@@ -135,7 +136,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
     });
     subwayStations.forEach(station => {
       for (const place of allTourism) {
-        if (activeCategories.includes(place.contentTypeId)) {
+        if (activeCategories.includes(place.contentTypeId) && (!petOnlyFilter || place.isPetFriendly)) {
           if (getDistance(station.lat, station.lng, place.mapy, place.mapx) <= 500) {
             set.add(String(station.stationId));
             break;
@@ -144,7 +145,7 @@ export default function EcoTourMap({ onStopSelect }: EcoTourMapProps) {
       }
     });
     return set;
-  }, [busStops, subwayStations, allTourism, activeCategories]);
+  }, [busStops, subwayStations, allTourism, activeCategories, petOnlyFilter]);
 
   if (loading) return <CharacterLoader />;
   if (error) {
