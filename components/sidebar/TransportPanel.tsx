@@ -19,7 +19,7 @@ interface TransportPanelProps {
 
 export default function TransportPanel({ onStopSelect, mobileCompact }: TransportPanelProps) {
   const [activeTab, setActiveTab] = useState<TabType>('bus');
-  const { activeCategories, toggleCategory, petOnlyFilter, togglePetOnlyFilter, setTransportMode } = useEcoTourStore();
+  const { activeCategories, toggleCategory, setTransportMode } = useEcoTourStore();
 
   function handleTabChange(tab: TabType) {
     setActiveTab(tab);
@@ -64,8 +64,8 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
         </button>
       </div>
 
-      {/* ── Category filter ── */}
-      <div className="flex gap-1 border-b border-gray-100 bg-white px-2 py-2 overflow-x-auto">
+      {/* ── Category filter (관광지, 문화시설, 음식점, 숙박, 쇼핑) ── */}
+      <div className="flex gap-1.5 border-b border-gray-100 bg-white px-3 py-2">
         {CATEGORY_IDS.map((id) => {
           const isActive = activeCategories.includes(id);
           return (
@@ -73,7 +73,7 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
               key={id}
               type="button"
               onClick={() => toggleCategory(id)}
-              className="flex flex-1 items-center justify-center gap-0.5 rounded-lg py-1.5 px-1 text-[11px] sm:text-xs font-medium transition-all whitespace-nowrap min-w-[50px]"
+              className="flex flex-1 items-center justify-center gap-0.5 rounded-lg py-1.5 text-xs font-medium transition-all"
               style={
                 isActive
                   ? {
@@ -109,29 +109,6 @@ export default function TransportPanel({ onStopSelect, mobileCompact }: Transpor
             </button>
           );
         })}
-        {/* 반려동물 동반 필터 */}
-        <button
-          type="button"
-          onClick={togglePetOnlyFilter}
-          title="반려동물 동반 가능 장소만 필터링"
-          className="flex flex-1 items-center justify-center gap-0.5 rounded-lg py-1.5 px-1 text-[11px] sm:text-xs font-medium transition-all whitespace-nowrap min-w-[62px]"
-          style={
-            petOnlyFilter
-              ? {
-                  backgroundColor: '#D1FAE5',
-                  color: '#065F46',
-                  fontWeight: 700,
-                  boxShadow: '0 0 0 1px #10B981',
-                }
-              : {
-                  backgroundColor: '#F3F4F6',
-                  color: '#9CA3AF',
-                }
-          }
-        >
-          <span>🐾</span>
-          반려동물
-        </button>
       </div>
 
       {/* ── Tab content ── */}

@@ -40,8 +40,6 @@ interface EcoTourState {
   // ─── 카테고리 필터 ─────────────────────────────
   activeCategories: number[];
   toggleCategory: (categoryId: number) => void;
-  petOnlyFilter: boolean;
-  togglePetOnlyFilter: () => void;
 
   // ─── UI 상태 ───────────────────────────────────
   isSidebarOpen: boolean;
@@ -114,8 +112,6 @@ export const useEcoTourStore = create<EcoTourState>((set) => ({
       ? state.activeCategories.filter((c) => c !== categoryId)
       : [...state.activeCategories, categoryId],
   })),
-  petOnlyFilter: false,
-  togglePetOnlyFilter: () => set((state) => ({ petOnlyFilter: !state.petOnlyFilter })),
 
   // UI
   isSidebarOpen: true,

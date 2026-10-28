@@ -5,6 +5,7 @@ import { CONTENT_TYPE_LABELS, CONTENT_TYPE_ICONS, CONTENT_TYPE_COLORS } from '@/
 import FavoriteButton from '@/components/my/FavoriteButton';
 import VisitButton from '@/components/my/VisitButton';
 import { useEcoTourStore } from '@/store/ecoTourStore';
+import { getPetPolicy } from '@/lib/petPolicy';
 
 interface TourismInfoCardProps {
   place: TourismPlace;
@@ -44,6 +45,7 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
   const categoryColor = CONTENT_TYPE_COLORS[place.contentTypeId];
   const categoryIcon = CONTENT_TYPE_ICONS[place.contentTypeId];
   const categoryLabel = CONTENT_TYPE_LABELS[place.contentTypeId];
+  const petPolicy = getPetPolicy(place, detailInfo?.petInfo);
 
   // 주변 관광지 (500m 이내)
   const relatedPlaces = allTourism.filter(p => 
@@ -137,11 +139,9 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
                   🏅 광주 관광명소
                 </span>
               )}
-              {(place.isPetFriendly || detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능')) && (
-                <span className="bg-emerald-100 text-emerald-800 text-[10px] px-2 py-0.5 rounded font-bold border border-emerald-300 whitespace-nowrap shadow-sm">
-                  🐾 반려동물 동반
-                </span>
-              )}
+              <span className={`${petPolicy.badgeClass} text-[10px] px-2 py-0.5 rounded font-bold border ${petPolicy.badgeBorder} whitespace-nowrap shadow-sm`}>
+                {petPolicy.badgeText}
+              </span>
             </div>
           </div>
           {place.addr1 && <p className="text-sm text-gray-500 mt-1">📍 {place.addr1}</p>}
@@ -170,34 +170,30 @@ export default function TourismInfoCard({ place, nearestStopName, onClose }: Tou
         </div>
 
         {/* 반려동물 동반 상세 정보 */}
-        <div className={`mt-4 pt-3 rounded-lg p-3 ${place.isPetFriendly ? 'bg-emerald-50/80 border border-emerald-200' : 'bg-gray-50 border border-gray-200'}`}>
-          <h4 className={`font-bold text-xs mb-2 flex items-center gap-1 ${place.isPetFriendly ? 'text-emerald-800' : 'text-gray-600'}`}>
-            <span>🐾</span> 반려동물 동반 안내
-          </h4>
-          {place.isPetFriendly ? (
-            <div className="text-xs text-emerald-900 space-y-1.5">
-              <p className="font-semibold text-emerald-700 flex items-center gap-1">
-                <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                한국관광공사 등록 반려동물 동반 가능 시설
+        <div className={`mt-4 pt-3 rounded-xl p-3.5 border ${petPolicy.badgeBg}`}>
+          <div className="flex items-center justify-between mb-2">
+            <h4 className="font-bold text-xs text-gray-800 flex items-center gap-1.5">
+              <span>🐾</span> {petPolicy.statusTitle}
+            </h4>
+            {petPolicy.isCertified && (
+              <span className="text-[10px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded shadow-xs">
+                공공인증
+              </span>
+            )}
+          </div>
+          <div className="text-xs text-gray-700 space-y-1.5">
+            {petPolicy.rules.map((rule, idx) => (
+              <p key={idx} className="flex items-start gap-1.5">
+                <span className="text-emerald-600 font-bold mt-0.5">•</span>
+                <span className="leading-snug">{rule}</span>
               </p>
-              {detailInfo?.petInfo?.acmpyPsblCpam && (
-                <p className="pl-2 border-l-2 border-emerald-300"><span className="font-semibold text-emerald-800">동반 구분:</span> {detailInfo.petInfo.acmpyPsblCpam}</p>
-              )}
-              {detailInfo?.petInfo?.acmpyNeedMtr && detailInfo.petInfo.acmpyNeedMtr !== '없음' && (
-                <p className="pl-2 border-l-2 border-emerald-300"><span className="font-semibold text-emerald-800">필수 사항:</span> {detailInfo.petInfo.acmpyNeedMtr}</p>
-              )}
-              {detailInfo?.petInfo?.etcAcmpyInfo && detailInfo.petInfo.etcAcmpyInfo !== '없음' && (
-                <p className="pl-2 border-l-2 border-emerald-300"><span className="font-semibold text-emerald-800">이용 규정:</span> {detailInfo.petInfo.etcAcmpyInfo}</p>
-              )}
-              {!detailInfo?.petInfo?.acmpyPsblCpam && (
-                <p className="text-[11px] text-emerald-600 mt-1">※ 안전하고 쾌적한 관광을 위해 목줄 착용 및 배변봉투/이동장을 지참해주세요.</p>
-              )}
-            </div>
-          ) : (
-            <p className="text-[11px] text-gray-500 leading-relaxed">
-              공공데이터상 별도 등록된 반려동물 규정이 없는 시설입니다. 방문 전 유선({place.tel || '안내소'}) 문의를 권장합니다.
-            </p>
-          )}
+            ))}
+          </div>
+          {/* 대중교통 에코투어 연계 안내 */}
+          <div className="mt-2.5 pt-2 border-t border-gray-200/60 flex items-center gap-1.5 text-[11px] text-gray-600">
+            <span>🚌</span>
+            <span className="font-medium text-blue-900">{petPolicy.transitTip}</span>
+          </div>
         </div>
 
         {/* 연관 관광지 (500m 이내) */}

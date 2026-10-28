@@ -4,6 +4,7 @@ import type { TourismPlace } from '@/types';
 import { CONTENT_TYPE_COLORS, CONTENT_TYPE_ICONS } from '@/types';
 import { useEcoTourStore } from '@/store/ecoTourStore';
 import Image from 'next/image';
+import { getPetPolicy } from '@/lib/petPolicy';
 
 interface TourismMarkerProps {
   place: TourismPlace;
@@ -52,6 +53,7 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
 
   const color = CATEGORY_COLORS[place.contentTypeId] ?? '#666666';
   const icon = CONTENT_TYPE_ICONS[place.contentTypeId] ?? '📍';
+  const petPolicy = getPetPolicy(place, detailInfo?.petInfo);
 
   // 로컬 연관 관광지 계산 (반경 500m 이내)
   const relatedPlaces = allTourism.filter(p => 
@@ -137,11 +139,9 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
               <div className="flex justify-between items-start mb-1">
                 <h3 className="font-bold text-base text-gray-900 leading-tight">{place.title}</h3>
                 <div className="flex flex-col items-end gap-1">
-                  {(place.isPetFriendly || detailInfo?.petInfo?.acmpyPsblCpam?.includes('가능')) && (
-                    <span className="shrink-0 bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-bold border border-emerald-300">
-                      🐾 반려동물
-                    </span>
-                  )}
+                  <span className={`shrink-0 ${petPolicy.badgeClass} text-[10px] px-1.5 py-0.5 rounded font-bold border ${petPolicy.badgeBorder}`}>
+                    {petPolicy.badgeText}
+                  </span>
                   <a 
                     href={(() => {
                       const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
@@ -166,23 +166,28 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
               </div>
 
               {/* 반려동물 정보 */}
-              {place.isPetFriendly && (
-                <div className="mt-3 pt-2 border-t border-emerald-100 bg-emerald-50/70 p-2.5 rounded-lg text-xs text-emerald-900">
-                  <p className="font-bold flex items-center gap-1 text-emerald-800">
-                    <span>🐾</span> 한국관광공사 등록 반려동물 동반 가능
+              <div className={`mt-3 pt-2.5 p-2.5 rounded-lg border text-xs ${petPolicy.badgeBg}`}>
+                <div className="flex items-center justify-between mb-1">
+                  <p className="font-bold flex items-center gap-1 text-[11px] text-gray-800">
+                    <span>🐾</span> {petPolicy.statusTitle}
                   </p>
-                  {detailInfo?.petInfo?.acmpyPsblCpam && (
-                    <p className="text-[11px] mt-1 text-emerald-700">
-                      <span className="font-semibold">동반 안내:</span> {detailInfo.petInfo.acmpyPsblCpam}
-                    </p>
-                  )}
-                  {detailInfo?.petInfo?.acmpyNeedMtr && detailInfo.petInfo.acmpyNeedMtr !== '없음' && (
-                    <p className="text-[11px] mt-0.5 text-emerald-700">
-                      <span className="font-semibold">필수 사항:</span> {detailInfo.petInfo.acmpyNeedMtr}
-                    </p>
+                  {petPolicy.isCertified && (
+                    <span className="text-[9px] bg-emerald-600 text-white font-bold px-1 rounded">
+                      공공인증
+                    </span>
                   )}
                 </div>
-              )}
+                <div className="text-[11px] text-gray-700 space-y-0.5">
+                  {petPolicy.rules.slice(0, 2).map((rule, idx) => (
+                    <p key={idx} className="leading-snug">
+                      • {rule}
+                    </p>
+                  ))}
+                </div>
+                <p className="text-[10px] text-blue-900 mt-1.5 pt-1 border-t border-gray-200/50">
+                  🚌 {petPolicy.transitTip}
+                </p>
+              </div>
 
               {/* 연관 관광지 (500m 이내) */}
               {relatedPlaces.length > 0 && (
