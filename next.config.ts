@@ -1,11 +1,11 @@
 import type { NextConfig } from "next";
 
-// Content Security Policy (카카오 지도 SDK 최신 CDN 및 Web Worker, NextAuth 완벽 호환)
+// Content Security Policy (OWASP ZAP 취약점 점검 최적화 및 카카오 지도, NextAuth 완벽 호환)
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net https://cdn.tailwindcss.com;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net;
   style-src 'self' 'unsafe-inline' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net;
-  img-src 'self' blob: data: https: http:;
+  img-src 'self' blob: data: https://*.visitkorea.or.kr http://*.visitkorea.or.kr https://*.kakaocdn.net http://*.kakaocdn.net https://*.daumcdn.net http://*.daumcdn.net https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net http://*.khs.go.kr https://*.khs.go.kr http://*.cha.go.kr https://*.cha.go.kr;
   font-src 'self' data: https://*.daumcdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net;
   connect-src 'self' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net;
   worker-src 'self' blob:;
@@ -45,7 +45,7 @@ const securityHeaders = [
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=(self), browsing-topics=()',
   },
-  // 6. Strict-Transport-Security (HTTPS 강제 및 중간자 공격 방어 - A+ 등급 핵심 요건)
+  // 6. Strict-Transport-Security (HTTPS 강제 및 중간자 공격 방어)
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
@@ -53,6 +53,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // 프레임워크 정보 누출 방지 (ZAP Server Leaks Information via X-Powered-By 해결)
+  poweredByHeader: false,
+
   async headers() {
     return [
       {
