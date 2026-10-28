@@ -1,16 +1,18 @@
 import type { NextConfig } from "next";
 
-// Content Security Policy (카카오 지도 및 공공데이터 이미지, NextAuth 완벽 호환)
+// Content Security Policy (카카오 지도 SDK 최신 CDN 및 Web Worker, NextAuth 완벽 호환)
 const cspHeader = `
   default-src 'self';
-  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://dapi.kakao.com https://*.daumcdn.net https://t1.daumcdn.net https://*.kakao.com https://cdn.tailwindcss.com;
-  style-src 'self' 'unsafe-inline' https://*.daumcdn.net https://t1.daumcdn.net https://cdn.jsdelivr.net;
+  script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net https://cdn.tailwindcss.com;
+  style-src 'self' 'unsafe-inline' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net;
   img-src 'self' blob: data: https: http:;
-  font-src 'self' data: https://*.daumcdn.net https://cdn.jsdelivr.net;
-  connect-src 'self' https://dapi.kakao.com https://*.daumcdn.net https://*.kakao.com https://*.kakaocdn.net https://kapi.kakao.com https://kauth.kakao.com;
-  frame-src 'self' https://*.kakao.com;
+  font-src 'self' data: https://*.daumcdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net;
+  connect-src 'self' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net;
+  worker-src 'self' blob:;
+  child-src 'self' blob: https://kakao.com https://*.kakao.com;
+  frame-src 'self' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net;
   frame-ancestors 'self';
-  form-action 'self' https://kauth.kakao.com;
+  form-action 'self' https://kakao.com https://*.kakao.com;
   base-uri 'self';
   object-src 'none';
 `
@@ -43,7 +45,7 @@ const securityHeaders = [
     key: 'Permissions-Policy',
     value: 'camera=(), microphone=(), geolocation=(self), browsing-topics=()',
   },
-  // 6. Strict-Transport-Security (HTTPS 강제 및 중간자 공격 방어 - A+ 등급 필수)
+  // 6. Strict-Transport-Security (HTTPS 강제 및 중간자 공격 방어 - A+ 등급 핵심 요건)
   {
     key: 'Strict-Transport-Security',
     value: 'max-age=63072000; includeSubDomains; preload',
