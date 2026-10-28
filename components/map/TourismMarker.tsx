@@ -139,9 +139,11 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
               <div className="flex justify-between items-start mb-1">
                 <h3 className="font-bold text-base text-gray-900 leading-tight">{place.title}</h3>
                 <div className="flex flex-col items-end gap-1">
-                  <span className={`shrink-0 ${petPolicy.badgeClass} text-[10px] px-1.5 py-0.5 rounded font-bold border ${petPolicy.badgeBorder}`}>
-                    {petPolicy.badgeText}
-                  </span>
+                  {petPolicy && (
+                    <span className={`shrink-0 ${petPolicy.badgeClass} text-[10px] px-1.5 py-0.5 rounded font-bold border ${petPolicy.badgeBorder}`}>
+                      {petPolicy.badgeText}
+                    </span>
+                  )}
                   <a 
                     href={(() => {
                       const safePlaceTitle = encodeURIComponent(place.title.replace(/,/g, ''));
@@ -165,29 +167,31 @@ export default function TourismMarker({ place, isSelected, onSelect }: TourismMa
                 </p>
               </div>
 
-              {/* 반려동물 정보 */}
-              <div className={`mt-3 pt-2.5 p-2.5 rounded-lg border text-xs ${petPolicy.badgeBg}`}>
-                <div className="flex items-center justify-between mb-1">
-                  <p className="font-bold flex items-center gap-1 text-[11px] text-gray-800">
-                    <span>🐾</span> {petPolicy.statusTitle}
-                  </p>
-                  {petPolicy.isCertified && (
-                    <span className="text-[9px] bg-emerald-600 text-white font-bold px-1 rounded">
-                      공공인증
+              {/* 반려동물 정보 (API 데이터가 있는 경우에만 표시) */}
+              {petPolicy && (
+                <div className={`mt-3 pt-2.5 p-2.5 rounded-lg border text-xs ${petPolicy.badgeBg}`}>
+                  <div className="flex items-center justify-between mb-1">
+                    <p className="font-bold flex items-center gap-1 text-[11px] text-gray-800">
+                      <span>🐾</span> {petPolicy.statusTitle}
+                    </p>
+                    <span className="text-[9px] bg-emerald-600 text-white font-bold px-1.5 py-0.5 rounded">
+                      반려동물 동반가능
                     </span>
+                  </div>
+                  <div className="text-[11px] text-gray-700 space-y-0.5">
+                    {petPolicy.rules.slice(0, 2).map((rule, idx) => (
+                      <p key={idx} className="leading-snug">
+                        • {rule}
+                      </p>
+                    ))}
+                  </div>
+                  {petPolicy.transitTip && (
+                    <p className="text-[10px] text-blue-900 mt-1.5 pt-1 border-t border-gray-200/50">
+                      🚌 {petPolicy.transitTip}
+                    </p>
                   )}
                 </div>
-                <div className="text-[11px] text-gray-700 space-y-0.5">
-                  {petPolicy.rules.slice(0, 2).map((rule, idx) => (
-                    <p key={idx} className="leading-snug">
-                      • {rule}
-                    </p>
-                  ))}
-                </div>
-                <p className="text-[10px] text-blue-900 mt-1.5 pt-1 border-t border-gray-200/50">
-                  🚌 {petPolicy.transitTip}
-                </p>
-              </div>
+              )}
 
               {/* 연관 관광지 (500m 이내) */}
               {relatedPlaces.length > 0 && (
