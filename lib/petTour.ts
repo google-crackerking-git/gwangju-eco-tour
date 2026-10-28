@@ -46,16 +46,24 @@ export async function fetchPetTourPlaces(): Promise<PetTourItem[]> {
 export function mergePetTourData(allPlaces: any[], petItems: PetTourItem[]): any[] {
   if (!petItems || petItems.length === 0) return allPlaces;
 
-  const petMap = new Map<string, PetTourItem>();
+  const petIdSet = new Set<string>();
+  const petTitleSet = new Set<string>();
+
   petItems.forEach((p) => {
-    petMap.set(String(p.contentid), p);
+    if (p.contentid) petIdSet.add(String(p.contentid));
+    if (p.title) {
+      const cleanTitle = p.title.replace(/\s+/g, '').toLowerCase();
+      petTitleSet.add(cleanTitle);
+    }
   });
 
-  // 1. 기존 관광지에 반려동물 가능 플래그(isPetFriendly: true) 표시
-  const updatedPlaces = allPlaces.map((place) => {
+  // 기존 관광지/문화시설/음식점/숙박/쇼핑 목록은 그대로 유지하며,
+  // 반려동물 API에 등록된 장소와 일치하는 경우에만 isPetFriendly: true 플래그 부여 (임의의 상점 추가 방지)
+  return allPlaces.map((place) => {
     const id = String(place.contentId);
-    if (petMap.has(id)) {
-      petMap.delete(id);
+    const cleanTitle = (place.title || '').replace(/\s+/g, '').toLowerCase();
+
+    if (petIdSet.has(id) || (cleanTitle && petTitleSet.has(cleanTitle))) {
       return {
         ...place,
         isPetFriendly: true,
@@ -63,27 +71,4 @@ export function mergePetTourData(allPlaces: any[], petItems: PetTourItem[]): any
     }
     return place;
   });
-
-  // 2. 일반 목록에 없던 신규 반려동물 동반 장소 추가
-  const newPlaces: any[] = [];
-  for (const [, item] of petMap.entries()) {
-    const rawType = parseInt(item.contenttypeid, 10);
-    const contentTypeId = [12, 14, 39, 32, 38].includes(rawType) ? rawType : 12;
-
-    newPlaces.push({
-      contentId: String(item.contentid),
-      contentTypeId,
-      title: item.title,
-      addr1: item.addr1 || '',
-      addr2: item.addr2 || '',
-      firstimage: item.firstimage || '',
-      firstimage2: item.firstimage2 || '',
-      mapx: parseFloat(item.mapx || '0'),
-      mapy: parseFloat(item.mapy || '0'),
-      tel: item.tel || '',
-      isPetFriendly: true,
-    });
-  }
-
-  return [...updatedPlaces, ...newPlaces];
 }

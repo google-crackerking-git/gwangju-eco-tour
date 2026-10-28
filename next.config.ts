@@ -4,9 +4,9 @@ import type { NextConfig } from "next";
 const cspHeader = `
   default-src 'self';
   script-src 'self' 'unsafe-inline' 'unsafe-eval' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net;
-  style-src 'self' 'unsafe-inline' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net;
+  style-src 'self' 'unsafe-inline' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net https://fonts.googleapis.com;
   img-src 'self' blob: data: https://*.visitkorea.or.kr http://*.visitkorea.or.kr https://*.kakaocdn.net http://*.kakaocdn.net https://*.daumcdn.net http://*.daumcdn.net https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net http://*.khs.go.kr https://*.khs.go.kr http://*.cha.go.kr https://*.cha.go.kr;
-  font-src 'self' data: https://*.daumcdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net;
+  font-src 'self' data: https://*.daumcdn.net https://*.kakaocdn.net https://cdn.jsdelivr.net https://fonts.gstatic.com;
   connect-src 'self' https://kakao.com https://*.kakao.com https://daum.net https://*.daum.net https://daumcdn.net https://*.daumcdn.net https://kakaocdn.net https://*.kakaocdn.net;
   worker-src 'self' blob:;
   child-src 'self' blob: https://kakao.com https://*.kakao.com;
